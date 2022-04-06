@@ -1,0 +1,11 @@
+<div class="loginForm">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <input formControlName="email" type="email" class="inputField" placeholder="Email">
+        <input formControlName="password" type="password" class="inputField" placeholder="Password">
+        <br><a class="forgotText">Forgot your password?</a>
+        <button class="signinButton" type="submit" [disabled]="form.invalid || !passwordDoesMatch || loading">
+            Log In
+        </button>
+        <p class="errorMessage" *ngIf="serverMessage != null">{{serverMessage}}</p>
+    </form>
+</div>

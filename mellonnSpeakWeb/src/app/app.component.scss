@@ -3,18 +3,25 @@
     background-color: #FAB228;
     height: 70px;
     box-shadow: 0px 2px 5px #00000024;
+    position: relative;
 
     .icon {
+        position: absolute;
+        top: 50%;
+        left: 50px;
+        transform: translate(-50%, -50%);
+        cursor: pointer;
         height: 40px;
         border-radius: 10px;
-        margin: 15px 10px 15px 30px;
         display: inline-block;
     }
 
     .logo {
         position: absolute;
-        left: calc(50% - 75px);
-        margin: 20px auto 20px auto;
-        width: 150px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        cursor: pointer;
+        height: 30px;
     }
 }

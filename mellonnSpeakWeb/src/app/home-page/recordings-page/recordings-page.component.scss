@@ -1,0 +1,15 @@
+
+.pageContainer {
+    position: relative;
+
+    .center {
+        position: absolute;
+        //top: 25%;
+        left: 50%;
+        transform: translate(-50%);
+    }
+}
+
+p {
+    font-size: 2em;
+}

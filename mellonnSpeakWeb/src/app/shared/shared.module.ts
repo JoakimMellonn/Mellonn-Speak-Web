@@ -1,13 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ShellComponent } from './shell/shell.component';
+import { LoginModule } from '../login/login.module';
 
 const components = [
   ShellComponent
 ];
 
 const modules = [
-  CommonModule
+  CommonModule,
+  LoginModule
 ];
 
 @NgModule({
