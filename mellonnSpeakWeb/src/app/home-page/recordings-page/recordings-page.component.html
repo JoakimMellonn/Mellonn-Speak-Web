@@ -1,7 +1,52 @@
 <div class="pageContainer">
     <div class="center">
-        <p>Hurray!! Hello {{firstName}} {{lastName}}</p>
-
-        <button (click)="signOut()">Sign out</button>
+        <div class="mainContent">
+            <div class="recordings">
+                <div class="titleBox">
+                    <h1>
+                        Here's your Recordings
+                    </h1>
+                </div>
+                <div class="contentBox">
+                    <div class="recordingElement" *ngFor="let recording of recordings">
+                        <p class="title">{{recording.name}}</p>
+                        <p class="date">{{recording.date | date}}</p>
+                        <p class="description">{{recording.description}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="sideColumn">
+                <div class="uploadRecording">
+                    <div class="titleBox">
+                        <h1>
+                            Upload a Recording
+                        </h1>
+                    </div>
+                    <div class="contentBox">
+                        <form>
+                            <button class="standardButton">
+                                Choose file
+                            </button>
+                            <p class="text">Chosen file: None</p>
+                            <input type="text" class="inputField" placeholder="Title">
+                            <input type="text" class="inputField" placeholder="Description">
+                            <button class="standardButton">
+                                Upload
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                <div class="misc">
+                    <div class="titleBox">
+                        <h1>
+                            Misc.
+                        </h1>
+                    </div>
+                    <div class="contentBox" style="padding-top: 25px;">
+                        Misc stuff, coming soon.
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

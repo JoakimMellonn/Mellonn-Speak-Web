@@ -4,12 +4,101 @@
 
     .center {
         position: absolute;
-        //top: 25%;
         left: 50%;
-        transform: translate(-50%);
-    }
-}
+        transform: translate(-50%, 10%);
+        width: 50%;
 
-p {
-    font-size: 2em;
+        .mainContent {
+            position: relative;
+            left: 50%;
+            transform: translate(-50%);
+            display: flex;
+
+            .titleBox {
+                width: 100%;
+                background-color: #FAB228;
+                box-shadow: 0px 2px 5px #00000024;
+                border-radius: 25px;
+                padding: 25px;
+    
+                h1 {
+                    margin: 0;
+                    font-size: 2.5em;
+                }
+            }
+
+            .contentBox {
+                padding: 0 25px 25px 25px;
+                
+                p {
+                    text-align: center;
+                }
+            }
+
+            .recordings {
+                flex: 1.5;
+                background-color: #F8F8F8;
+                border-radius: 25px;
+                box-shadow: 0px 2px 5px #00000024;
+                box-sizing: border-box;
+                height: 100%;
+
+                .recordingElement {
+                    background-color: #F8F8F8;
+                    border-radius: 25px;
+                    box-shadow: 0px 2px 5px #00000024;
+                    width: 100%;
+                    margin-top: 25px;
+                    padding: 25px;
+                    cursor: pointer;
+
+                    .title {
+                        font-size: 1.3em;
+                        text-align: left;
+                        margin: 0;
+                    }
+
+                    .date {
+                        text-align: left;
+                        margin: 10px 0 8px 0;
+                    }
+
+                    .description {
+                        text-align: left;
+                        margin: 0;
+                        font-weight: 400;
+                        text-shadow: 0px 1px 0.5px #00000024;
+                    }
+                }
+
+                .recordingElement:hover {
+                    background-color: #efefef;
+                }
+            }
+
+            .sideColumn {
+                display: flex;
+                flex-direction: column;
+                flex: 1;
+                margin-left: 25px;
+
+                .uploadRecording {
+                    background-color: #F8F8F8;
+                    border-radius: 25px;
+                    box-shadow: 0px 2px 5px #00000024;
+                    box-sizing: border-box;
+                    max-height: 550px;
+                }
+    
+                .misc {
+                    background-color: #F8F8F8;
+                    border-radius: 25px;
+                    box-shadow: 0px 2px 5px #00000024;
+                    box-sizing: border-box;
+                    margin-top: 25px;
+                    height: 300px;
+                }
+            }
+        }
+    }
 }

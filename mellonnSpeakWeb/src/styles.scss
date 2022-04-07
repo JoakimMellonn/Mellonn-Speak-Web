@@ -3,6 +3,7 @@ html, body {
     padding: 0;
     margin: 0;
     font-family: 'Raleway', sans-serif;
+    font-weight: 700;
     color: #505050;
     text-shadow: 0px 2px 1px #00000024;
     user-select: none;
@@ -16,4 +17,42 @@ input, button {
     font-size: 1.1em;
     font-family: 'Raleway', sans-serif;
     color: #505050;
+}
+
+.standardButton {
+    position: relative;
+    left: 50%;
+    transform: translate(-50%);
+    font-weight: 700;
+    background-color: #A5C644;
+    margin-top: 35px;
+    border: 0;
+    border-radius: 25px;
+    height: 50px;
+    width: 80%;
+    box-shadow: 0px 2px 5px #00000024;
+    cursor: pointer;
+}
+
+.standardButton:hover {
+    background-color: #9ACD3A;
+}
+
+.standardButton:disabled {
+    background-color: #D8D8D8;
+}
+
+.inputField {
+    position: relative;
+    left: 50%;
+    transform: translate(-50%);
+    margin: 25px 0 0 0;
+    background-color: #D8D8D8;
+    border: 0;
+    border-radius: 25px;
+    height: 50px;
+    width: 80%;
+    padding: 2px 25px 2px 25px;
+    box-shadow: 0px 2px 5px #00000024;
+    box-sizing: border-box;
 }

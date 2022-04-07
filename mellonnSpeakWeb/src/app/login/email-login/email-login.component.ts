@@ -92,7 +92,7 @@ export class EmailLoginComponent implements OnInit {
       }
     } catch (err) {
       console.log('Error during signin/signup: ', err);
-      this.serverMessage = String(err).replace('NotAuthorizedException: ', '').replace('username', 'email');
+      this.serverMessage = String(err).split(': ')[1].replace('username', 'email');
     }
 
     this.loading = false;
