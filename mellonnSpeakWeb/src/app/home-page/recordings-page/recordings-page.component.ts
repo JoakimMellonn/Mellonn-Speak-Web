@@ -37,7 +37,7 @@ export class RecordingsPageComponent implements OnInit {
       const recordings = await DataStore.query(Recording, Predicates.ALL, {
         sort: (s) => s.date(SortDirection.ASCENDING),
       });
-      console.log('recordings', recordings);
+      //console.log('recordings', recordings);
       this.recordings = recordings;
     } catch (err) {
       console.log('error getting recordings', err);
@@ -46,6 +46,7 @@ export class RecordingsPageComponent implements OnInit {
 
   async signOut() {
     try {
+      await DataStore.clear();
       await Auth.signOut();
       console.log('User is signed out');
       this.router.navigate(['/login']);

@@ -9,13 +9,15 @@ import { HomePageComponent } from './home-page/home-page.component';
 import Amplify from 'aws-amplify';
 import awsconfig from 'src/aws-exports';
 import { RecordingsPageComponent } from './home-page/recordings-page/recordings-page.component';
+import { TranscriptionPageComponent } from './home-page/recordings-page/transcription-page/transcription-page.component';
 Amplify.configure(awsconfig);
 
 @NgModule({
   declarations: [
     AppComponent,
     HomePageComponent,
-    RecordingsPageComponent
+    RecordingsPageComponent,
+    TranscriptionPageComponent
   ],
   imports: [
     BrowserModule,
