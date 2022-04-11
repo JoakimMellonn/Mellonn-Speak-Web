@@ -1,2 +1,38 @@
-<p *ngIf="id != ''">transcription-page works! Transcription id: {{id}}</p>
-<p *ngIf="id == ''">transcription-page works! But id is nothing...</p>
+<div class="pageContainer">
+    <div class="center">
+        <div *ngIf="loading == true">
+            Loading...
+        </div>
+        <div class="mainContent" *ngIf="loading == false">
+            <div class="transcription">
+                <div class="titleBox">
+                    <h1>
+                        {{ recording.name }}
+                    </h1>
+                </div>
+                <div class="contentBox">
+                    <div class="chatLine" *ngFor="let sww of speakerWithWords">
+                        <div class="chatBubbleUser" *ngIf="recording.interviewers?.includes(sww.speakerLabel)">
+                            {{ sww.pronouncedWords }}
+                        </div>
+                        <div class="chatBubble" *ngIf="!recording.interviewers?.includes(sww.speakerLabel)">
+                            {{ sww.pronouncedWords }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="sideColumn">
+                <div class="editTranscription">
+                    <div class="titleBox">
+                        <h1>
+                            Edit transcription
+                        </h1>
+                    </div>
+                    <div class="contentBox">
+                        Hello world!
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
