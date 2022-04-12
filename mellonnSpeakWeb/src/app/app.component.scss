@@ -24,4 +24,13 @@
         cursor: pointer;
         height: 30px;
     }
+
+    .profile {
+        position: absolute;
+        top: 45%;
+        right: 50px;
+        transform: translate(50%, -50%);
+        cursor: pointer;
+        display: inline-block;
+    }
 }

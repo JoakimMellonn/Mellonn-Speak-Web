@@ -10,6 +10,7 @@ import Amplify from 'aws-amplify';
 import awsconfig from 'src/aws-exports';
 import { RecordingsPageComponent } from './home-page/recordings-page/recordings-page.component';
 import { TranscriptionPageComponent } from './home-page/recordings-page/transcription-page/transcription-page.component';
+import { Router } from '@angular/router';
 Amplify.configure(awsconfig);
 
 @NgModule({
@@ -27,4 +28,9 @@ Amplify.configure(awsconfig);
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+
+  constructor(private router: Router) {}
+
+  url = this.router.url;
+}

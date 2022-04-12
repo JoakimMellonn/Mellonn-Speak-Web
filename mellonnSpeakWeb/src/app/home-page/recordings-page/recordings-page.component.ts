@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {Router} from '@angular/router';
-import { Auth } from 'aws-amplify';
+import { Auth, syncExpression } from 'aws-amplify';
 import { DataStore, Predicates, SortDirection } from '@aws-amplify/datastore';
 import { Recording } from 'src/models';
 import { Observable } from 'rxjs';
@@ -10,16 +10,27 @@ import { Observable } from 'rxjs';
   templateUrl: './recordings-page.component.html',
   styleUrls: ['./recordings-page.component.scss']
 })
-export class RecordingsPageComponent implements OnInit {
+export class RecordingsPageComponent implements OnInit, OnDestroy {
   firstName: string = '';
   lastName: string = '';
   recordings: Recording[] = [];
+  loading: boolean = true;
+  subscription: any;
 
-  constructor(private router: Router) { }
+  constructor() { }
 
   async ngOnInit() {
     await this.getUser();
     await this.getRecordings();
+    this.subscription = DataStore.observe(Recording).subscribe(rec => {
+      this.getRecordings();
+    });
+    this.loading = false;
+  }
+
+  ngOnDestroy() {
+    if (!this.subscription) return;
+    this.subscription.unsubscribe();
   }
 
   async getUser() {
@@ -37,22 +48,9 @@ export class RecordingsPageComponent implements OnInit {
       const recordings = await DataStore.query(Recording, Predicates.ALL, {
         sort: (s) => s.date(SortDirection.ASCENDING),
       });
-      //console.log('recordings', recordings);
       this.recordings = recordings;
     } catch (err) {
       console.log('error getting recordings', err);
-    }
-  }
-
-  async signOut() {
-    try {
-      await DataStore.clear();
-      await Auth.signOut();
-      console.log('User is signed out');
-      this.router.navigate(['/login']);
-
-    } catch (err) {
-      console.log('error signing out', err);
     }
   }
 }

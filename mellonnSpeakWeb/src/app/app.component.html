@@ -1,6 +1,9 @@
 <div class="header">
     <img src="/assets/images/512White.png" alt="icon" class="icon" routerLink="/">
     <img src="/assets/images/logoLightMode.png" alt="logo" class="logo" routerLink="/">
+    <i class="profile fa-solid fa-arrow-right-from-bracket fa-2xl" (click)="signOut()" *ngIf="!url.includes('login')"></i>
 </div>
+<p>Current url {{url}}</p>
+
 
 <router-outlet></router-outlet>

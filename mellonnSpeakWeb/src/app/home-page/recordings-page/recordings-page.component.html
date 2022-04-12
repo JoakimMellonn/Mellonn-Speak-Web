@@ -1,6 +1,9 @@
 <div class="pageContainer">
     <div class="center">
-        <div class="mainContent">
+        <h1 *ngIf="loading == true">
+            Loading...
+        </h1>
+        <div class="mainContent" *ngIf="loading == false">
             <div class="recordings">
                 <div class="titleBox">
                     <h1>
@@ -33,7 +36,7 @@
                             <input type="text" class="inputField" placeholder="Description">
                             
                         </form>
-                        <button (click)="signOut()" class="standardButton">
+                        <button class="standardButton">
                             Upload
                         </button>
                     </div>
