@@ -12,11 +12,17 @@
                 </div>
                 <div class="contentBox">
                     <div class="chatLine" *ngFor="let sww of speakerWithWords">
-                        <div class="chatBubbleUser" *ngIf="recording.interviewers?.includes(sww.speakerLabel)">
-                            {{ sww.pronouncedWords }}
+                        <div *ngIf="recording.interviewers?.includes(sww.speakerLabel)">
+                            <div class="chatBubbleUser">
+                                {{ sww.pronouncedWords }}
+                            </div>
+                            <p class="userText">{{ getSpkLabel(sww.speakerLabel) }}: (Speaker {{getSpkNum(sww.speakerLabel)}}): {{getTimeFrame(sww.startTime, sww.endTime)}}</p>
                         </div>
-                        <div class="chatBubble" *ngIf="!recording.interviewers?.includes(sww.speakerLabel)">
-                            {{ sww.pronouncedWords }}
+                        <div *ngIf="!recording.interviewers?.includes(sww.speakerLabel)">
+                            <div class="chatBubble">
+                                {{ sww.pronouncedWords }}
+                            </div>
+                            <p class="text">{{ getSpkLabel(sww.speakerLabel) }}: (Speaker {{getSpkNum(sww.speakerLabel)}}): {{getTimeFrame(sww.startTime, sww.endTime)}}</p>
                         </div>
                     </div>
                 </div>
