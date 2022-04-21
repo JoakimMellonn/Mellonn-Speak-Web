@@ -11,6 +11,8 @@ import awsconfig from 'src/aws-exports';
 import { RecordingsPageComponent } from './home-page/recordings-page/recordings-page.component';
 import { TranscriptionPageComponent } from './home-page/recordings-page/transcription-page/transcription-page.component';
 import { ChatBubbleComponent } from './home-page/recordings-page/transcription-page/chat-bubble/chat-bubble.component';
+import { UserChatBubbleComponent } from './home-page/recordings-page/transcription-page/user-chat-bubble/user-chat-bubble.component';
+import { FormsModule } from '@angular/forms';
 Amplify.configure(awsconfig);
 
 @NgModule({
@@ -19,12 +21,14 @@ Amplify.configure(awsconfig);
     HomePageComponent,
     RecordingsPageComponent,
     TranscriptionPageComponent,
-    ChatBubbleComponent
+    ChatBubbleComponent,
+    UserChatBubbleComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    SharedModule
+    SharedModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

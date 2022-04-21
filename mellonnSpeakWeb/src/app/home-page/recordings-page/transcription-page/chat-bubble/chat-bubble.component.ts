@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ElementRef } from '@angular/core';
+import { Component, Input, Renderer2, AfterViewInit } from '@angular/core';
 import { SpeakerWithWords } from '../transcription-service.service';
 
 @Component({
@@ -6,21 +6,20 @@ import { SpeakerWithWords } from '../transcription-service.service';
   templateUrl: './chat-bubble.component.html',
   styleUrls: ['./chat-bubble.component.scss']
 })
-export class ChatBubbleComponent implements OnInit {
-  boxHeight: number;
-
+export class ChatBubbleComponent implements AfterViewInit {
   @Input()
   sww!: SpeakerWithWords;
 
-  constructor(private element: ElementRef) { }
+  constructor(private renderer: Renderer2) { }
 
-  ngOnInit(): void {
-    this.setHeight();
+  ngAfterViewInit(): void {
+      this.setHeight();
   }
 
   setHeight(): void {
-    const textArea = this.element.nativeElement.querySelector('.chatBubble');
-    textArea.style.height = '100px';
-    //textArea.style.height = textArea.scrollHeight + 'px';
+    let textAreas: HTMLCollectionOf<Element> = document.getElementsByClassName('chatBubble')
+    for (let textArea of textAreas) {
+      this.renderer.setStyle(textArea, "height", textArea!.scrollHeight + .1 + 'px');
+    }
   }
 }
