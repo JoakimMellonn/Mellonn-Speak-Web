@@ -51,6 +51,19 @@ export class TranscriptionService {
     }
   }
 
+  async saveTranscription(transcription: Transcription, id: string) {
+    const fileKey: string = 'finishedJobs/' + id + '.json';
+
+    try {
+      const result = await Storage.put(fileKey, transcription);
+      console.log(result);
+      return result;
+    } catch (err) {
+      console.log('Error uploading file with key: ' + fileKey + ', error: ' + err);
+      return 'null';
+    }
+  }
+
   processTranscription(transcription: Transcription): SpeakerWithWords[] {
     const spkSegments: SpeakerSegment[] = this.getSpeakerLabels(transcription.results.speaker_labels.segments);
     const wList: PronouncedWord[] = this.getWords(transcription.results.items);

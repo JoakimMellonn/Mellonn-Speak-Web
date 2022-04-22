@@ -1,3 +1,12 @@
-<textarea class="userChatBubble" type="text" [(ngModel)]="text" value="{{sww.pronouncedWords}}">
-</textarea>
-<p *ngIf="changed == true">Changed</p>
+<div class="divBubble">
+    <textarea class="userChatBubble" type="text" [(ngModel)]="text" value="{{sww.pronouncedWords}}" (ngModelChange)="onChanged($event)">
+    </textarea>
+    <div class="saveCancelLine" *ngIf="changed == true">
+        <button class="cancelButton" (click)="cancel()">
+            Cancel
+        </button>
+        <button class="saveButton" (click)="save()">
+            Save
+        </button>
+    </div>
+</div>

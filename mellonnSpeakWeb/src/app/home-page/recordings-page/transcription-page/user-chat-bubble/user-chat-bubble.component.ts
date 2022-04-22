@@ -1,4 +1,6 @@
 import { AfterViewInit, Component, Input, OnInit, Renderer2 } from '@angular/core';
+import { TextEditService } from 'src/app/shared/text-edit.service';
+import { Transcription } from '../transcription';
 import { SpeakerWithWords } from '../transcription-service.service';
 
 @Component({
@@ -10,10 +12,11 @@ export class UserChatBubbleComponent implements AfterViewInit, OnInit {
   changed: boolean = false;
   text: string = '';
 
-  @Input()
-  sww!: SpeakerWithWords;
+  @Input() sww!: SpeakerWithWords;
+  @Input() transcription!: Transcription;
+  @Input() id!: string;
 
-  constructor(private renderer: Renderer2) { }
+  constructor(private renderer: Renderer2, private textEdit: TextEditService) { }
 
   ngOnInit(): void {
     this.text = this.sww.pronouncedWords;
@@ -33,7 +36,21 @@ export class UserChatBubbleComponent implements AfterViewInit, OnInit {
   }
 
   onChanged(event: Event): void {
-    //let text: string = event.
-    //console.log('The text was changed to: ' + text);
+    //console.log('Event: ' + event);
+    if (this.text == this.sww.pronouncedWords) {
+      this.changed = false;
+    } else {
+      this.changed = true;
+    }
+  }
+
+  async save() {
+    await this.textEdit.saveTranscription(this.transcription, this.id, this.sww);
+    this.changed = false;
+  }
+
+  cancel(): void {
+    this.text = this.sww.pronouncedWords;
+    this.changed = false;
   }
 }
