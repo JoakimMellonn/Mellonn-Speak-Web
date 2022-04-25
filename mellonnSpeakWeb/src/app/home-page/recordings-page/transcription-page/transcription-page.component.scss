@@ -1,11 +1,11 @@
 .pageContainer {
     position: relative;
+    top: 120px;
 
     .center {
         position: absolute;
         left: 50%;
         transform: translate(-50%);
-        margin-top: 50px;
         width: 50%;
         min-width: 1100px;
 
@@ -13,6 +13,7 @@
             position: relative;
             left: 50%;
             transform: translate(-50%);
+            height: 100%;
             display: flex;
 
             .titleBox {
@@ -35,6 +36,24 @@
                 
                 p {
                     text-align: center;
+                }
+            }
+
+            .sideColumn {
+                position: sticky;
+                top: 120px;
+                display: flex;
+                flex-direction: column;
+                flex: 1;
+                margin-left: 25px;
+                height: 500px;
+
+                .editTranscription {
+                    background-color: #F8F8F8;
+                    border-radius: 25px;
+                    box-shadow: 0px 2px 5px #00000024;
+                    box-sizing: border-box;
+                    max-height: 550px;
                 }
             }
 
@@ -97,21 +116,6 @@
                     }
                 }
             }
-
-            .sideColumn {
-                display: flex;
-                flex-direction: column;
-                flex: 1;
-                margin-left: 25px;
-
-                .editTranscription {
-                    background-color: #F8F8F8;
-                    border-radius: 25px;
-                    box-shadow: 0px 2px 5px #00000024;
-                    box-sizing: border-box;
-                    max-height: 550px;
-                }
-            }
         }
     }
 }
@@ -132,6 +136,7 @@
         
                 .sideColumn {
                     position: relative;
+                    top: 0;
                     left: 50%;
                     transform: translate(-50%);
                     margin-left: 0;

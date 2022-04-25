@@ -3,7 +3,9 @@
     background-color: #FAB228;
     height: 70px;
     box-shadow: 0px 2px 5px #00000024;
-    position: relative;
+    width: 100%;
+    position: fixed;
+    z-index: 10;
 
     .icon {
         position: absolute;
