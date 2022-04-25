@@ -2,19 +2,27 @@
     float: right;
     width: 60%;
 
-    .userChatBubble {
+    .chatBubble {
         background-color: #A5C644;
         width: 100%;
         padding: 15px;
         border-radius: 25px;
         box-shadow: 0px 2px 5px #00000024;
-        height: 62px;
         min-height: 50px;
+    }
+
+    p {
+        display: inline-block;
+        padding-top: 5px;
+        font-family: 'Raleway', sans-serif;
+        font-size: 0.8em;
+        color: #505050;
+        margin: 0;
     }
 
     .saveCancelLine {
         width: 100%;
-        padding: 10px 25px 5px 25px;
+        padding: 5px 25px 5px 25px;
         display: flex;
 
         .cancelButton {

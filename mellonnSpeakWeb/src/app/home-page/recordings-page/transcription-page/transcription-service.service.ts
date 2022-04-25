@@ -161,13 +161,19 @@ export class TranscriptionService {
           _joinableWords.push(' ' + word);
         }
       }
+
+      let joinedWords = _joinableWords.join('');
+
+      while (joinedWords.charAt(0) == ' ') {
+        joinedWords = joinedWords.replace(' ', '');
+      }
       
       swCombined.push(
         new SpeakerWithWords(
           speakerSegment.startTime,
           speakerSegment.speakerLabel,
           speakerSegment.endTime,
-          _joinableWords.join(''),
+          joinedWords,
         ),
       );
     }

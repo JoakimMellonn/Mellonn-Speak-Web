@@ -9,6 +9,7 @@ import { SpeakerWithWords } from '../transcription-service.service';
   styleUrls: ['./user-chat-bubble.component.scss']
 })
 export class UserChatBubbleComponent implements AfterViewInit, OnInit {
+  focused: boolean = false;
   changed: boolean = false;
   text: string = '';
 
@@ -20,22 +21,30 @@ export class UserChatBubbleComponent implements AfterViewInit, OnInit {
 
   ngOnInit(): void {
     this.text = this.sww.pronouncedWords;
-      
   }
 
   ngAfterViewInit(): void {
     Promise.resolve().then(() => this.setStartHeight());
   }
 
-  setStartHeight(): void {
-    let textAreas: HTMLCollectionOf<Element> = document.getElementsByClassName('userChatBubble');
+  onEnter(event: Event) {
+    event.preventDefault();
+    let textArea = document.getElementById('bubble');
+    textArea?.blur();
+    if (this.text != this.sww.pronouncedWords) {
+      this.save();
+    }
+  }
+
+  setStartHeight() {
+    let textAreas: HTMLCollectionOf<Element> = document.getElementsByClassName('chatBubble');
     for (let textArea of textAreas) {
       const height: number = textArea.scrollHeight + 0.01;
       this.renderer.setStyle(textArea, "height", height + 'px');
     }
   }
 
-  onChanged(event: Event): void {
+  onChanged(event: Event) {
     //console.log('Event: ' + event);
     if (this.text == this.sww.pronouncedWords) {
       this.changed = false;
@@ -45,11 +54,11 @@ export class UserChatBubbleComponent implements AfterViewInit, OnInit {
   }
 
   async save() {
-    await this.textEdit.saveTranscription(this.transcription, this.id, this.sww);
+    await this.textEdit.saveTranscription(this.transcription, this.id, this.sww, this.text);
     this.changed = false;
   }
 
-  cancel(): void {
+  cancel() {
     this.text = this.sww.pronouncedWords;
     this.changed = false;
   }
