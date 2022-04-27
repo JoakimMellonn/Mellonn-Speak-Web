@@ -20,14 +20,18 @@ export class AudioControlComponent implements OnInit {
       this.resetChosenBar();
     });
 
-    this.audio.audioProgressCalled.subscribe((res) => {
-      this.updateProgressState(res);
-    });
-
     this.audio.player.ontimeupdate = () => {
-      console.log('Current time: ' + this.audio.player.currentTime);
+      //console.log('Current time: ' + this.audio.player.currentTime + ', current end: ' + this.audio.currentEnd);
       this.updateProgressState(this.audio.player.currentTime);
     };
+  }
+
+  knobSeek() {
+    const chosenBar = document.getElementById('chosenBar');
+    const progressBar = document.getElementById('progressBar');
+    const knob = document.getElementById('seekKnob');
+
+    //chosenBar?.addEventListener('click', this.seek);
   }
 
   resetChosenBar() {
@@ -43,12 +47,46 @@ export class AudioControlComponent implements OnInit {
   }
 
   updateProgressState(currentTime: number) {
-    const percent: number = this.getPercent(currentTime, this.audio.currentEnd);
+    const percent: number = this.getPercent(currentTime - this.audio.currentStart, this.audio.currentEnd - this.audio.currentStart);
     const progressBar = document.getElementById('progressBar');
     const knob = document.getElementById('seekKnob');
 
     this.renderer.setStyle(progressBar, 'width', percent + '%');
     this.renderer.setStyle(knob, 'left', percent + '%');
+  }
+
+  seek(event: MouseEvent) {
+    const clickPercent = this.getClickPercent(event);
+    console.log('Click percent: ' + clickPercent);
+    this.audio.player.currentTime = this.audio.end * clickPercent;
+  }
+
+  dragKnob(event: MouseEvent) {
+    const knob = document.getElementById('seekKnob');
+    const clickPercent = this.getClickPercent(event);
+
+    window.addEventListener('mouseup', this.stopDrag);
+    window.addEventListener('mousemove', this.drag);
+  }
+
+  drag(event: MouseEvent) {
+    const bar = document.getElementById('chosenBar');
+    console.log('Percent: ' + (event.clientX - bar!.getBoundingClientRect().left) / bar!.offsetWidth);
+  }
+  
+  stopDrag() {
+    window.removeEventListener('mousemove', this.drag);
+    window.removeEventListener('mouseup', this.stopDrag);
+    window.removeAllListeners;
+  }
+
+  getClickPercent(event: MouseEvent): number {
+    const chosenBar = document.getElementById('chosenBar');
+    return (event.clientX - this.getPosition(chosenBar!)) / chosenBar!.offsetWidth;
+  }
+
+  getPosition(el: HTMLElement): number {
+    return el.getBoundingClientRect().left;
   }
 
   getPercent(place: number, end: number): number {

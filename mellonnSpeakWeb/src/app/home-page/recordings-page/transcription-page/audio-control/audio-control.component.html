@@ -1,10 +1,10 @@
 <div class="audioBar">
     <div class="progressBackground">
-        <div id="chosenBar">
+        <div id="chosenBar" (click)="seek($event)">
             <div id="progressBar">
 
             </div>
-            <div id="seekKnob">
+            <div id="seekKnob" (mousedown)="dragKnob($event)" (mouseup)="stopDrag()">
 
             </div>
         </div>
