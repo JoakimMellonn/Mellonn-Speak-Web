@@ -13,6 +13,7 @@ import { TranscriptionPageComponent } from './home-page/recordings-page/transcri
 import { ChatBubbleComponent } from './home-page/recordings-page/transcription-page/chat-bubble/chat-bubble.component';
 import { UserChatBubbleComponent } from './home-page/recordings-page/transcription-page/user-chat-bubble/user-chat-bubble.component';
 import { FormsModule } from '@angular/forms';
+import { AudioControlComponent } from './home-page/recordings-page/transcription-page/audio-control/audio-control.component';
 Amplify.configure(awsconfig);
 
 @NgModule({
@@ -22,7 +23,8 @@ Amplify.configure(awsconfig);
     RecordingsPageComponent,
     TranscriptionPageComponent,
     ChatBubbleComponent,
-    UserChatBubbleComponent
+    UserChatBubbleComponent,
+    AudioControlComponent
   ],
   imports: [
     BrowserModule,

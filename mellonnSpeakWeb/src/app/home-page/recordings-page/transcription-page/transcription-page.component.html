@@ -9,6 +9,9 @@
                     <h1>
                         {{ recording.name }}
                     </h1>
+                    <div class="menuButton">
+                        <i class="fa-solid fa-ellipsis-vertical fa-2xl"></i>
+                    </div>
                 </div>
                 <div class="contentBox">
                     <div class="chatLine" *ngFor="let sww of speakerWithWords">
@@ -35,8 +38,11 @@
                         <button (click)="startAudio()">
                             Play
                         </button>
-                        <button (click)="setClip()">
-                            Set clip
+                        <button (click)="pauseAudio()">
+                            Pause
+                        </button>
+                        <button (click)="resetAudio()">
+                            Reset audio
                         </button>
                     </div>
                 </div>
@@ -44,3 +50,4 @@
         </div>
     </div>
 </div>
+<app-audio-control></app-audio-control>

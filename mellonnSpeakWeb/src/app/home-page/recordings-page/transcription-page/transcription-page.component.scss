@@ -26,6 +26,15 @@
                 h1 {
                     margin: 0;
                     font-size: 2.5em;
+                    display: inline;
+                }
+
+                .menuButton {
+                    float: right;
+                    width: 20px;
+                    height: 50px;
+                    padding-top: 14px;
+                    cursor: pointer;
                 }
             }
 

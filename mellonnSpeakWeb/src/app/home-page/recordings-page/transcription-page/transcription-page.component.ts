@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Recording } from 'src/models';
 import { AudioService } from './audio.service';
@@ -19,6 +19,7 @@ export class TranscriptionPageComponent implements OnInit {
   speakerWithWords: SpeakerWithWords[];
   loading: boolean = true;
   error: boolean = false;
+  url: string;
 
   constructor(private route: ActivatedRoute, private service: TranscriptionService, private audio: AudioService) { }
 
@@ -39,8 +40,8 @@ export class TranscriptionPageComponent implements OnInit {
         this.error;
       }
     });
-    const url = await this.audio.getAudioUrl(this.recording.fileKey ?? '');
-    this.audio.setAudioUrl(url);
+    this.url = await this.audio.getAudioUrl(this.recording.fileKey ?? '');
+    this.audio.setAudioUrl(this.url);
     this.speakerWithWords = this.service.processTranscription(this.transcription);
   }
 
@@ -78,11 +79,15 @@ export class TranscriptionPageComponent implements OnInit {
     }
   }
 
-  async startAudio() {
+  startAudio() {
     this.audio.play();
   }
 
-  setClip() {
-    this.audio.setStartEnd(7, 14);
+  pauseAudio() {
+    this.audio.pause();
+  }
+
+  resetAudio() {
+    this.audio.resetState();
   }
 }
