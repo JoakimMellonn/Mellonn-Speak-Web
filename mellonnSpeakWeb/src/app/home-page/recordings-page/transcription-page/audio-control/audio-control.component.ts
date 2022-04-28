@@ -1,5 +1,5 @@
-import { NumberSymbol } from '@angular/common';
 import { Component, OnInit, Renderer2 } from '@angular/core';
+import { SettingsService } from 'src/app/shared/settings.service';
 import { AudioService } from '../audio.service';
 
 @Component({
@@ -13,10 +13,13 @@ export class AudioControlComponent implements OnInit {
   chosenStart: string;
   chosenEnd: string;
   chosen: boolean;
+  jumpSecs: number;
 
-  constructor(private renderer: Renderer2, private audio: AudioService) { }
+  constructor(private renderer: Renderer2, private audio: AudioService, private settings: SettingsService) { }
 
   ngOnInit(): void {
+    this.jumpSecs = this.settings.jumpSecs;
+
     this.audio.audioControlSetChosenCalled.subscribe((res) => {
       console.log('res: ' + res);
       this.setChosenBar(res[0], res[1]);
@@ -32,12 +35,32 @@ export class AudioControlComponent implements OnInit {
     };
   }
 
+  playPause() {
+    const icon = document.getElementById('playPause');
+    if (this.audio.player.paused) {
+      this.renderer.removeClass(icon, 'fa-play');
+      this.renderer.addClass(icon, 'fa-pause');
+      this.audio.play();
+    } else {
+      this.renderer.removeClass(icon, 'fa-pause');
+      this.renderer.addClass(icon, 'fa-play');
+      this.audio.pause();
+    }
+  }
+
+  jumpTime(time: number) {
+    const current = this.audio.player.currentTime;
+    if (current + time < 0 || current + time > this.audio.end) {
+      this.audio.player.currentTime = this.audio.currentStart;
+    } else {
+      this.audio.player.currentTime = current + time;
+    }
+  }
+
   knobSeek() {
     const chosenBar = document.getElementById('chosenBar');
     const progressBar = document.getElementById('progressBar');
     const knob = document.getElementById('seekKnob');
-
-    //chosenBar?.addEventListener('click', this.seek);
   }
 
   resetChosenBar() {
@@ -122,9 +145,7 @@ export class AudioControlComponent implements OnInit {
   }
 
   getChosenWidth(start: number, end: number): string {
-    const returnValue = (65 + this.addNumber(start) + this.addNumber(end)) + 'px';
-    console.log('Width: ' + returnValue);
-    return returnValue;
+    return (65 + this.addNumber(start) + this.addNumber(end)) + 'px';
   }
 
   addNumber(secs: number): number {

@@ -55,6 +55,14 @@ export class AudioService {
     }
   }
 
+  playPause() {
+    if (this.player.paused) {
+      this.play();
+    } else {
+      this.pause();
+    }
+  }
+
   setStartEnd(start: number, end: number) {
     console.log('Setting start-end: ' + start + 's - ' + end + 's');
     const newUrl: string = this.playerUrl + '#t=' + start + ',' + end;

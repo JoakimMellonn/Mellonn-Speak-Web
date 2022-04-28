@@ -19,4 +19,11 @@
         <p class="start">{{ currentTime }}</p>
         <p class="end">{{ endTime }}</p>
     </div>
+    <div class="mediaControls">
+        <div class="centerControls">
+            <i class="step fa-solid fa-backward-step fa-xl" (click)="jumpTime(-jumpSecs)"></i>
+            <i id="playPause" class="playButton fa-solid fa-play fa-xl" (click)="playPause()"></i>
+            <i class="step fa-solid fa-forward-step fa-xl" (click)="jumpTime(jumpSecs)"></i>
+        </div>
+    </div>
 </div>
