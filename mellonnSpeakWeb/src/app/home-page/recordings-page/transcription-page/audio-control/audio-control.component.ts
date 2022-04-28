@@ -1,3 +1,4 @@
+import { NumberSymbol } from '@angular/common';
 import { Component, OnInit, Renderer2 } from '@angular/core';
 import { AudioService } from '../audio.service';
 
@@ -7,6 +8,11 @@ import { AudioService } from '../audio.service';
   styleUrls: ['./audio-control.component.scss']
 })
 export class AudioControlComponent implements OnInit {
+  currentTime: string;
+  endTime: string;
+  chosenStart: string;
+  chosenEnd: string;
+  chosen: boolean;
 
   constructor(private renderer: Renderer2, private audio: AudioService) { }
 
@@ -21,7 +27,7 @@ export class AudioControlComponent implements OnInit {
     });
 
     this.audio.player.ontimeupdate = () => {
-      //console.log('Current time: ' + this.audio.player.currentTime + ', current end: ' + this.audio.currentEnd);
+      this.endTime = this.formatSeconds(this.audio.end);
       this.updateProgressState(this.audio.player.currentTime);
     };
   }
@@ -38,18 +44,27 @@ export class AudioControlComponent implements OnInit {
     const chosenBar = document.getElementById('chosenBar');
     this.renderer.setStyle(chosenBar, 'left', '0');
     this.renderer.setStyle(chosenBar, 'width', '100%');
+    this.chosen = false;
   }
 
   setChosenBar(start: number, end: number) {
     const chosenBar = document.getElementById('chosenBar');
+    const chosen = document.getElementById('chosen');
+    this.chosenStart = this.formatSeconds(start);
+    this.chosenEnd = this.formatSeconds(end);
+    this.chosen = true;
+    this.renderer.setStyle(chosen, 'min-width', this.getChosenWidth(start, end));
     this.renderer.setStyle(chosenBar, 'left', this.getPercent(start, this.audio.end) + '%');
+    this.renderer.setStyle(chosen, 'left', this.getPercent(start, this.audio.end) + (this.getPercent(end - start, this.audio.end) / 2) + '%');
     this.renderer.setStyle(chosenBar, 'width', this.getPercent(end - start, this.audio.end) + '%');
+    this.renderer.setStyle(chosen, 'width', this.getPercent(end - start, this.audio.end) + '%');
   }
 
   updateProgressState(currentTime: number) {
     const percent: number = this.getPercent(currentTime - this.audio.currentStart, this.audio.currentEnd - this.audio.currentStart);
     const progressBar = document.getElementById('progressBar');
     const knob = document.getElementById('seekKnob');
+    this.currentTime = this.formatSeconds(currentTime);
 
     this.renderer.setStyle(progressBar, 'width', percent + '%');
     this.renderer.setStyle(knob, 'left', percent + '%');
@@ -62,11 +77,8 @@ export class AudioControlComponent implements OnInit {
   }
 
   dragKnob(event: MouseEvent) {
-    const knob = document.getElementById('seekKnob');
-    const clickPercent = this.getClickPercent(event);
-
-    window.addEventListener('mouseup', this.stopDrag);
     window.addEventListener('mousemove', this.drag);
+    window.addEventListener('mouseup', this.stopDrag);
   }
 
   drag(event: MouseEvent) {
@@ -75,9 +87,9 @@ export class AudioControlComponent implements OnInit {
   }
   
   stopDrag() {
+    console.log('Stopped drag');
     window.removeEventListener('mousemove', this.drag);
     window.removeEventListener('mouseup', this.stopDrag);
-    window.removeAllListeners;
   }
 
   getClickPercent(event: MouseEvent): number {
@@ -93,4 +105,37 @@ export class AudioControlComponent implements OnInit {
     return (place / end) * 100;
   }
 
+  formatSeconds(totalSeconds: number): string {
+    let hours = Math.floor(Math.round(totalSeconds) / 3600);
+    let minutes = Math.floor(Math.round(totalSeconds) / 60);
+    let seconds = Math.round(totalSeconds) % 60;
+
+
+    if (totalSeconds >= 3600) {
+      let minutesString = String(minutes).padStart(2, "0");
+      let secondsString = String(seconds).padStart(2, "0");
+      return hours + ":" + minutesString + ":" + secondsString;
+    } else {
+      let secondsString = String(seconds).padStart(2, "0");
+      return minutes + ":" + secondsString;
+    }
+  }
+
+  getChosenWidth(start: number, end: number): string {
+    const returnValue = (65 + this.addNumber(start) + this.addNumber(end)) + 'px';
+    console.log('Width: ' + returnValue);
+    return returnValue;
+  }
+
+  addNumber(secs: number): number {
+    if (Math.round(secs) == 0) {
+      return 1;
+    } else if (secs < 600) {
+      return 0;
+    } else if (secs < 3600) {
+      return 15;
+    } else {
+      return 30;
+    }
+  }
 }
