@@ -6,6 +6,7 @@
         value="{{sww.pronouncedWords}}" 
         (ngModelChange)="onChanged($event)" 
         (keydown.enter)="onEnter($event)"
+        (focus)="onFocus()"
     >
     </textarea>
     <p *ngIf="changed == true">Press enter to save</p>

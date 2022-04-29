@@ -113,10 +113,10 @@
         height: 25px;
 
         .centerControls {
-            display: inline;
             position: relative;
+            transform: translate(-50%, 0);
             left: 50%;
-            transform: translate(-50%);
+            display: inline-block;
 
             .playButton {
                 cursor: pointer;

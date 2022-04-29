@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, Input, OnInit, Renderer2 } from '@angular/core';
 import { TextEditService } from 'src/app/shared/text-edit.service';
+import { AudioService } from '../audio.service';
 import { Transcription } from '../transcription';
 import { SpeakerWithWords } from '../transcription-service.service';
 
@@ -17,7 +18,7 @@ export class UserChatBubbleComponent implements AfterViewInit, OnInit {
   @Input() transcription!: Transcription;
   @Input() id!: string;
 
-  constructor(private renderer: Renderer2, private textEdit: TextEditService) { }
+  constructor(private renderer: Renderer2, private textEdit: TextEditService, private audio: AudioService) { }
 
   ngOnInit(): void {
     this.text = this.sww.pronouncedWords;
@@ -51,6 +52,10 @@ export class UserChatBubbleComponent implements AfterViewInit, OnInit {
     } else {
       this.changed = true;
     }
+  }
+
+  onFocus() {
+    this.audio.setStartEnd(this.sww.startTime, this.sww.endTime);
   }
 
   async save() {
