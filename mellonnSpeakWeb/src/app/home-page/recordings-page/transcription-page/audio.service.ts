@@ -36,6 +36,10 @@ export class AudioService {
         this.loadedFirst = true;
       }
     }
+
+    this.player.onerror = (err) => {
+      console.log('Audio error: ' + err);
+    }
   }
 
   resetState() {
@@ -47,19 +51,11 @@ export class AudioService {
 
   async getAudioUrl(key: string): Promise<string> {
     try {
-      const url = await Storage.get(key, {level: 'private'});
+      const url = await Storage.get(key, {level: 'private', expires: 360});
       return url;
     } catch (err) {
-      console.log('Error while get audio url: ' + err);
+      console.log('Error while getting audio url: ' + err);
       return '' + err;
-    }
-  }
-
-  playPause() {
-    if (this.player.paused) {
-      this.play();
-    } else {
-      this.pause();
     }
   }
 
