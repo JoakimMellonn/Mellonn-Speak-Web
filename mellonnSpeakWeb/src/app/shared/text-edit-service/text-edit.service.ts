@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Item, Transcription, Alternative } from '../home-page/recordings-page/transcription-page/transcription';
-import { SpeakerWithWords, TranscriptionService } from '../home-page/recordings-page/transcription-page/transcription-service.service';
+import { Item, Transcription, Alternative } from '../../home-page/recordings-page/transcription-page/transcription';
+import { SpeakerWithWords, TranscriptionService } from '../../home-page/recordings-page/transcription-page/transcription-service.service';
 
 @Injectable({
   providedIn: 'root'

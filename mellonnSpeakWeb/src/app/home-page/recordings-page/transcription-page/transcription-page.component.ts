@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { DocxService } from 'src/app/shared/docx-service/docx.service';
 import { Recording } from 'src/models';
 import { AudioService } from './audio.service';
 import { Transcription } from './transcription';
@@ -21,7 +22,12 @@ export class TranscriptionPageComponent implements OnInit {
   error: boolean = false;
   url: string;
 
-  constructor(private route: ActivatedRoute, private service: TranscriptionService, private audio: AudioService) { }
+  constructor(
+    private route: ActivatedRoute,
+    private service: TranscriptionService,
+    private audio: AudioService,
+    private docx: DocxService
+  ) { }
 
   async ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id') ?? '';
@@ -77,6 +83,10 @@ export class TranscriptionPageComponent implements OnInit {
     } else {
       return minSec;
     }
+  }
+
+  downloadDOCX() {
+    this.docx.generateDOCX(this.speakerWithWords, this.recording);
   }
 
   startAudio() {

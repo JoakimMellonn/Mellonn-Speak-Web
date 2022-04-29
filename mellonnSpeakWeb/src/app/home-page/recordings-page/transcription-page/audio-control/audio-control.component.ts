@@ -1,5 +1,5 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
-import { SettingsService } from 'src/app/shared/settings.service';
+import { SettingsService } from 'src/app/shared/settings-service/settings.service';
 import { AudioService } from '../audio.service';
 
 @Component({

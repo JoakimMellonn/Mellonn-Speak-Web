@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, Input, OnInit, Renderer2 } from '@angular/core';
-import { TextEditService } from 'src/app/shared/text-edit.service';
+import { TextEditService } from 'src/app/shared/text-edit-service/text-edit.service';
 import { AudioService } from '../audio.service';
 import { Transcription } from '../transcription';
 import { SpeakerWithWords } from '../transcription-service.service';
