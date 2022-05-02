@@ -25,7 +25,7 @@ export class AudioControlComponent implements OnInit {
       this.setChosenBar(res[0], res[1]);
     });
 
-    this.audio.audioControlResetChosenCalled.subscribe((res) => {
+    this.audio.audioControlResetChosenCalled.subscribe(() => {
       this.resetChosenBar();
     });
 

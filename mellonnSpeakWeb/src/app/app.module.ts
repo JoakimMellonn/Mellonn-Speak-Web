@@ -14,6 +14,9 @@ import { ChatBubbleComponent } from './home-page/recordings-page/transcription-p
 import { UserChatBubbleComponent } from './home-page/recordings-page/transcription-page/user-chat-bubble/user-chat-bubble.component';
 import { FormsModule } from '@angular/forms';
 import { AudioControlComponent } from './home-page/recordings-page/transcription-page/audio-control/audio-control.component';
+import { SpeakerChooserComponent } from './home-page/recordings-page/transcription-page/speaker-chooser/speaker-chooser.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 Amplify.configure(awsconfig);
 
 @NgModule({
@@ -24,13 +27,15 @@ Amplify.configure(awsconfig);
     TranscriptionPageComponent,
     ChatBubbleComponent,
     UserChatBubbleComponent,
-    AudioControlComponent
+    AudioControlComponent,
+    SpeakerChooserComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     SharedModule,
-    FormsModule
+    FormsModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
