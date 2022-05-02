@@ -41,7 +41,7 @@
                         <button (click)="resetAudio()">
                             Reset audio
                         </button><br><br>
-                        <app-speaker-chooser [recording]="recording"></app-speaker-chooser>
+                        <app-speaker-chooser [recording]="recording" [speakerWithWords]="speakerWithWords" *ngIf="loading == false"></app-speaker-chooser>
                     </div>
                 </div>
             </div>

@@ -20,6 +20,9 @@ export class AudioService {
   private audioControlResetChosen = new Subject<any>();
   audioControlResetChosenCalled = this.audioControlResetChosen.asObservable();
 
+  private audioOnTimeUpdate = new Subject<any>();
+  audioOnTimeUpdateCalled = this.audioOnTimeUpdate.asObservable();
+
   constructor() { }
 
   async setAudioUrl(url: string) {
@@ -35,6 +38,10 @@ export class AudioService {
         this.player.currentTime = 0;
         this.loadedFirst = true;
       }
+    }
+
+    this.player.ontimeupdate = () => {
+      this.audioOnTimeUpdate.next(1);
     }
 
     this.player.onerror = (err) => {

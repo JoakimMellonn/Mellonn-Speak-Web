@@ -29,10 +29,10 @@ export class AudioControlComponent implements OnInit {
       this.resetChosenBar();
     });
 
-    this.audio.player.ontimeupdate = () => {
+    this.audio.audioOnTimeUpdateCalled.subscribe(() => {
       this.endTime = this.formatSeconds(this.audio.end);
       this.updateProgressState(this.audio.player.currentTime);
-    };
+    });
   }
 
   playPause() {

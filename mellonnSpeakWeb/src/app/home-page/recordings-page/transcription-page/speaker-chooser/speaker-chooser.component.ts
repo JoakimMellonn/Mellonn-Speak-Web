@@ -24,14 +24,14 @@ export class SpeakerChooserComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.selectSpeaker(0);
 
-    this.audio.player.ontimeupdate = () => {
+    this.audio.audioOnTimeUpdateCalled.subscribe(() => {
       if (this.autoSwitch) {
-        this.getSpeaker(this.audio.player.currentTime);
+        this.selectSpeaker(this.getSpeaker(this.audio.player.currentTime));
       }
-    }
+    });
   }
 
-  getSpeakers(): void {
+  getSpeakers() {
     for (let i = 0; i < this.recording.labels!.length; i++) {
       this.speakerList.push(
         new Speaker(
@@ -42,7 +42,7 @@ export class SpeakerChooserComponent implements OnInit, AfterViewInit {
     }
   }
 
-  selectSpeaker(currentSpeaker: number): void {
+  selectSpeaker(currentSpeaker: number) {
     for (let speaker of this.speakerList) {
       const item = document.getElementById('speaker' + speaker.number);
       this.renderer.removeClass(item, 'chosenSpeaker');
