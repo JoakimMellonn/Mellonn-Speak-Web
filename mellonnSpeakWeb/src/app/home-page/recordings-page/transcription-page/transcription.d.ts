@@ -32,7 +32,13 @@ export interface Segment {
     start_time: string;
     speaker_label: string;
     end_time: string;
-    items: Item[];
+    items: Item2[];
+}
+
+export interface Item2 {
+    start_time: string
+    speaker_label: string
+    end_time: string
 }
 
 export interface Transcript {

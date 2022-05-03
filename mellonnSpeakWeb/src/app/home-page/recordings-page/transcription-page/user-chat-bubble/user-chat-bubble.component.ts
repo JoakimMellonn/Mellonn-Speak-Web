@@ -1,8 +1,8 @@
 import { AfterViewInit, Component, Input, OnInit, Renderer2 } from '@angular/core';
 import { TextEditService } from 'src/app/shared/text-edit-service/text-edit.service';
-import { AudioService } from '../audio.service';
+import { AudioService } from '../services/audio.service';
 import { Transcription } from '../transcription';
-import { SpeakerWithWords } from '../transcription-service.service';
+import { SpeakerWithWords } from '../services/transcription-service.service';
 
 @Component({
   selector: 'app-user-chat-bubble',

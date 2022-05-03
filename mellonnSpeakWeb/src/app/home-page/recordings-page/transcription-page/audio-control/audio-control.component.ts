@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { SettingsService } from 'src/app/shared/settings-service/settings.service';
-import { AudioService } from '../audio.service';
+import { AudioService } from '../services/audio.service';
 
 @Component({
   selector: 'app-audio-control',

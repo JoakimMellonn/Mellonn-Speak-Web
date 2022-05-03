@@ -1,7 +1,9 @@
 import { AfterViewInit, Component, Input, OnInit, Renderer2 } from '@angular/core';
+import { SpeakerEditService, SpeakerSwitch } from 'src/app/shared/speaker-edit-service/speaker-edit.service';
 import { Recording } from 'src/models';
-import { AudioService } from '../audio.service';
-import { SpeakerWithWords } from '../transcription-service.service';
+import { AudioService } from '../services/audio.service';
+import { SpeakerWithWords } from '../services/transcription-service.service';
+import { Transcription } from '../transcription';
 
 @Component({
   selector: 'app-speaker-chooser',
@@ -11,24 +13,55 @@ import { SpeakerWithWords } from '../transcription-service.service';
 export class SpeakerChooserComponent implements OnInit, AfterViewInit {
   @Input() recording: Recording;
   @Input() speakerWithWords: SpeakerWithWords[];
+  @Input() transcription: Transcription;
 
+  currentTime: number;
   speakerList: Speaker[] = [];
   autoSwitch: boolean = true;
+  speakerSwitches: SpeakerSwitch[] = [];
+  lastPosition: number = 0;
+  lastSpeaker: number;
+  unsavedTranscription: Transcription;
+  saved: boolean = true;
 
-  constructor(private renderer: Renderer2, private audio: AudioService) { }
+  constructor(private renderer: Renderer2, private audio: AudioService, private speakerEdit: SpeakerEditService) { }
 
   ngOnInit(): void {
     this.getSpeakers();
+    this.speakerSwitches = this.speakerEdit.getSpeakerSwitches(this.transcription);
   }
 
   ngAfterViewInit(): void {
-    this.selectSpeaker(0);
+    let firstSpeaker: number = +this.transcription.results.speaker_labels.segments[0].speaker_label.split('_')[1];
+    this.selectSpeaker(firstSpeaker, 0, true);
+    this.lastSpeaker = firstSpeaker;
+
+    var timeInterval = setInterval(() => {
+      if (this.autoSwitch) {
+        for (let sw of this.speakerSwitches) {
+          const minTime = Math.round(this.audio.player.currentTime * 100) / 100 - 0.01;
+          const maxTime = Math.round(this.audio.player.currentTime * 100) / 100 + 0.01;
+          if (sw.start >= minTime && sw.start <= maxTime) {
+            if (sw.speaker != this.lastSpeaker) {
+              this.selectSpeaker(sw.speaker, sw.start, true);
+            }
+          }
+        }
+      }
+    }, 10);
 
     this.audio.audioOnTimeUpdateCalled.subscribe(() => {
-      if (this.autoSwitch) {
-        this.selectSpeaker(this.getSpeaker(this.audio.player.currentTime));
-      }
+      this.currentTime = this.audio.player.currentTime;
     });
+  }
+
+  save() {
+
+  }
+
+  cancel() {
+    this.unsavedTranscription = this.transcription;
+    this.saved = true;
   }
 
   getSpeakers() {
@@ -42,7 +75,7 @@ export class SpeakerChooserComponent implements OnInit, AfterViewInit {
     }
   }
 
-  selectSpeaker(currentSpeaker: number) {
+  selectSpeaker(currentSpeaker: number, position: number, automatic: boolean) {
     for (let speaker of this.speakerList) {
       const item = document.getElementById('speaker' + speaker.number);
       this.renderer.removeClass(item, 'chosenSpeaker');
@@ -53,6 +86,8 @@ export class SpeakerChooserComponent implements OnInit, AfterViewInit {
         this.renderer.addClass(item, 'speaker');
       }
     }
+    if (!automatic) this.saved = false;
+    this.switchSpeaker(position, currentSpeaker);
   }
 
   getSpeaker(time: number): number {
@@ -62,6 +97,34 @@ export class SpeakerChooserComponent implements OnInit, AfterViewInit {
       }
     }
     return 0;
+  }
+
+  switchSpeaker(position: number, speaker: number) {
+    console.log('Switched speaker: ' + position + ', speaker: ' + speaker);
+    let startTime: number = this.lastPosition;
+    let endTime: number = position;
+    let oldTranscription: Transcription = this.transcription;
+
+    if (endTime != 0) {
+      if (startTime == 0) {
+        endTime = Math.round(+(endTime - 0.01) * 100) / 100;
+        startTime = Math.round((startTime + 0.01) * 100) / 100;
+      } else {
+        endTime = Math.round((endTime - 0.01) * 100) / 100;
+        startTime = Math.round(startTime * 100) / 100;
+      }
+    }
+
+    if (startTime < endTime) {
+      let newTranscription: Transcription = this.speakerEdit.getNewSpeakerLabels(oldTranscription, startTime, endTime, this.lastSpeaker);
+
+      this.unsavedTranscription = newTranscription;
+      this.speakerSwitches = this.speakerEdit.getSpeakerSwitches(newTranscription);
+
+      this.lastPosition = position;
+      this.lastSpeaker = speaker;
+      console.log('Saved switch, lastPosition: ' + this.lastPosition + ', lastSpeaker: ' + this.lastSpeaker);
+    }
   }
 
 }

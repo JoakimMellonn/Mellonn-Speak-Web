@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SpeakerWithWords } from 'src/app/home-page/recordings-page/transcription-page/transcription-service.service';
+import { SpeakerWithWords } from 'src/app/home-page/recordings-page/transcription-page/services/transcription-service.service';
 import { Recording } from 'src/models';
 import { Document, Packer, Paragraph, TextRun, HeadingLevel } from "docx";
 import { saveAs } from 'file-saver';

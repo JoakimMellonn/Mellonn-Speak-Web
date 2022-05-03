@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DocxService } from 'src/app/shared/docx-service/docx.service';
 import { Recording } from 'src/models';
-import { AudioService } from './audio.service';
+import { AudioService } from './services/audio.service';
 import { Transcription } from './transcription';
-import { TranscriptionService, SpeakerWithWords } from './transcription-service.service';
+import { TranscriptionService, SpeakerWithWords } from './services/transcription-service.service';
 
 
 @Component({

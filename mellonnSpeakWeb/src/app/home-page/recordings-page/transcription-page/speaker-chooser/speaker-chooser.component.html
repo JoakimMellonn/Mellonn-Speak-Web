@@ -1,9 +1,18 @@
 <p style="display: inline;">Auto switch speaker </p>
 <input type="checkbox" [(ngModel)]="autoSwitch">
+
 <div class="chooserDiv">
     <div *ngFor="let speaker of speakerList">
-        <div id="speaker{{speaker.number}}" (click)="selectSpeaker(speaker.number)">
+        <div id="speaker{{speaker.number}}" (click)="selectSpeaker(speaker.number, currentTime, false)">
             <div class="text">{{speaker.label}}</div>
         </div>
+    </div>
+    <div class="saveCancelLine" *ngIf="saved == false">
+        <button class="cancelButton" (click)="cancel()">
+            Cancel
+        </button>
+        <button class="saveButton" (click)="save()">
+            Save
+        </button>
     </div>
 </div>
