@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2 } from '@angular/core';
+import { Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { SettingsService } from 'src/app/shared/settings-service/settings.service';
 import { AudioService } from '../audio.service';
 
@@ -7,7 +7,7 @@ import { AudioService } from '../audio.service';
   templateUrl: './audio-control.component.html',
   styleUrls: ['./audio-control.component.scss']
 })
-export class AudioControlComponent implements OnInit {
+export class AudioControlComponent implements OnInit, OnDestroy {
   currentTime: string;
   endTime: string;
   chosenStart: string;
@@ -33,6 +33,17 @@ export class AudioControlComponent implements OnInit {
       this.endTime = this.formatSeconds(this.audio.end);
       this.updateProgressState(this.audio.player.currentTime);
     });
+
+    this.audio.audioOnEndCalled.subscribe(() => {
+      const icon = document.getElementById('playPause');
+      this.renderer.removeClass(icon, 'fa-pause');
+      this.renderer.addClass(icon, 'fa-play');
+      this.audio.player.currentTime = this.audio.currentStart;
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.audio.destroy();
   }
 
   playPause() {

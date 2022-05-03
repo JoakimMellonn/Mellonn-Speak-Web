@@ -23,6 +23,9 @@ export class AudioService {
   private audioOnTimeUpdate = new Subject<any>();
   audioOnTimeUpdateCalled = this.audioOnTimeUpdate.asObservable();
 
+  private audioOnEnd = new Subject<any>();
+  audioOnEndCalled = this.audioOnEnd.asObservable();
+
   constructor() { }
 
   async setAudioUrl(url: string) {
@@ -37,7 +40,7 @@ export class AudioService {
         this.currentEnd = this.player.duration;
         this.player.currentTime = 0;
         this.loadedFirst = true;
-        console.log('Current start: ' + this.currentStart + ', current end: ' + this.currentEnd);
+        console.log('Current end: ' + this.currentEnd);
       }
     }
 
@@ -45,9 +48,19 @@ export class AudioService {
       this.audioOnTimeUpdate.next(1);
     }
 
+    this.player.onended = () => {
+      console.log('Ended at: ' + this.player.currentTime);
+      this.audioOnEnd.next(1);
+    }
+
     this.player.onerror = (err) => {
       console.log('Audio error: ' + err);
     }
+  }
+
+  destroy() {
+    this.loadedFirst = false;
+    this.end = 0;
   }
 
   resetState() {
