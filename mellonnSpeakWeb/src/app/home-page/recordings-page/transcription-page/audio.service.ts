@@ -37,6 +37,7 @@ export class AudioService {
         this.currentEnd = this.player.duration;
         this.player.currentTime = 0;
         this.loadedFirst = true;
+        console.log('Current start: ' + this.currentStart + ', current end: ' + this.currentEnd);
       }
     }
 

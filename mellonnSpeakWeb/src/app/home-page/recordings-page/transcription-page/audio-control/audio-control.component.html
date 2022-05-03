@@ -6,7 +6,7 @@
         </div>
     </div>
     <div class="progressBackground">
-        <div id="chosenBar" (click)="seek($event)">
+        <div id="chosenBar" (mousedown)="dragKnob($event)">
             <div id="progressBar"></div>
             <div id="seekKnob" (mousedown)="dragKnob($event)"></div>
         </div>

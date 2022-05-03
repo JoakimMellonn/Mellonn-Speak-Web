@@ -48,6 +48,7 @@ export class AudioControlComponent implements OnInit {
     }
   }
 
+  //Jumps the given amount of seconds in the audio
   jumpTime(time: number) {
     const current = this.audio.player.currentTime;
     if (current + time < 0 || current + time > this.audio.end) {
@@ -57,12 +58,7 @@ export class AudioControlComponent implements OnInit {
     }
   }
 
-  knobSeek() {
-    const chosenBar = document.getElementById('chosenBar');
-    const progressBar = document.getElementById('progressBar');
-    const knob = document.getElementById('seekKnob');
-  }
-
+  //Resets the position and chosen part of the media controls
   resetChosenBar() {
     const chosenBar = document.getElementById('chosenBar');
     this.renderer.setStyle(chosenBar, 'left', '0');
@@ -70,20 +66,27 @@ export class AudioControlComponent implements OnInit {
     this.chosen = false;
   }
 
+  //Sets the chosen part of the audio
   setChosenBar(start: number, end: number) {
     const chosenBar = document.getElementById('chosenBar');
     const chosen = document.getElementById('chosen');
     this.chosenStart = this.formatSeconds(start);
     this.chosenEnd = this.formatSeconds(end);
+    let chosenLeft = this.getPercent(start, this.audio.end) + (this.getPercent(end - start, this.audio.end) / 2);
+    if (chosenLeft < 2) chosenLeft = 2;
+    if (chosenLeft > 97) chosenLeft = 97;
     this.chosen = true;
     this.renderer.setStyle(chosen, 'min-width', this.getChosenWidth(start, end));
     this.renderer.setStyle(chosenBar, 'left', this.getPercent(start, this.audio.end) + '%');
-    this.renderer.setStyle(chosen, 'left', this.getPercent(start, this.audio.end) + (this.getPercent(end - start, this.audio.end) / 2) + '%');
+    this.renderer.setStyle(chosen, 'left', chosenLeft + '%');
     this.renderer.setStyle(chosenBar, 'width', this.getPercent(end - start, this.audio.end) + '%');
     this.renderer.setStyle(chosen, 'width', this.getPercent(end - start, this.audio.end) + '%');
   }
 
+  //Updates the progress bar's state so the knob is the right place
   updateProgressState(currentTime: number) {
+    if (currentTime < this.audio.currentStart) currentTime = this.audio.currentStart;
+    if (currentTime > this.audio.currentEnd) currentTime = this.audio.currentEnd;
     const percent: number = this.getPercent(currentTime - this.audio.currentStart, this.audio.currentEnd - this.audio.currentStart);
     const progressBar = document.getElementById('progressBar');
     const knob = document.getElementById('seekKnob');
@@ -93,41 +96,34 @@ export class AudioControlComponent implements OnInit {
     this.renderer.setStyle(knob, 'left', percent + '%');
   }
 
-  seek(event: MouseEvent) {
-    const clickPercent = this.getClickPercent(event);
-    console.log('Click percent: ' + clickPercent);
-    this.audio.player.currentTime = this.audio.end * clickPercent;
-  }
-
+  //Called on mousedown event on the knob
   dragKnob(event: MouseEvent) {
-    window.addEventListener('mousemove', this.drag);
-    window.addEventListener('mouseup', this.stopDrag);
+    window.addEventListener('mousemove', this.drag.bind(this));
+    window.addEventListener('mouseup', this.stopDrag.bind(this));
   }
 
+  //Called on the mousemove event
   drag(event: MouseEvent) {
     const bar = document.getElementById('chosenBar');
-    console.log('Percent: ' + (event.clientX - bar!.getBoundingClientRect().left) / bar!.offsetWidth);
+    const percent = (event.clientX - bar!.getBoundingClientRect().left) / bar!.offsetWidth;
+    this.updateProgressState(this.audio.currentEnd * percent + (this.audio.currentStart * (1 - percent)));
   }
   
-  stopDrag() {
-    console.log('Stopped drag');
-    window.removeEventListener('mousemove', this.drag);
-    window.removeEventListener('mouseup', this.stopDrag);
+  //Called on the mouseup event
+  stopDrag(event: MouseEvent) {
+    window.removeAllListeners!('mousemove');
+    window.removeAllListeners!('mouseup');
+    const bar = document.getElementById('chosenBar');
+    const percent = (event.clientX - bar!.getBoundingClientRect().left) / bar!.offsetWidth;
+    this.audio.player.currentTime = this.audio.currentEnd * percent + (this.audio.currentStart * (1 - percent));
   }
 
-  getClickPercent(event: MouseEvent): number {
-    const chosenBar = document.getElementById('chosenBar');
-    return (event.clientX - this.getPosition(chosenBar!)) / chosenBar!.offsetWidth;
-  }
-
-  getPosition(el: HTMLElement): number {
-    return el.getBoundingClientRect().left;
-  }
-
+  //Gets the percent between the given place and the end
   getPercent(place: number, end: number): number {
     return (place / end) * 100;
   }
 
+  //Formats the given amount of seconds to a readable string of HH:MM:SS
   formatSeconds(totalSeconds: number): string {
     let hours = Math.floor(Math.round(totalSeconds) / 3600);
     let minutes = Math.floor(Math.round(totalSeconds) / 60);
@@ -144,10 +140,12 @@ export class AudioControlComponent implements OnInit {
     }
   }
 
+  //Gets the width for the chosen bar
   getChosenWidth(start: number, end: number): string {
     return (65 + this.addNumber(start) + this.addNumber(end)) + 'px';
   }
 
+  //Gets the size for the chosen interval display
   addNumber(secs: number): number {
     if (Math.round(secs) == 0) {
       return 1;
