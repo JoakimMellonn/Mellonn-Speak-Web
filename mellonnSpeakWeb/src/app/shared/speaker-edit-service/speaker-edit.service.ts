@@ -19,10 +19,15 @@ export class SpeakerEditService {
       endTime,
       speaker,
     );
+    /*const sws = this.getSpeakerSwitches(newTranscription);
+    for(let sw of sws) {
+      console.log('Speaker: ' + sw.speaker + ', start: ' + sw.start + ', end: ' + sw.end);
+    }*/
     return newTranscription;
   }
 
   getNewSLList(oldList: Segment[], startTime: number, endTime: number, speaker: number): Segment[] {
+    console.log('Changing speakerLabel start: ' + startTime + ', end: ' + endTime + ', spk: ' + speaker);
     //Creating the variables
     let speakerLabel = 'spk_' + speaker;
     let newList: Segment[] = [];
@@ -99,6 +104,7 @@ export class SpeakerEditService {
         newSegment.speaker_label = speakerLabel;
         newSegment.end_time = endTime.toString();
         hasBeenThrough = true;
+        console.log('Case 1, start: ' + newSegmentItems[newSegmentItems.length - 1].start_time + ', end: ' + newSegmentItems[newSegmentItems.length - 1].end_time + ', speaker: ' + newSegmentItems[newSegmentItems.length - 1].speaker_label);
       } else if (segmentStart <= endTime && endTime <= segmentEnd && !hasBeenThrough) {
         ///
         ///Case 2:
@@ -128,6 +134,7 @@ export class SpeakerEditService {
         newSegment.speaker_label = speakerLabel;
         newSegment.end_time = endTime.toString();
         hasBeenThrough = true;
+        console.log('Case 2, start: ' + newSegmentItems[newSegmentItems.length - 1].start_time + ', end: ' + newSegmentItems[newSegmentItems.length - 1].end_time + ', speaker: ' + newSegmentItems[newSegmentItems.length - 1].speaker_label);
       } else if (segmentStart >= startTime && endTime >= segmentEnd && !hasBeenThrough) {
         ///
         ///Case 3:
@@ -143,6 +150,7 @@ export class SpeakerEditService {
 
         hasBeenThrough = true;
         newChanged = true;
+        console.log('Case 3, start: ' + newSegment.start_time + ', end: ' + newSegment.end_time + ', speaker: ' + newSegment.speaker_label);
       } else if (startTime >= segmentStart && endTime <= segmentEnd || beforeFirst && endTime <= segmentStart) {
         ///
         ///Case 4:
@@ -186,6 +194,7 @@ export class SpeakerEditService {
         newSegment.speaker_label = speakerLabel;
         newSegment.end_time = endTime.toString();
         hasBeenThrough = true;
+        console.log('Case 4, start: ' + newSegment.start_time + ', end: ' + newSegment.end_time + ', speaker: ' + newSegment.speaker_label);
       } else {
         ///
         ///Case 5:
@@ -242,6 +251,7 @@ export class SpeakerEditService {
     let speakerLabels: Segment[] = transcription.results.speaker_labels.segments;
     let speakerSwitchList: SpeakerSwitch[] = [];
     let lastSpeaker: number = 0;
+    let lastEnd: number;
     let speakerSwitch: SpeakerSwitch = new SpeakerSwitch(0, 0, 0);
 
     for (let segment of speakerLabels) {
@@ -251,7 +261,9 @@ export class SpeakerEditService {
 
       if (currentSpeaker == lastSpeaker) {
         lastSpeaker = currentSpeaker;
+        lastEnd = endTime
       } else {
+        speakerSwitch.end = lastEnd! ?? endTime;
         speakerSwitchList.push(speakerSwitch);
         speakerSwitch = new SpeakerSwitch(startTime, endTime, currentSpeaker);
         lastSpeaker = currentSpeaker;

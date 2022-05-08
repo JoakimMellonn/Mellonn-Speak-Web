@@ -63,8 +63,10 @@ export class AudioControlComponent implements OnInit, OnDestroy {
   jumpTime(time: number) {
     const current = this.audio.player.currentTime;
     if (current + time < 0 || current + time > this.audio.end) {
+      this.audio.switchSpeakers(current, this.audio.currentStart);
       this.audio.player.currentTime = this.audio.currentStart;
     } else {
+      this.audio.switchSpeakers(current, current + time);
       this.audio.player.currentTime = current + time;
     }
   }
@@ -107,8 +109,14 @@ export class AudioControlComponent implements OnInit, OnDestroy {
     this.renderer.setStyle(knob, 'left', percent + '%');
   }
 
+  dragStart: number = 0;
+  wasPlaying: boolean = false;
+
   //Called on mousedown event on the knob
   dragKnob(event: MouseEvent) {
+    this.wasPlaying = !this.audio.player.paused;
+    if (this.wasPlaying) this.audio.pause();
+    this.dragStart = this.audio.player.currentTime;
     window.addEventListener('mousemove', this.drag.bind(this));
     window.addEventListener('mouseup', this.stopDrag.bind(this));
   }
@@ -126,7 +134,10 @@ export class AudioControlComponent implements OnInit, OnDestroy {
     window.removeAllListeners!('mouseup');
     const bar = document.getElementById('chosenBar');
     const percent = (event.clientX - bar!.getBoundingClientRect().left) / bar!.offsetWidth;
-    this.audio.player.currentTime = this.audio.currentEnd * percent + (this.audio.currentStart * (1 - percent));
+    const newPos: number = this.audio.currentEnd * percent + (this.audio.currentStart * (1 - percent));
+    this.audio.switchSpeakers(this.dragStart, newPos);
+    this.audio.player.currentTime = newPos;
+    if (this.wasPlaying) this.audio.play();
   }
 
   //Gets the percent between the given place and the end

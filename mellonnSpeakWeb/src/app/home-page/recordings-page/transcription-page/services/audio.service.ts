@@ -26,6 +26,9 @@ export class AudioService {
   private audioOnEnd = new Subject<any>();
   audioOnEndCalled = this.audioOnEnd.asObservable();
 
+  private switchSpeaker = new Subject<number[]>();
+  switchSpeakerCalled = this.switchSpeaker.asObservable();
+
   constructor() { }
 
   async setAudioUrl(url: string) {
@@ -40,7 +43,6 @@ export class AudioService {
         this.currentEnd = this.player.duration;
         this.player.currentTime = 0;
         this.loadedFirst = true;
-        console.log('Current end: ' + this.currentEnd);
       }
     }
 
@@ -49,7 +51,7 @@ export class AudioService {
     }
 
     this.player.onended = () => {
-      console.log('Ended at: ' + this.player.currentTime);
+      this.switchSpeakers(this.player.currentTime, this.currentStart);
       this.audioOnEnd.next(1);
     }
 
@@ -96,5 +98,9 @@ export class AudioService {
 
   pause() {
     this.player.pause();
+  }
+
+  switchSpeakers(position: number, newPos: number) {
+    this.switchSpeaker.next([position, newPos]);
   }
 }
