@@ -20,7 +20,7 @@ export class SpeakerChooserComponent implements OnInit, AfterViewInit {
   speakerList: Speaker[] = [];
   autoSwitch: boolean = true;
   speakerSwitches: SpeakerSwitch[] = [];
-  lastPosition: number = 0;
+  lastPosition: number;
   lastSpeaker: number;
   unsavedTranscription: Transcription;
   saved: boolean = true;
@@ -34,7 +34,7 @@ export class SpeakerChooserComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.getSpeakers();
     this.speakerSwitches = this.speakerEdit.getSpeakerSwitches(this.transcription);
-    
+    this.lastPosition = 0;
   }
 
   ngAfterViewInit(): void {
@@ -73,11 +73,12 @@ export class SpeakerChooserComponent implements OnInit, AfterViewInit {
   }
 
   async test() {
-    this.lastPosition = 20;
-    this.lastSpeaker = 1;
-    this.switchSpeaker(25, 0);
-    await new Promise(f => setTimeout(f, 1000));
-    this.switchSpeaker(30, 1);
+    this.lastPosition = 0;
+    this.lastSpeaker = 0;
+    this.switchSpeaker(8, 1);
+    console.log('lastPosition: ' + this.lastPosition + ', lastSpeaker: ' + this.lastSpeaker);
+    //await new Promise(f => setTimeout(f, 1000));
+    this.switchSpeaker(13, 0);
   }
 
   save() {
@@ -131,10 +132,11 @@ export class SpeakerChooserComponent implements OnInit, AfterViewInit {
     let startTime: number = this.lastPosition;
     let endTime: number = position;
     let oldTranscription: Transcription = this.unsavedTranscription ?? this.transcription;
+    console.log('Start: ' + startTime + ' (' + this.lastPosition + '), end: ' + endTime);
 
     if (endTime != 0) {
       if (startTime == 0) {
-        endTime = Math.round(+(endTime - 0.01) * 100) / 100;
+        endTime = Math.round((endTime - 0.01) * 100) / 100;
         startTime = Math.round((startTime + 0.01) * 100) / 100;
       } else {
         endTime = Math.round((endTime - 0.01) * 100) / 100;

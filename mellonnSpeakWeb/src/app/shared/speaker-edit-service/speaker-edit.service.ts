@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
+import { saveAs } from 'file-saver';
 import { Item, Item2, Segment, Transcription } from '../../home-page/recordings-page/transcription-page/transcription';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SpeakerEditService {
+  i: number = 0;
 
   constructor() { }
 
@@ -19,10 +21,12 @@ export class SpeakerEditService {
       endTime,
       speaker,
     );
-    /*const sws = this.getSpeakerSwitches(newTranscription);
+    const sws = this.getSpeakerSwitches(newTranscription);
     for(let sw of sws) {
       console.log('Speaker: ' + sw.speaker + ', start: ' + sw.start + ', end: ' + sw.end);
-    }*/
+    }
+    //console.log(JSON.stringify(newTranscription));
+    this.i++;
     return newTranscription;
   }
 
@@ -79,7 +83,7 @@ export class SpeakerEditService {
           firstSegment = {
             start_time: segment.start_time,
             speaker_label: segment.speaker_label,
-            end_time: startTime.toString(),
+            end_time: (startTime - 0.01).toString(),
             items: firstItems,
           };
           firstChanged = true;
@@ -113,7 +117,7 @@ export class SpeakerEditService {
         let lastItems: Item2[] = this.goThroughSegmentItems(segment.speaker_label, endTime, segmentEnd, segment.items);
         if (lastItems.length > 0) {
           lastSegment = {
-            start_time: endTime.toString(),
+            start_time: (endTime + 0.01).toString(),
             speaker_label: segment.speaker_label,
             end_time: segment.end_time,
             items: lastItems,
@@ -161,7 +165,7 @@ export class SpeakerEditService {
           firstSegment = {
             start_time: segment.start_time,
             speaker_label: segment.speaker_label,
-            end_time: startTime.toString(),
+            end_time: (startTime - 0.01).toString(),
             items: firstItems,
           };
           firstChanged = true;
@@ -218,6 +222,7 @@ export class SpeakerEditService {
       }
       index++;
     }
+    console.log('New segment start: ' + newSegment.start_time + ', end: ' + newSegment.end_time + ', speaker: ' + newSegment.speaker_label);
     return newList;
   }
 
@@ -263,9 +268,12 @@ export class SpeakerEditService {
         lastSpeaker = currentSpeaker;
         lastEnd = endTime
       } else {
-        speakerSwitch.end = lastEnd! ?? endTime;
         speakerSwitchList.push(speakerSwitch);
-        speakerSwitch = new SpeakerSwitch(startTime, endTime, currentSpeaker);
+        speakerSwitch = new SpeakerSwitch(
+          startTime,
+          endTime,
+          currentSpeaker,
+        );
         lastSpeaker = currentSpeaker;
       }
     }
