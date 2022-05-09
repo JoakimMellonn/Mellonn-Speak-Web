@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
 import { saveAs } from 'file-saver';
+import { Subject } from 'rxjs';
 import { Item, Item2, Segment, Transcription } from '../../home-page/recordings-page/transcription-page/transcription';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SpeakerEditService {
-  i: number = 0;
+
+  private speakerEditReload = new Subject<Transcription>();
+  speakerEditReloadCalled = this.speakerEditReload.asObservable();
 
   constructor() { }
 
@@ -22,11 +25,6 @@ export class SpeakerEditService {
       speaker,
     );
     const sws = this.getSpeakerSwitches(newTranscription);
-    for(let sw of sws) {
-      console.log('Speaker: ' + sw.speaker + ', start: ' + sw.start + ', end: ' + sw.end);
-    }
-    //console.log(JSON.stringify(newTranscription));
-    this.i++;
     return newTranscription;
   }
 
@@ -108,7 +106,6 @@ export class SpeakerEditService {
         newSegment.speaker_label = speakerLabel;
         newSegment.end_time = endTime.toString();
         hasBeenThrough = true;
-        console.log('Case 1, start: ' + newSegmentItems[newSegmentItems.length - 1].start_time + ', end: ' + newSegmentItems[newSegmentItems.length - 1].end_time + ', speaker: ' + newSegmentItems[newSegmentItems.length - 1].speaker_label);
       } else if (segmentStart <= endTime && endTime <= segmentEnd && !hasBeenThrough) {
         ///
         ///Case 2:
@@ -138,7 +135,7 @@ export class SpeakerEditService {
         newSegment.speaker_label = speakerLabel;
         newSegment.end_time = endTime.toString();
         hasBeenThrough = true;
-        console.log('Case 2, start: ' + newSegmentItems[newSegmentItems.length - 1].start_time + ', end: ' + newSegmentItems[newSegmentItems.length - 1].end_time + ', speaker: ' + newSegmentItems[newSegmentItems.length - 1].speaker_label);
+        //console.log('Case 2, start: ' + newSegmentItems[newSegmentItems.length - 1].start_time + ', end: ' + newSegmentItems[newSegmentItems.length - 1].end_time + ', speaker: ' + newSegmentItems[newSegmentItems.length - 1].speaker_label);
       } else if (segmentStart >= startTime && endTime >= segmentEnd && !hasBeenThrough) {
         ///
         ///Case 3:
@@ -154,7 +151,6 @@ export class SpeakerEditService {
 
         hasBeenThrough = true;
         newChanged = true;
-        console.log('Case 3, start: ' + newSegment.start_time + ', end: ' + newSegment.end_time + ', speaker: ' + newSegment.speaker_label);
       } else if (startTime >= segmentStart && endTime <= segmentEnd || beforeFirst && endTime <= segmentStart) {
         ///
         ///Case 4:
@@ -198,7 +194,6 @@ export class SpeakerEditService {
         newSegment.speaker_label = speakerLabel;
         newSegment.end_time = endTime.toString();
         hasBeenThrough = true;
-        console.log('Case 4, start: ' + newSegment.start_time + ', end: ' + newSegment.end_time + ', speaker: ' + newSegment.speaker_label);
       } else {
         ///
         ///Case 5:
@@ -222,7 +217,6 @@ export class SpeakerEditService {
       }
       index++;
     }
-    console.log('New segment start: ' + newSegment.start_time + ', end: ' + newSegment.end_time + ', speaker: ' + newSegment.speaker_label);
     return newList;
   }
 
@@ -278,6 +272,10 @@ export class SpeakerEditService {
       }
     }
     return speakerSwitchList;
+  }
+
+  reloadTranscription(transcription: Transcription) {
+    this.speakerEditReload.next(transcription);
   }
 }
 

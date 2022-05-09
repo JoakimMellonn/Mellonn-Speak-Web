@@ -1,9 +1,10 @@
 import { AfterViewInit, Component, Input, OnInit, Renderer2 } from '@angular/core';
+import { reduce } from 'rxjs';
 import { SpeakerEditService, SpeakerSwitch } from 'src/app/shared/speaker-edit-service/speaker-edit.service';
 import { Recording } from 'src/models';
 import { AudioControlComponent } from '../audio-control/audio-control.component';
 import { AudioService } from '../services/audio.service';
-import { SpeakerWithWords } from '../services/transcription-service.service';
+import { SpeakerWithWords, TranscriptionService } from '../services/transcription-service.service';
 import { Transcription } from '../transcription';
 
 @Component({
@@ -28,7 +29,8 @@ export class SpeakerChooserComponent implements OnInit, AfterViewInit {
   constructor(
     private renderer: Renderer2,
     private audio: AudioService,
-    private speakerEdit: SpeakerEditService
+    private speakerEdit: SpeakerEditService,
+    private transService: TranscriptionService
   ) { }
 
   ngOnInit(): void {
@@ -81,11 +83,12 @@ export class SpeakerChooserComponent implements OnInit, AfterViewInit {
     this.switchSpeaker(13, 0);
   }
 
-  save() {
-    //const sws = this.speakerEdit.getSpeakerSwitches(this.unsavedTranscription);
-    for(let sw of this.speakerSwitches) {
-      console.log('Speaker: ' + sw.speaker + ', start: ' + sw.start + ', end: ' + sw.end);
-    }
+  async save() {
+    this.switchSpeaker(this.audio.player.currentTime, this.lastSpeaker);
+    const res = await this.transService.saveTranscription(this.unsavedTranscription, this.recording.id);
+    this.transcription = this.unsavedTranscription;
+    this.speakerEdit.reloadTranscription(this.unsavedTranscription);
+    this.saved = true;
   }
 
   cancel() {
@@ -132,7 +135,6 @@ export class SpeakerChooserComponent implements OnInit, AfterViewInit {
     let startTime: number = this.lastPosition;
     let endTime: number = position;
     let oldTranscription: Transcription = this.unsavedTranscription ?? this.transcription;
-    console.log('Start: ' + startTime + ' (' + this.lastPosition + '), end: ' + endTime);
 
     if (endTime != 0) {
       if (startTime == 0) {
@@ -150,9 +152,6 @@ export class SpeakerChooserComponent implements OnInit, AfterViewInit {
 
       this.unsavedTranscription = newTranscription;
       this.speakerSwitches = this.speakerEdit.getSpeakerSwitches(newTranscription);
-      for(let sw of this.speakerSwitches) {
-        console.log('Speaker: ' + sw.speaker + ', start: ' + sw.start + ', end: ' + sw.end);
-      }
 
       this.lastPosition = position;
       this.lastSpeaker = speaker;

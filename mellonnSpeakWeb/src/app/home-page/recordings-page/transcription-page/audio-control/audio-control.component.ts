@@ -172,7 +172,7 @@ export class AudioControlComponent implements OnInit, OnDestroy {
     if (Math.round(secs) == 0) {
       return 1;
     } else if (secs < 600) {
-      return 0;
+      return 5;
     } else if (secs < 3600) {
       return 15;
     } else {

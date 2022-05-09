@@ -5,6 +5,7 @@ import { Recording } from 'src/models';
 import { AudioService } from './services/audio.service';
 import { Transcription } from './transcription';
 import { TranscriptionService, SpeakerWithWords } from './services/transcription-service.service';
+import { SpeakerEditService } from 'src/app/shared/speaker-edit-service/speaker-edit.service';
 
 
 @Component({
@@ -26,7 +27,8 @@ export class TranscriptionPageComponent implements OnInit {
     private route: ActivatedRoute,
     private service: TranscriptionService,
     private audio: AudioService,
-    private docx: DocxService
+    private docx: DocxService,
+    private speakerEdit: SpeakerEditService
   ) { }
 
   async ngOnInit() {
@@ -49,6 +51,10 @@ export class TranscriptionPageComponent implements OnInit {
     this.url = await this.audio.getAudioUrl(this.recording.fileKey ?? '');
     this.audio.setAudioUrl(this.url);
     this.speakerWithWords = this.service.processTranscription(this.transcription);
+
+    this.speakerEdit.speakerEditReloadCalled.subscribe((res) => {
+      this.reloadTranscription(res);
+    });
   }
 
   getSpkNum(speakerLabel: string): number {
@@ -99,5 +105,10 @@ export class TranscriptionPageComponent implements OnInit {
 
   resetAudio() {
     this.audio.resetState();
+  }
+
+  reloadTranscription(trans: Transcription) {
+    this.transcription = trans;
+    this.speakerWithWords = this.service.processTranscription(trans);
   }
 }
