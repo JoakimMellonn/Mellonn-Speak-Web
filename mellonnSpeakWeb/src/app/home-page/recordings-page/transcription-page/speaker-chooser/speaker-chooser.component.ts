@@ -74,15 +74,6 @@ export class SpeakerChooserComponent implements OnInit, AfterViewInit {
     });
   }
 
-  async test() {
-    this.lastPosition = 0;
-    this.lastSpeaker = 0;
-    this.switchSpeaker(8, 1);
-    console.log('lastPosition: ' + this.lastPosition + ', lastSpeaker: ' + this.lastSpeaker);
-    //await new Promise(f => setTimeout(f, 1000));
-    this.switchSpeaker(13, 0);
-  }
-
   async save() {
     this.switchSpeaker(this.audio.player.currentTime, this.lastSpeaker);
     const res = await this.transService.saveTranscription(this.unsavedTranscription, this.recording.id);

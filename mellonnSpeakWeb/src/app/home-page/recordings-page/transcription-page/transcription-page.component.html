@@ -16,11 +16,11 @@
                 <div class="contentBox">
                     <div class="chatLine" *ngFor="let sww of speakerWithWords">
                         <div *ngIf="recording.interviewers?.includes(sww.speakerLabel)">
-                            <app-user-chat-bubble [sww]="sww" [transcription]="transcription" [id]="id"></app-user-chat-bubble>
+                            <app-user-chat-bubble [sww]="sww" [transcription]="transcription" [recording]="recording"></app-user-chat-bubble>
                             <p class="userText">{{ getSpkLabel(sww.speakerLabel) }} (Speaker {{getSpkNum(sww.speakerLabel) + 1}}): {{getTimeFrame(sww.startTime, sww.endTime)}}</p>
                         </div>
                         <div *ngIf="!recording.interviewers?.includes(sww.speakerLabel)">
-                            <app-chat-bubble [sww]="sww" [isUser]="true" [transcription]="transcription" [id]="id"></app-chat-bubble>
+                            <app-chat-bubble [sww]="sww" [isUser]="true" [transcription]="transcription" [recording]="recording"></app-chat-bubble>
                             <p class="text">{{ getSpkLabel(sww.speakerLabel) }} (Speaker {{getSpkNum(sww.speakerLabel) + 1}}): {{getTimeFrame(sww.startTime, sww.endTime)}}</p>
                         </div>
                     </div>

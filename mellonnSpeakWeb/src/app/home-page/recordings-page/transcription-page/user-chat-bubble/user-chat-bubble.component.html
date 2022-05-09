@@ -7,6 +7,7 @@
         (ngModelChange)="onChanged($event)" 
         (keydown.enter)="onEnter($event)"
         (focus)="onFocus()"
+        (select)="onSelection($event)"
     >
     </textarea>
     <p *ngIf="changed == true">Press enter to save</p>
@@ -17,5 +18,20 @@
         <button class="saveButton" (click)="save()">
             Save
         </button>
+    </div>
+    <div class="speakerChooser" *ngIf="selected == true">
+        <div *ngFor="let speaker of speakerList">
+            <div id="speaker{{speaker.number}}" class="speaker" (click)="selectSpeaker(speaker.number)">
+                <div class="text">{{speaker.label}}</div>
+            </div>
+        </div>
+        <div class="saveCancelLine">
+            <button class="cancelButton" (click)="speakerCancel()">
+                Cancel
+            </button>
+            <button class="saveButton" (click)="speakerSave()">
+                Save
+            </button>
+        </div>
     </div>
 </div>

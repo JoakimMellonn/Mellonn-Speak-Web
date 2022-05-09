@@ -55,6 +55,62 @@
             background-color: #9ACD3A;
         }
     }
+
+    .speaker {
+        display: block;
+        box-sizing: border-box;
+        background-color: #F8F8F8;
+        box-shadow: 0px 2px 5px #00000024;
+        border-radius: 25px;
+        height: 50px;
+        width: 100%;
+        padding: 0 25px 0 25px;
+        margin-bottom: 10px;
+        cursor: pointer;
+        
+        .text {
+            position: relative;
+            text-align: center;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    }
+    
+    .speaker:hover {
+        background-color: #efefef;
+    }
+    
+    .chosenSpeaker {
+        display: block;
+        box-sizing: border-box;
+        background-color: #FAB228;
+        box-shadow: 0px 2px 5px #00000024;
+        border-radius: 25px;
+        height: 50px;
+        width: 100%;
+        padding: 0 25px 0 25px;
+        margin-bottom: 10px;
+        cursor: pointer;
+        
+        .text {
+            position: relative;
+            text-align: center;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    }
+    
+    .chosenSpeaker:hover {
+        background-color: #f3ab26;
+    }
+
+    .speakerChooser {
+        width: 100%;
+        padding: 5px;
+        display: block;
+    }
     
     textarea {
         resize: none;

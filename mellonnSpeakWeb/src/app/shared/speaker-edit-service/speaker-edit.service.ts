@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { saveAs } from 'file-saver';
 import { Subject } from 'rxjs';
+import { SpeakerWithWords } from 'src/app/home-page/recordings-page/transcription-page/services/transcription-service.service';
 import { Item, Item2, Segment, Transcription } from '../../home-page/recordings-page/transcription-page/transcription';
 
 @Injectable({
@@ -220,10 +221,6 @@ export class SpeakerEditService {
     return newList;
   }
 
-  ///
-  ///This function will go through a List of segmentItems
-  ///And return the items in the given interval, with the speakerLabels changed
-  ///
   goThroughSegmentItems(speakerLabel: string, startTime: number, endTime: number, items: Item2[]): Item2[] {
     let newList: Item2[] = [];
 
@@ -243,9 +240,6 @@ export class SpeakerEditService {
     return newList;
   }
 
-  ///
-  ///When called with a transcription, it will return a list of all the times it switches the speaker.
-  ///
   getSpeakerSwitches(transcription: Transcription): SpeakerSwitch[] {
     let speakerLabels: Segment[] = transcription.results.speaker_labels.segments;
     let speakerSwitchList: SpeakerSwitch[] = [];
@@ -274,6 +268,58 @@ export class SpeakerEditService {
     return speakerSwitchList;
   }
 
+  getStartEndFromSelection(sww: SpeakerWithWords, transcription: Transcription, selectStart: number, selectEnd: number): number[] {
+    const allItems = transcription.results.items;
+    let wordCharList: WordCharacters[] = [];
+    let startEntered: boolean = false;
+    let lastEnd: number = 0;
+
+    for (let item of allItems) {
+      if (+item.start_time >= sww.startTime && +item.end_time <= sww.endTime) {
+        startEntered = true;
+        wordCharList.push(new WordCharacters(
+          +item.start_time,
+          +item.end_time,
+          item.alternatives[0].content.split(''),
+          item.type
+        ));
+        lastEnd = +item.end_time;
+      } else if (startEntered) {
+        wordCharList.push(new WordCharacters(
+          lastEnd + 0.01,
+          lastEnd + 0.02,
+          item.alternatives[0].content.split(''),
+          item.type
+        ));
+      }
+      if (+item.start_time > sww.endTime) break;
+    }
+
+    let currentPlace: number = 0;
+    let startChosen: boolean = false;
+    let startIndex: number;
+    let endIndex: number;
+    let i: number = 0;
+
+    for (let word of wordCharList) {
+      if (word.type == 'pronunciation') {
+        currentPlace += word.characters.length + 1;
+      } else {
+        currentPlace += word.characters.length;
+      }
+      if (!startChosen && selectStart + 1 <= currentPlace) {
+        startIndex = i;
+        startChosen = true;
+      }
+      if (startChosen && selectEnd <= currentPlace) {
+        endIndex = i;
+        break;
+      }
+      i++;
+    }
+    return [wordCharList[startIndex!].startTime, wordCharList[endIndex!].endTime];
+  }
+
   reloadTranscription(transcription: Transcription) {
     this.speakerEditReload.next(transcription);
   }
@@ -288,5 +334,19 @@ export class SpeakerSwitch {
     this.start = start,
     this.end = end,
     this.speaker = speaker
+  }
+}
+
+export class WordCharacters {
+  startTime: number;
+  endTime: number;
+  characters: string[];
+  type: string;
+
+  constructor(startTime: number, endTime: number, characters: string[], type: string) {
+    this.startTime = startTime,
+    this.endTime = endTime,
+    this.characters = characters,
+    this.type = type
   }
 }

@@ -2,7 +2,10 @@ import { AfterViewInit, Component, Input, OnInit, Renderer2 } from '@angular/cor
 import { TextEditService } from 'src/app/shared/text-edit-service/text-edit.service';
 import { AudioService } from '../services/audio.service';
 import { Transcription } from '../transcription';
-import { SpeakerWithWords } from '../services/transcription-service.service';
+import { SpeakerWithWords, TranscriptionService } from '../services/transcription-service.service';
+import { Speaker } from '../speaker-chooser/speaker-chooser.component';
+import { SpeakerEditService } from 'src/app/shared/speaker-edit-service/speaker-edit.service';
+import { Recording } from 'src/models';
 
 @Component({
   selector: 'app-user-chat-bubble',
@@ -10,18 +13,30 @@ import { SpeakerWithWords } from '../services/transcription-service.service';
   styleUrls: ['./user-chat-bubble.component.scss']
 })
 export class UserChatBubbleComponent implements AfterViewInit, OnInit {
-  focused: boolean = false;
   changed: boolean = false;
+  selected: boolean = false;
   text: string = '';
+  speakerList: Speaker[] = [];
+  selectedSpeaker: number = 0;
+  selection: number[] = [];
+  lastSelection: number[] = [0, 0];
 
   @Input() sww!: SpeakerWithWords;
+  @Input() isUser!: boolean;
   @Input() transcription!: Transcription;
-  @Input() id!: string;
+  @Input() recording!: Recording;
 
-  constructor(private renderer: Renderer2, private textEdit: TextEditService, private audio: AudioService) { }
+  constructor(
+    private renderer: Renderer2,
+    private textEdit: TextEditService,
+    private audio: AudioService,
+    private speakerEdit: SpeakerEditService,
+    private transService: TranscriptionService
+  ) { }
 
   ngOnInit(): void {
     this.text = this.sww.pronouncedWords;
+    this.getSpeakers();
   }
 
   ngAfterViewInit(): void {
@@ -47,6 +62,7 @@ export class UserChatBubbleComponent implements AfterViewInit, OnInit {
 
   onChanged(event: Event) {
     //console.log('Event: ' + event);
+    this.selected = false;
     if (this.text == this.sww.pronouncedWords) {
       this.changed = false;
     } else {
@@ -58,13 +74,66 @@ export class UserChatBubbleComponent implements AfterViewInit, OnInit {
     this.audio.setStartEnd(this.sww.startTime, this.sww.endTime);
   }
 
+  async onSelection(event: any) {
+    const start = event.target.selectionStart;
+    const end = event.target.selectionEnd;
+    if (start != this.lastSelection[0] || end != this.lastSelection [1]) {
+      this.lastSelection = [start, end];
+      this.selection = this.speakerEdit.getStartEndFromSelection(this.sww, this.transcription, start, end);
+      console.log('Result start: ' + this.selection[0] + ', end: ' + this.selection[1]);
+      this.selected = true;
+      await new Promise(r => setTimeout(r, 10));
+      this.selectSpeaker(+this.sww.speakerLabel.split('_')[1]);
+    }
+  }
+
+  getSpeakers() {
+    for (let i = 0; i < this.recording.labels!.length; i++) {
+      this.speakerList.push(
+        new Speaker(
+          this.recording.labels![i]!,
+          i
+        )
+      );
+    }
+  }
+
+  selectSpeaker(currentSpeaker: number) {
+    this.selectedSpeaker = currentSpeaker;
+    for (let speaker of this.speakerList) {
+      const item = document.getElementById('speaker' + speaker.number);
+      this.renderer.removeClass(item, 'chosenSpeaker');
+      this.renderer.removeClass(item, 'speaker');
+      if (speaker.number == currentSpeaker) {
+        this.renderer.addClass(item, 'chosenSpeaker');
+      } else {
+        this.renderer.addClass(item, 'speaker');
+      }
+    }
+  }
+
   async save() {
-    await this.textEdit.saveTranscription(this.transcription, this.id, this.sww, this.text);
+    await this.textEdit.saveTranscription(this.transcription, this.recording.id, this.sww, this.text);
     this.changed = false;
   }
 
   cancel() {
     this.text = this.sww.pronouncedWords;
     this.changed = false;
+  }
+
+  async speakerSave() {
+    const newTranscription = this.speakerEdit.getNewSpeakerLabels(this.transcription, this.selection[0], this.selection[1], this.selectedSpeaker);
+    const res = await this.transService.saveTranscription(newTranscription, this.recording.id);
+    //this.selected = false;
+    //await new Promise(r => setTimeout(r, 10));
+    //this.lastSelection = [0, 0];
+    this.speakerEdit.reloadTranscription(newTranscription);
+  }
+
+  async speakerCancel() {
+    this.selected = false;
+    await new Promise(r => setTimeout(r, 10));
+    this.lastSelection = [0, 0];
   }
 }
