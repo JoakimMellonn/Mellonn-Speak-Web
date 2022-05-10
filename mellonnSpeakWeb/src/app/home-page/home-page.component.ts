@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from '@angular/router';
 import { Auth } from 'aws-amplify';
+import { AuthService } from '../shared/auth-service/auth.service';
 
 @Component({
   selector: 'app-home-page',
@@ -9,14 +10,16 @@ import { Auth } from 'aws-amplify';
 })
 export class HomePageComponent implements OnInit {
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private authService: AuthService) { }
 
   async ngOnInit(): Promise<void> {
     const isLoggedIn = await this.checkCurrentUser();
     if (isLoggedIn) {
+      this.authService.signIn();
       console.log('User is logged in');
       this.router.navigate(['/home']);
     } else {
+      this.authService.signOut();
       console.log('User is not logged in');
       this.router.navigate(['/login']);
     }

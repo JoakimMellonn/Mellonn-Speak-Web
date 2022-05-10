@@ -4,6 +4,7 @@ import { Auth, syncExpression } from 'aws-amplify';
 import { DataStore, Predicates, SortDirection } from '@aws-amplify/datastore';
 import { Recording } from 'src/models';
 import { Observable } from 'rxjs';
+import { AuthService } from 'src/app/shared/auth-service/auth.service';
 
 @Component({
   selector: 'app-recordings-page',
@@ -17,7 +18,7 @@ export class RecordingsPageComponent implements OnInit, OnDestroy {
   loading: boolean = true;
   subscription: any;
 
-  constructor() { }
+  constructor(private authService: AuthService) { }
 
   async ngOnInit() {
     await this.getUser();
@@ -38,6 +39,7 @@ export class RecordingsPageComponent implements OnInit, OnDestroy {
       const user = await Auth.currentUserInfo();
       this.firstName = user.attributes.name;
       this.lastName = user.attributes.family_name;
+      this.authService.signIn();
     } catch (err) {
       console.log('error getting user', err);
     }

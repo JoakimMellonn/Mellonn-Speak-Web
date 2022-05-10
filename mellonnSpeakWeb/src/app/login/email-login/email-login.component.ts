@@ -6,6 +6,7 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Auth } from 'aws-amplify';
+import { AuthService } from 'src/app/shared/auth-service/auth.service';
 
 @Component({
   selector: 'app-email-login',
@@ -20,7 +21,7 @@ export class EmailLoginComponent implements OnInit {
 
   serverMessage: string;
 
-  constructor(private fb: FormBuilder, private router: Router) {}
+  constructor(private fb: FormBuilder, private router: Router, private authService: AuthService) {}
 
   ngOnInit(): void {
     this.changeType("login");
@@ -80,6 +81,7 @@ export class EmailLoginComponent implements OnInit {
     try {
       if (this.isLogin) {
         const user = await Auth.signIn(email, password);
+        this.authService.signIn();
         this.router.navigateByUrl('/home');
       }
       if (this.isSignup) {

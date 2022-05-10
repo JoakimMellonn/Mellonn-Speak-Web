@@ -9,8 +9,16 @@
                     <h1>
                         {{ recording.name }}
                     </h1>
-                    <div class="menuButton">
-                        <i class="fa-solid fa-ellipsis-vertical fa-2xl"></i>
+                    <div class="dropdown">
+                        <i class="fa-solid fa-ellipsis-vertical fa-2xl icon"></i>
+                        <div class="dropdown-content">
+                            <a>Edit labels</a>
+                            <a (click)="downloadDOCX()">Export as DOCX</a>
+                            <a>Version history</a>
+                            <a>Info</a>
+                            <a>Delete this recording</a>
+                            <a>Help</a>
+                        </div>
                     </div>
                 </div>
                 <div class="contentBox">
@@ -34,12 +42,8 @@
                         </h1>
                     </div>
                     <div class="contentBox">
-                        Hello world!
-                        <button (click)="downloadDOCX()">
-                            Download
-                        </button>
-                        <button (click)="resetAudio()">
-                            Reset audio
+                        <button class="standardButton" (click)="resetAudio()">
+                            Reset audio selection
                         </button><br><br>
                         <app-speaker-chooser [recording]="recording" [speakerWithWords]="speakerWithWords" [transcription]="transcription" *ngIf="loading == false"></app-speaker-chooser>
                     </div>

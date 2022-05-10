@@ -22,13 +22,14 @@ export class TranscriptionPageComponent implements OnInit {
   loading: boolean = true;
   error: boolean = false;
   url: string;
+  dropdownShown: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
     private service: TranscriptionService,
     private audio: AudioService,
     private docx: DocxService,
-    private speakerEdit: SpeakerEditService
+    private speakerEdit: SpeakerEditService,
   ) { }
 
   async ngOnInit() {
