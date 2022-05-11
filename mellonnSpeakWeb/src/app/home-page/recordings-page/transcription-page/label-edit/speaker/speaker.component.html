@@ -1,0 +1,15 @@
+<div class="content">
+    <p>Speaker {{speaker + 1}}</p>
+    <div class="dropdown">
+        {{chosenType}}   <i class="fa-solid fa-arrow-down fa-lg"></i>
+        <div class="dropdown-content" id="dropdownContent">
+            <a (click)="setChosenType('Interviewer')">Interviewer</a>
+            <a (click)="setChosenType('Interviewee')">Interviewee</a>
+        </div>
+    </div>
+    <input type="text" class="inputField" [(ngModel)]="value" (ngModelChange)="onTextChange()">
+    <div class="buttons">
+        <button class="button" id="left">Play</button>
+        <button class="button" id="right">Shuffle</button>
+    </div>
+</div>

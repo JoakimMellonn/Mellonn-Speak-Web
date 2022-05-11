@@ -72,7 +72,6 @@ export class EmailLoginComponent implements OnInit {
 
 
   async onSubmit() {
-    console.log('onSubmit');
     this.loading = true;
 
     const email = this.email!.value;

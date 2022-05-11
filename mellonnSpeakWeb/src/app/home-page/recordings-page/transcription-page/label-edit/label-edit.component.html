@@ -1,0 +1,11 @@
+<div class="titleBox">
+    <h1>
+        Assign labels
+    </h1>
+</div>
+<div class="content" *ngIf="!loading">
+    <div class="speaker" *ngFor="let speakerLabel of speakerLabels">
+        <app-speaker [speaker]="speakerLabel.index" [initialValue]="speakerLabel.label"></app-speaker>
+    </div>
+    <button class="standardButton assign" (click)="assignLabels()">Assign labels</button>
+</div>

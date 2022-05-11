@@ -6,6 +6,8 @@ import { AudioService } from './services/audio.service';
 import { Transcription } from './transcription';
 import { TranscriptionService, SpeakerWithWords } from './services/transcription-service.service';
 import { SpeakerEditService } from 'src/app/shared/speaker-edit-service/speaker-edit.service';
+import { LabelService } from './label-edit/label.service';
+import { label } from 'aws-amplify';
 
 
 @Component({
@@ -23,6 +25,7 @@ export class TranscriptionPageComponent implements OnInit {
   error: boolean = false;
   url: string;
   dropdownShown: boolean = false;
+  modalOpen: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -30,6 +33,7 @@ export class TranscriptionPageComponent implements OnInit {
     private audio: AudioService,
     private docx: DocxService,
     private speakerEdit: SpeakerEditService,
+    private labelService: LabelService
   ) { }
 
   async ngOnInit() {
@@ -49,12 +53,27 @@ export class TranscriptionPageComponent implements OnInit {
         this.error;
       }
     });
+    if (this.recording.labels == [] || this.recording.labels == null || this.recording.labels == undefined || this.recording.labels.length != this.recording.speakerCount) {
+      this.modalOpen = true;
+    }
     this.url = await this.audio.getAudioUrl(this.recording.fileKey ?? '');
     this.audio.setAudioUrl(this.url);
     this.speakerWithWords = this.service.processTranscription(this.transcription);
 
     this.speakerEdit.speakerEditReloadCalled.subscribe((res) => {
       this.reloadTranscription(res);
+    });
+
+    this.labelService.closeModalCalled.subscribe(async (res) => {
+      await this.service.getRecording(this.id).then((value) => {
+        if (value != 'null') {
+          this.recording = value;
+          this.loading = false;
+        } else {
+          this.error;
+        }
+      });
+      this.modalOpen = false;
     });
   }
 

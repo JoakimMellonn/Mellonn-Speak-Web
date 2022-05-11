@@ -17,6 +17,8 @@ import { AudioControlComponent } from './home-page/recordings-page/transcription
 import { SpeakerChooserComponent } from './home-page/recordings-page/transcription-page/speaker-chooser/speaker-chooser.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ProfilePageComponent } from './home-page/profile-page/profile-page.component';
+import { LabelEditComponent } from './home-page/recordings-page/transcription-page/label-edit/label-edit.component';
+import { SpeakerComponent } from './home-page/recordings-page/transcription-page/label-edit/speaker/speaker.component';
 
 Amplify.configure(awsconfig);
 
@@ -31,6 +33,8 @@ Amplify.configure(awsconfig);
     AudioControlComponent,
     SpeakerChooserComponent,
     ProfilePageComponent,
+    LabelEditComponent,
+    SpeakerComponent,
   ],
   imports: [
     BrowserModule,
