@@ -2,18 +2,24 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Auth, DataStore } from 'aws-amplify';
 import { Subject } from 'rxjs';
+import { StorageService } from '../storage-service/storage.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  email: string;
   firstName: string;
   lastName: string;
+  group: string;
+  superDev: boolean = false;
+
+  freePeriods: number = 0;
 
   private signInState = new Subject<number>();
   signInStateCalled = this.signInState.asObservable();
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private storage: StorageService) { }
 
   async signIn() {
     await this.getUserInfo();
@@ -35,7 +41,13 @@ export class AuthService {
   async getUserInfo() {
     const { attributes } = await Auth.currentAuthenticatedUser();
 
+    this.email = attributes.email;
     this.firstName = attributes.name;
     this.lastName = attributes.family_name;
+    this.group = attributes['custom:group'];
+    if (attributes['custom:superdev'] == 'true') this.superDev = true;
+
+    const userData = await this.storage.getUserData();
+    this.freePeriods = +userData['freePeriods'];
   }
 }

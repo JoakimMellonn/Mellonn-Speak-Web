@@ -18,10 +18,10 @@ export class RecordingsPageComponent implements OnInit, OnDestroy {
   loading: boolean = true;
   subscription: any;
 
-  constructor(private authService: AuthService) { }
+  constructor(public authService: AuthService) { }
 
   async ngOnInit() {
-    await this.getUser();
+    await this.authService.signIn();
     await this.getRecordings();
     this.subscription = DataStore.observe(Recording).subscribe(rec => {
       this.getRecordings();
@@ -32,17 +32,6 @@ export class RecordingsPageComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     if (!this.subscription) return;
     this.subscription.unsubscribe();
-  }
-
-  async getUser() {
-    try {
-      const user = await Auth.currentUserInfo();
-      this.firstName = user.attributes.name;
-      this.lastName = user.attributes.family_name;
-      this.authService.signIn();
-    } catch (err) {
-      console.log('error getting user', err);
-    }
   }
 
   async getRecordings() {

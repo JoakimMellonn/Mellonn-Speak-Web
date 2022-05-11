@@ -50,6 +50,48 @@
 
                 .content {
                     padding: 25px;
+                    display: flex;
+                    flex-direction: row;
+                    
+                    .left {
+                        flex: 1;
+                    }
+
+                    .right {
+                        flex: 1;
+                    }
+
+                    .segment {
+                        position: relative;
+                        width: 75%;
+                        left: 50%;
+                        transform: translate(-50%);
+                        margin-bottom: 25px;
+                        background-color: #F8F8F8;
+                        border-radius: 25px;
+                        box-shadow: 0px 2px 5px #00000024;
+                        padding: 25px;
+
+                        p {
+                            display: inline;
+                            position: fixed;
+                            left: 60px;
+                        }
+
+                        i {
+                            display: inline;
+                        }
+
+                        hr {
+                            margin: 15px 5px;
+                            border-top: 1px solid #0000005b;
+                            border-radius: 0.5px;
+                        }
+                    }
+
+                    .segment:last-child {
+                        margin-bottom: 0;
+                    }
                 }
             }
         }

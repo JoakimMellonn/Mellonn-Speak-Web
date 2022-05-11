@@ -1,13 +1,44 @@
 <div class="pageContainer">
     <div class="center">
         <div class="mainContent">
-            <div class="contentBox">
+            <div class="contentBox" *ngIf="!loading">
                 <div class="titleBox">
-                    <div class="profilePic"></div>
+                    <img src="/assets/images/emptyProfile.png" class="profilePic">
                     <h1>Hi {{authService.firstName}} {{authService.lastName}}!</h1>
                 </div>
                 <div class="content">
-                    Hello world!
+                    <div class="left">
+                        <div class="segment">
+                            <i class="fa-solid fa-envelope fa-lg"></i>
+                            <p>{{authService.email}}</p>
+                            <hr>
+                            <i class="fa-solid fa-user fa-lg"></i>
+                            <p>{{profileType}}</p>
+                            <hr>
+                            <i class="fa-solid fa-coins fa-lg"></i>
+                            <p>Free credits: {{authService.freePeriods}}</p>
+                        </div>
+                        <div class="segment">
+                            <i class="fa-solid fa-percent fa-lg"></i>
+                            <p>Redeem promotional code</p>
+                        </div>
+                        <div class="segment">
+                            <i class="fa-solid fa-question fa-lg"></i>
+                            <p>Help</p>
+                            <hr>
+                            <i class="fa-solid fa-bug"></i>
+                            <p>Report issue</p>
+                        </div>
+                        <div class="segment">
+                            <i class="fa-solid fa-right-from-bracket fa-lg"></i>
+                            <p>Sign out</p>
+                        </div>
+                    </div>
+                    <div class="right">
+                        <div class="segment">
+                            TODO
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

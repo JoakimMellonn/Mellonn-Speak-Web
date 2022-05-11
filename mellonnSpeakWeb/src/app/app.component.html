@@ -1,7 +1,7 @@
 <div class="header">
     <img src="/assets/images/512White.png" alt="icon" class="icon" routerLink="/">
     <img src="/assets/images/logoLightMode.png" alt="logo" class="logo" routerLink="/">
-    <i class="profile" routerLink="/profile" *ngIf="signedIn"></i>
+    <img src="/assets/images/emptyProfile.png" class="profile" routerLink="/profile" *ngIf="signedIn">
 </div>
 
 <router-outlet></router-outlet>

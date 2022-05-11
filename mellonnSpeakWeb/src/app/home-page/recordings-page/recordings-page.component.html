@@ -1,8 +1,5 @@
 <div class="pageContainer">
     <div class="center">
-        <h1 *ngIf="loading == true">
-            Loading...
-        </h1>
         <div class="mainContent" *ngIf="loading == false">
             <div class="recordings">
                 <div class="titleBox">
@@ -34,23 +31,28 @@
                             <p class="text">Chosen file: None</p>
                             <input type="text" class="inputField" placeholder="Title">
                             <input type="text" class="inputField" placeholder="Description">
-                            
                         </form>
                         <button class="standardButton">
                             Upload
                         </button>
                     </div>
                 </div>
-                <!--<div class="misc">
+                <div class="admin" *ngIf="authService.superDev">
                     <div class="titleBox">
-                        <h1>
-                            Misc.
-                        </h1>
+                        <h2>
+                            Administrate group
+                        </h2>
                     </div>
-                    <div class="contentBox" style="padding-top: 25px;">
-                        Misc stuff, coming soon.
+                    <div class="contentBox">
+                        <p>Add/remove benefit user</p>
+                        <input type="text" class="inputField" placeholder="Email">
+                        <div class="addRemove">
+                            <button id="remove">Remove</button>
+                            <button>Add</button>
+                        </div>
+                        <button class="standardButton">View all users in group</button>
                     </div>
-                </div>-->
+                </div>
             </div>
         </div>
     </div>

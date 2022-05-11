@@ -26,10 +26,15 @@
                     margin: 0;
                     font-size: 2.5em;
                 }
+
+                h2 {
+                    margin: 0;
+                    font-size: 2em;
+                }
             }
 
             .contentBox {
-                padding: 0 25px 25px 25px;
+                padding: 25px;
                 
                 p {
                     text-align: center;
@@ -76,6 +81,10 @@
                 .recordingElement:hover {
                     background-color: #efefef;
                 }
+
+                .recordingElement:first-child {
+                    margin-top: 0;
+                }
             }
 
             .sideColumn {
@@ -94,13 +103,52 @@
                     max-height: 550px;
                 }
     
-                .misc {
+                .admin {
                     background-color: #F8F8F8;
                     border-radius: 25px;
                     box-shadow: 0px 2px 5px #00000024;
                     box-sizing: border-box;
                     margin-top: 25px;
-                    height: 300px;
+
+                    .inputField {
+                        margin-top: 10px;
+                    }
+
+                    .addRemove {
+                        position: relative;
+                        display: flex;
+                        flex-direction: row;
+                        left: 50%;
+                        margin-top: 15px;
+                        transform: translate(-50%);
+                        width: 80%;
+
+                        button {
+                            flex: 1;
+                            background-color: #A5C644;
+                            border: 0;
+                            border-radius: 25px;
+                            height: 50px;
+                            box-shadow: 0px 2px 5px #00000024;
+                            font-size: 1em;
+                            cursor: pointer;
+                            margin-left: 5px;
+                        }
+
+                        button:hover {
+                            background-color: #9ACD3A;
+                        }
+
+                        #remove {
+                            background-color: #FD594D;
+                            margin-right: 5px;
+                            margin-left: 0;
+                        }
+
+                        #remove:hover {
+                            background-color: #FF675C;
+                        }
+                    }
                 }
             }
         }
@@ -110,6 +158,10 @@
 .standardButton {
     margin: 25px 0 5px 0;
     width: 80%;
+}
+
+.standardButton:first-child {
+    margin-top: 0;
 }
 
 @media screen and (max-width: 1200px) {
