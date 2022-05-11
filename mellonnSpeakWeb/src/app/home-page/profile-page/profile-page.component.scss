@@ -92,6 +92,14 @@
                     .segment:last-child {
                         margin-bottom: 0;
                     }
+
+                    #clickable {
+                        cursor: pointer;
+                    }
+
+                    #clickable:hover {
+                        background-color: #efefef;
+                    }
                 }
             }
         }

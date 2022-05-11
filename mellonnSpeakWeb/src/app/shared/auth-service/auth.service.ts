@@ -45,7 +45,11 @@ export class AuthService {
     this.firstName = attributes.name;
     this.lastName = attributes.family_name;
     this.group = attributes['custom:group'];
-    if (attributes['custom:superdev'] == 'true') this.superDev = true;
+    if (attributes['custom:superdev'] == 'true') {
+      this.superDev = true;
+    } else {
+      this.superDev = false;
+    }
 
     const userData = await this.storage.getUserData();
     this.freePeriods = +userData['freePeriods'];
