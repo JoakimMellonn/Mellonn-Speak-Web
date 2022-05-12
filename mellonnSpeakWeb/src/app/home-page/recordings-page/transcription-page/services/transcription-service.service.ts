@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import Amplify, { DataStore, Storage } from 'aws-amplify';
-import { Recording } from 'src/models';
+import { Recording, Version } from 'src/models';
 import { Transcription, Results, Item, Alternative, SpeakerLabels, Segment, Transcript } from '../transcription';
 
 @Injectable({
@@ -178,6 +178,37 @@ export class TranscriptionService {
       );
     }
     return swCombined;
+  }
+
+  async deleteTranscription(recording: Recording) {
+    //first we remove all versions
+    try {
+      const versions: Version[] = await DataStore.query(Version, version => version.recordingID("eq", recording.id));
+  
+      for (let version of versions) {
+        try {
+          const versionKey = 'versions/' + recording.id + '/' + version.id + '.json';
+          await Storage.remove(versionKey, {level: 'private'});
+          await DataStore.delete(version);
+        } catch (e) {
+          console.log('Error while deleting versions: ' + e);
+        }
+      }
+      const originalKey = 'versions/' + recording.id + '/original.json';
+      await Storage.remove(originalKey, {level: 'private'});
+    } catch (e) {
+      console.log('Error while deleting original version: ' + e);
+    }
+  
+    //now we remove the audio and the transcription
+    try {
+      const transcriptKey = 'finishedJobs/' + recording.id + '.json';
+      await Storage.remove(transcriptKey);
+      await Storage.remove(recording.fileKey!, {level: 'private'});
+      await DataStore.delete(recording);
+    } catch (e) {
+      console.log('Error while deleting recording: ' + e);
+    }
   }
 }
 

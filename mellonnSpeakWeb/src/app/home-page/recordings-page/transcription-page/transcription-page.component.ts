@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DocxService } from 'src/app/shared/docx-service/docx.service';
 import { Recording } from 'src/models';
 import { AudioService } from './services/audio.service';
@@ -36,7 +36,8 @@ export class TranscriptionPageComponent implements OnInit {
     private docx: DocxService,
     private speakerEdit: SpeakerEditService,
     private labelService: LabelService,
-    private versionHistory: VersionHistoryService
+    private versionHistory: VersionHistoryService,
+    private router: Router
   ) { }
 
   async ngOnInit() {
@@ -144,5 +145,12 @@ export class TranscriptionPageComponent implements OnInit {
   reloadTranscription(trans: Transcription) {
     this.transcription = trans;
     this.speakerWithWords = this.service.processTranscription(trans);
+  }
+
+  async deleteRecording() {
+    if (confirm('Are you ABSOLUTELY sure you want to delete this recording? This can NOT be undone')) {
+      await this.service.deleteTranscription(this.recording);
+      this.router.navigate(['/']);
+    }
   }
 }

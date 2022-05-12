@@ -73,9 +73,11 @@ export class VersionHistoryComponent implements OnInit {
   }
 
   async recoverTranscription() {
-    await this.transService.saveTranscription(this.currentTrans, this.recording.id);
-    await this.versionService.uploadVersion(this.recording.id, this.currentTrans, 'Recovered Version');
-    this.versionService.recoverTranscription();
+    if (confirm('Are you sure you want to recover the transcription to this state?')) {
+      await this.transService.saveTranscription(this.currentTrans, this.recording.id);
+      await this.versionService.uploadVersion(this.recording.id, this.currentTrans, 'Recovered Version');
+      this.versionService.recoverTranscription();
+    }
   }
 
   getSpkNum(speakerLabel: string): number {
