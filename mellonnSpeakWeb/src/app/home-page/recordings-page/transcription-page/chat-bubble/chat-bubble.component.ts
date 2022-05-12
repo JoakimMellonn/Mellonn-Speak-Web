@@ -6,6 +6,7 @@ import { SpeakerWithWords, TranscriptionService } from '../services/transcriptio
 import { SpeakerEditService } from 'src/app/shared/speaker-edit-service/speaker-edit.service';
 import { Speaker } from '../speaker-chooser/speaker-chooser.component';
 import { Recording } from 'src/models';
+import { VersionHistoryService } from '../version-history/version-history.service';
 
 @Component({
   selector: 'app-chat-bubble',
@@ -31,7 +32,8 @@ export class ChatBubbleComponent implements AfterViewInit {
     private textEdit: TextEditService,
     private audio: AudioService,
     private speakerEdit: SpeakerEditService,
-    private transService: TranscriptionService
+    private transService: TranscriptionService,
+    private versionService: VersionHistoryService
   ) { }
 
   ngOnInit(): void {
@@ -114,6 +116,7 @@ export class ChatBubbleComponent implements AfterViewInit {
 
   async save() {
     await this.textEdit.saveTranscription(this.transcription, this.recording.id, this.sww, this.text);
+    this.versionService.uploadVersion(this.recording.id, this.transcription, 'Edited Text');
     this.audio.resetState();
     this.changed = false;
   }

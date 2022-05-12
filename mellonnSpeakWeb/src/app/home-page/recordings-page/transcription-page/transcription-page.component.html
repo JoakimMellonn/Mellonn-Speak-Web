@@ -12,16 +12,16 @@
                     <div class="dropdown">
                         <i class="fa-solid fa-ellipsis-vertical fa-2xl icon"></i>
                         <div class="dropdown-content">
-                            <a (click)="modalOpen = true">Edit labels</a>
-                            <a (click)="downloadDOCX()">Export as DOCX</a>
-                            <a>Version history</a>
-                            <a>Info</a>
+                            <a (click)="labelEditOpen = true">Edit labels</a>
+                            <a (click)="downloadDOCX()">Download as DOCX</a>
+                            <a (click)="versionHistoryOpen = true">Version history</a>
+                            <a (click)="infoOpen = true">Info</a>
                             <a>Delete this recording</a>
                             <a>Help</a>
                         </div>
                     </div>
                 </div>
-                <div class="contentBox" *ngIf="!modalOpen">
+                <div class="contentBox" *ngIf="!labelEditOpen && !versionHistoryOpen">
                     <div class="chatLine" *ngFor="let sww of speakerWithWords">
                         <div *ngIf="recording.interviewers?.includes(sww.speakerLabel)">
                             <app-user-chat-bubble [sww]="sww" [transcription]="transcription" [recording]="recording"></app-user-chat-bubble>
@@ -45,7 +45,7 @@
                         <button class="standardButton" (click)="resetAudio()">
                             Reset audio selection
                         </button><br><br>
-                        <div *ngIf="!modalOpen">
+                        <div *ngIf="!labelEditOpen">
                             <app-speaker-chooser [recording]="recording" [speakerWithWords]="speakerWithWords" [transcription]="transcription" *ngIf="loading == false"></app-speaker-chooser>
                         </div>
                     </div>
@@ -55,8 +55,20 @@
     </div>
 </div>
 <app-audio-control *ngIf="loading == false"></app-audio-control>
-<div class="modalBackground" *ngIf="modalOpen && !loading">
+<div class="modalBackgroundLabel" *ngIf="labelEditOpen && !loading">
     <div class="modalWindow">
         <app-label-edit [recording]="recording"></app-label-edit>
+    </div>
+</div>
+<div class="modalBackground" *ngIf="versionHistoryOpen && !loading">
+    <div class="modalWindow">
+        <app-version-history [recording]="recording"></app-version-history>
+        <button class="standardButton" (click)="versionHistoryOpen = false">Close</button>
+    </div>
+</div>
+<div class="modalBackground" *ngIf="infoOpen" (click)="infoOpen = false">
+    <div class="modalWindow">
+        <app-info-panel [recording]="recording"></app-info-panel>
+        <button class="standardButton">Close</button>
     </div>
 </div>

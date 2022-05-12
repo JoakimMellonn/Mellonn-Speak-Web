@@ -1,0 +1,125 @@
+.box {
+    width: 30%;
+    min-width: 660px;
+    margin: 0;
+
+    .titleBox {
+        width: 100%;
+        background-color: #FAB228;
+        box-shadow: 0px 2px 5px #00000024;
+        border-radius: 25px;
+        padding: 25px;
+
+        .icon {
+            display: inline;
+            position: relative;
+            height: 25px;
+            top: -7px;
+            cursor: pointer;
+        }
+
+        .recover {
+            display: inline;
+            float: right;
+            position: relative;
+            height: 25px;
+            top: 14px;
+            cursor: pointer;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2.5em;
+            display: inline;
+        }
+    }
+
+    .content {
+        padding: 25px;
+
+        .versionElement {
+            background-color: #F8F8F8;
+            border-radius: 25px;
+            box-shadow: 0px 2px 5px #00000024;
+            width: 100%;
+            margin-top: 15px;
+            padding: 15px 25px 15px 25px;
+            cursor: pointer;
+
+            .date {
+                text-align: left;
+                margin: 0;
+                margin-bottom: 4px;
+            }
+
+            .date:last-child {
+                margin-bottom: 0;
+            }
+
+            .type {
+                text-align: left;
+                margin: 0;
+                font-weight: 400;
+                text-shadow: 0px 1px 0.5px #00000024;
+            }
+        }
+
+        .versionElement:hover {
+            background-color: #efefef;
+        }
+
+        .versionElement:first-child {
+            margin-top: 0;
+        }
+
+        hr {
+            margin: 15px 5px;
+            border-top: 1px solid #0000005b;
+            border-radius: 0.5px;
+        }
+
+
+        .chatLine {
+            width: 100%;
+            box-sizing: border-box;
+            overflow: hidden;
+            padding: 5px;
+
+            .chatBubbleUser {
+                background-color: #A5C644;
+                float: right;
+                max-width: 60%;
+                padding: 15px;
+                border-radius: 25px;
+                box-shadow: 0px 2px 5px #00000024;
+                min-height: 50px;
+            }
+
+            .chatBubble {
+                background-color: #F8F8F8;
+                float: left;
+                max-width: 60%;
+                padding: 15px;
+                border-radius: 25px;
+                box-shadow: 0px 2px 5px #00000024;
+                min-height: 50px;
+            }
+
+            .userText {
+                display: block;
+                float: right;
+                width: 100%;
+                text-align: right;
+                margin: 5px 0 15px 0;
+            }
+
+            .text {
+                display: block;
+                float: left;
+                width: 100%;
+                text-align: left;
+                margin: 5px 0 15px 0;
+            }
+        }
+    }
+}

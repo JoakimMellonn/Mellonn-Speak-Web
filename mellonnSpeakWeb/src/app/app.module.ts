@@ -19,6 +19,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ProfilePageComponent } from './home-page/profile-page/profile-page.component';
 import { LabelEditComponent } from './home-page/recordings-page/transcription-page/label-edit/label-edit.component';
 import { SpeakerComponent } from './home-page/recordings-page/transcription-page/label-edit/speaker/speaker.component';
+import { InfoPanelComponent } from './home-page/recordings-page/transcription-page/info-panel/info-panel.component';
+import { VersionHistoryComponent } from './home-page/recordings-page/transcription-page/version-history/version-history.component';
 
 Amplify.configure(awsconfig);
 
@@ -35,6 +37,8 @@ Amplify.configure(awsconfig);
     ProfilePageComponent,
     LabelEditComponent,
     SpeakerComponent,
+    InfoPanelComponent,
+    VersionHistoryComponent,
   ],
   imports: [
     BrowserModule,

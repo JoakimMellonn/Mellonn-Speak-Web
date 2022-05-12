@@ -57,11 +57,18 @@
                     a {
                         display: block;
                         padding: 20px 25px;
-                        border-radius: 25px;
                     }
 
                     a:hover {
                         background-color: #efefef;
+                    }
+
+                    a:first-child {
+                        border-radius: 25px 25px 0 0;
+                    }
+
+                    a:last-child {
+                        border-radius: 0 0 25px 25px;
                     }
                 }
 
@@ -167,19 +174,43 @@
 
 .modalBackground {
     position: fixed;
+    top: 70px;
     width: 100%;
-    height: 100%;
+    height: calc(100% - 70px);
+    overflow-y: scroll;
     background-color: #00000099;
 
-    .modalWindow {
-        position: fixed;
-        top: 50%;
+    .modalWindowLabel {
+        position: relative;
+        top: 25px;
         left: 50%;
-        transform: translate(-50%, -50%);
+        margin-bottom: 50px;
+        transform: translate(-50%);
         background-color: #F8F8F8;
         border-radius: 25px;
         box-shadow: 0px 2px 5px #00000024;
         max-width: 75%;
+        z-index: 200;
+        width: fit-content;
+    }
+
+    .modalWindow {
+        position: relative;
+        top: 25px;
+        left: 50%;
+        margin-bottom: 50px;
+        transform: translate(-50%);
+        background-color: #F8F8F8;
+        border-radius: 25px;
+        box-shadow: 0px 2px 5px #00000024;
+        width: 30%;
+        min-width: 660px;
+        z-index: 200;
+
+        .standardButton {
+            margin-bottom: 25px;
+            width: 75%;
+        }
     }
 }
 

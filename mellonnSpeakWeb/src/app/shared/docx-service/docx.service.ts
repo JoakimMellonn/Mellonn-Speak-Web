@@ -53,7 +53,7 @@ export class DocxService {
     return new Paragraph({
       children: [
         new TextRun({
-          text: speakerLabel + this.getTimeFrame(sww.startTime, sww.endTime) + ': ',
+          text: speakerLabel + ' ' + this.getTimeFrame(sww.startTime, sww.endTime) + ': ',
           bold: true
         }),
         new TextRun({

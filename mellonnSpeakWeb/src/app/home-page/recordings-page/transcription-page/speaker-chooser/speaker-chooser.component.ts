@@ -6,6 +6,7 @@ import { AudioControlComponent } from '../audio-control/audio-control.component'
 import { AudioService } from '../services/audio.service';
 import { SpeakerWithWords, TranscriptionService } from '../services/transcription-service.service';
 import { Transcription } from '../transcription';
+import { VersionHistoryService } from '../version-history/version-history.service';
 
 @Component({
   selector: 'app-speaker-chooser',
@@ -30,7 +31,8 @@ export class SpeakerChooserComponent implements OnInit, AfterViewInit {
     private renderer: Renderer2,
     private audio: AudioService,
     private speakerEdit: SpeakerEditService,
-    private transService: TranscriptionService
+    private transService: TranscriptionService,
+    private versionService: VersionHistoryService
   ) { }
 
   ngOnInit(): void {
@@ -77,6 +79,7 @@ export class SpeakerChooserComponent implements OnInit, AfterViewInit {
   async save() {
     this.switchSpeaker(this.audio.player.currentTime, this.lastSpeaker);
     const res = await this.transService.saveTranscription(this.unsavedTranscription, this.recording.id);
+    this.versionService.uploadVersion(this.recording.id, this.transcription, 'Edited Speaker Labels');
     this.transcription = this.unsavedTranscription;
     this.speakerEdit.reloadTranscription(this.unsavedTranscription);
     this.saved = true;
