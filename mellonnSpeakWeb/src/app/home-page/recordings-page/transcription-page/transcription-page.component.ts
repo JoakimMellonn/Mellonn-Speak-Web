@@ -52,7 +52,6 @@ export class TranscriptionPageComponent implements OnInit {
     await this.service.getRecording(this.id).then((value) => {
       if (value != 'null') {
         this.recording = value;
-        this.loading = false;
       } else {
         this.error;
       }
@@ -90,6 +89,7 @@ export class TranscriptionPageComponent implements OnInit {
       });
       this.versionHistoryOpen = false;
     });
+    this.loading = false;
   }
 
   getSpkNum(speakerLabel: string): number {

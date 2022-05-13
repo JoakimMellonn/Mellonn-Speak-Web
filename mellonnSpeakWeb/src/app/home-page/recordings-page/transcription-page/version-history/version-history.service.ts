@@ -37,6 +37,7 @@ export class VersionHistoryService {
         const deleteVersion = await DataStore.query(Version, version => version.id("eq", versions[0].id));
         deleteVersion.forEach((vers) => {
           DataStore.delete(vers);
+          this.removeOldVersion(recordingID, vers.id);
         });
       }
       return newVersion.id;
@@ -58,8 +59,8 @@ export class VersionHistoryService {
     }
   }
 
-  async removeOldVersion() {
-    const key = 'versions/$recordingID/$versionID.json';
+  async removeOldVersion(recordingID: string, versionID: string) {
+    const key = 'versions/' + recordingID + '/' + versionID + '.json';
 
     try {
       const result = await Storage.remove(key, {level: 'private'});

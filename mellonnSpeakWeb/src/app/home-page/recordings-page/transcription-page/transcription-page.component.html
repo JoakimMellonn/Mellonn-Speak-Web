@@ -55,9 +55,9 @@
     </div>
 </div>
 <app-audio-control *ngIf="loading == false"></app-audio-control>
-<div class="modalBackgroundLabel" *ngIf="labelEditOpen && !loading">
-    <div class="modalWindow">
-        <app-label-edit [recording]="recording"></app-label-edit>
+<div class="modalBackground" *ngIf="labelEditOpen && !loading">
+    <div class="modalWindowLabel">
+        <app-label-edit [recording]="recording" [speakerWithWords]="speakerWithWords"></app-label-edit>
     </div>
 </div>
 <div class="modalBackground" *ngIf="versionHistoryOpen && !loading">

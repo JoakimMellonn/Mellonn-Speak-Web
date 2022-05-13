@@ -13,6 +13,7 @@ export class AudioService {
   currentStart: number;
   currentEnd: number;
   loadedFirst: boolean = false;
+  labelActive: boolean = false;
 
   private audioControlSetChosen = new Subject<number[]>();
   audioControlSetChosenCalled = this.audioControlSetChosen.asObservable();
@@ -51,7 +52,7 @@ export class AudioService {
     }
 
     this.player.onended = () => {
-      this.switchSpeakers(this.player.currentTime, this.currentStart);
+      if (!this.labelActive) this.switchSpeakers(this.player.currentTime, this.currentStart);
       this.audioOnEnd.next(1);
     }
 
@@ -67,6 +68,7 @@ export class AudioService {
 
   resetState() {
     console.log('Reset audio state...');
+    this.player.pause();
     this.player.src = this.playerUrl;
     this.loadedFirst = false;
     this.audioControlResetChosen.next(1);

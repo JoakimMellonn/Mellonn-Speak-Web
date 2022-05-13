@@ -10,11 +10,12 @@ export class SpeakerComponent implements OnInit {
   speakerL: string = '';
   chosenType: string = 'Interviewee';
   value: string = 'Hello';
+  playPause: string = 'Play';
 
   @Input() speaker: number;
   @Input() initialValue: string;
 
-  constructor(private renderer: Renderer2, private labelService: LabelService) { }
+  constructor(private renderer: Renderer2, public labelService: LabelService) { }
 
   ngOnInit(): void {
     this.value = this.initialValue;
@@ -25,6 +26,14 @@ export class SpeakerComponent implements OnInit {
         break;
       }
     }
+
+    this.labelService.currentlyPlayingCalled.subscribe((res) => {
+      if (this.speaker == res) {
+        this.playPause = 'Pause';
+      } else {
+        this.playPause = 'Play';
+      }
+    });
   }
 
   setChosenType(type: string) {

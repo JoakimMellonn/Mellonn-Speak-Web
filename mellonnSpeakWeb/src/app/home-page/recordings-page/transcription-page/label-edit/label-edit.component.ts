@@ -1,5 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Recording } from 'src/models';
+import { AudioService } from '../services/audio.service';
+import { SpeakerWithWords } from '../services/transcription-service.service';
 import { LabelService } from './label.service';
 
 @Component({
@@ -12,15 +14,30 @@ export class LabelEditComponent implements OnInit, OnDestroy {
   loading: boolean = true;
 
   @Input() recording: Recording;
+  @Input() speakerWithWords: SpeakerWithWords[];
 
-  constructor(private labelService: LabelService) { }
+  constructor(private labelService: LabelService, private audio: AudioService) { }
 
   ngOnInit() {
     this.initLabel();
+    this.audio.labelActive = true;
+    this.labelService.speakerClips = this.labelService.getSpeakerClips(this.speakerWithWords, this.recording.speakerCount);
+
+    this.audio.audioOnEndCalled.subscribe(() => {
+      this.labelService.stopAudio();
+    });
+
+    this.audio.audioOnTimeUpdateCalled.subscribe(() => {
+      if (this.audio.player.currentTime >= this.labelService.currentEnd) {
+        this.labelService.stopAudio();
+      }
+    })
+
     this.loading = false;
   }
 
   ngOnDestroy(): void {
+    this.audio.labelActive = false;
     this.labelService.resetLabel();
   }
 
@@ -60,6 +77,7 @@ export class LabelEditComponent implements OnInit, OnDestroy {
   }
 
   async assignLabels() {
+    this.audio.resetState();
     await this.labelService.assignLabels(this.recording);
   }
 

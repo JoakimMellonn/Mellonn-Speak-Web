@@ -9,7 +9,7 @@
     </div>
     <input type="text" class="inputField" [(ngModel)]="value" (ngModelChange)="onTextChange()">
     <div class="buttons">
-        <button class="button" id="left">Play</button>
-        <button class="button" id="right">Shuffle</button>
+        <button class="button" id="left" (click)="labelService.playAudio(speaker)">{{playPause}}</button>
+        <button class="button" id="right" (click)="labelService.shuffleAudio(speaker)">Shuffle</button>
     </div>
 </div>
