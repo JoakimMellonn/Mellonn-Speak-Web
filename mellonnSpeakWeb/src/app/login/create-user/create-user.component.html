@@ -1,0 +1,30 @@
+<div class="createForm">
+    <form [formGroup]="formP1" (ngSubmit)="onSubmit()" *ngIf="!verificationSent">
+        <input formControlName="email" type="email" class="inputField" placeholder="Email">
+        <input formControlName="password" type="password" class="inputField" placeholder="Password">
+        <input formControlName="passwordConfirm" type="password" class="inputField" placeholder="Confirm password">
+
+        <div class="buttonRow">
+            <button id="left" class="standardButton" type="button" (click)="setCreate(false)">
+                Cancel
+            </button>
+            <button id="right" class="standardButton" type="submit" [disabled]="!verificationSent && formP1.invalid || !passwordDoesMatch || loading">
+                {{buttonText}}
+            </button>
+        </div>
+    </form>
+
+    <form [formGroup]="formP2" (ngSubmit)="onSubmit()" *ngIf="verificationSent">
+        <p class="otherMessage">Check your email!</p>
+        <input formControlName="name" type="text" class="inputField" placeholder="First name">
+        <input formControlName="lastName" type="text" class="inputField" placeholder="Last name">
+        <input formControlName="verificationCode" type="text" class="inputField" placeholder="Verification code">
+        <p class="resend" (click)="resendCode()">Haven't received a code? Send it again!</p>
+
+        <button class="standardButton" type="submit" [disabled]="verificationSent && formP2.invalid || loading">
+            {{buttonText}}
+        </button>
+    </form>
+
+    <p class="errorMessage" *ngIf="serverMessage != null">{{serverMessage}}</p>
+</div>

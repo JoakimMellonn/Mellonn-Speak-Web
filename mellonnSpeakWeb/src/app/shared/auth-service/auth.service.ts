@@ -19,11 +19,29 @@ export class AuthService {
   private signInState = new Subject<number>();
   signInStateCalled = this.signInState.asObservable();
 
+  private createState = new Subject<boolean>();
+  createStateCalled = this.createState.asObservable();
+
+  private forgotState = new Subject<boolean>();
+  forgotStateCalled = this.forgotState.asObservable();
+
   constructor(private router: Router, private storage: StorageService) { }
 
   async signIn() {
     await this.getUserInfo();
     this.signInState.next(1);
+  }
+
+  forgetPasswordError: string;
+
+  async forgotPassword(email: string) {
+    try {
+      await Auth.forgotPassword(email);
+      return true;
+    } catch (err) {
+      this.forgetPasswordError = String(err);
+      return false;
+    }
   }
 
   async signOut() {
@@ -51,7 +69,15 @@ export class AuthService {
       this.superDev = false;
     }
 
-    const userData = await this.storage.getUserData();
+    const userData = await this.storage.getUserData(this.email);
     this.freePeriods = +userData['freePeriods'];
+  }
+
+  setCreate(val: boolean) {
+    this.createState.next(val);
+  }
+
+  setForgotState(val: boolean) {
+    this.forgotState.next(val);
   }
 }

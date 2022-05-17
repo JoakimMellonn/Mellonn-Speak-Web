@@ -40,6 +40,7 @@ input, button {
 
 .standardButton:disabled {
     background-color: #D8D8D8;
+    cursor: default;
 }
 
 .inputField {

@@ -18,16 +18,20 @@
                             <i class="fa-solid fa-coins fa-lg"></i>
                             <p>Free credits: {{authService.freePeriods}}</p>
                         </div>
-                        <div class="segment">
+                        <div id="clickable" class="segment" (click)="redeemPromotion()">
                             <i class="fa-solid fa-percent fa-lg"></i>
                             <p>Redeem promotional code</p>
                         </div>
-                        <div class="segment">
-                            <i class="fa-solid fa-question fa-lg"></i>
-                            <p>Help</p>
+                        <div id="divided" class="segment">
+                            <div id="clickable" class="dividedSegment">
+                                <i class="fa-solid fa-question fa-lg"></i>
+                                <p>Help</p>
+                            </div>
                             <hr>
-                            <i class="fa-solid fa-bug"></i>
-                            <p>Report issue</p>
+                            <div id="clickable" class="dividedSegment">
+                                <i class="fa-solid fa-bug"></i>
+                                <p>Report issue</p>
+                            </div>
                         </div>
                         <div class="segment" id="clickable" (click)="authService.signOut()">
                             <i class="fa-solid fa-right-from-bracket fa-lg"></i>
@@ -36,7 +40,7 @@
                     </div>
                     <div class="right">
                         <div class="segment">
-                            TODO
+                            TODO: Settings sync
                         </div>
                     </div>
                 </div>

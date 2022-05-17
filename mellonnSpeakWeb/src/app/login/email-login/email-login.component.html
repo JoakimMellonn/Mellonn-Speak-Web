@@ -1,11 +1,32 @@
 <div class="loginForm">
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="!isConfirm">
         <input formControlName="email" type="email" class="inputField" placeholder="Email">
-        <input formControlName="password" type="password" class="inputField" placeholder="Password">
-        <br><a class="forgotText">Forgot your password?</a>
-        <button class="standardButton" type="submit" [disabled]="form.invalid || !passwordDoesMatch || loading">
-            Log In
+        <input formControlName="password" type="password" class="inputField" placeholder="Password" *ngIf="isLogin || !isLogin && verificationSent">
+        <input formControlName="passwordConfirm" type="password" class="inputField" placeholder="Confirm password" *ngIf="!isLogin && verificationSent">
+        <input formControlName="verificationCode" type="text" class="inputField" placeholder="Verification code" *ngIf="verificationSent">
+
+        <br><a class="forgotText" *ngIf="isLogin" (click)="changeType('reset')">Forgot your password?</a>
+
+        <div class="buttonRow">
+            <button id="left" class="standardButton" type="button" (click)="changeType('login')" *ngIf="isPasswordReset">
+                Cancel
+            </button>
+            <button id="right" class="standardButton" type="submit" [disabled]="form.invalid || verificationSent && !passwordDoesMatch || loading">
+                {{buttonString}}
+            </button>
+        </div>
+        <p id="msg" class="errorMessage" *ngIf="serverMessage != null">{{serverMessage}}</p>
+    </form>
+
+    <form [formGroup]="formConfirm" (ngSubmit)="onSubmit()" *ngIf="isConfirm">
+        <p class="otherMessage">Your account isn't fully set up yet... Check your email for a verification code!</p>
+        <input formControlName="name" type="text" class="inputField" placeholder="First name">
+        <input formControlName="lastName" type="text" class="inputField" placeholder="Last name">
+        <input formControlName="confirmCode" type="text" class="inputField" placeholder="Verification code">
+        <p class="resend" (click)="resendCode()">Haven't received a code? Send it again!</p>
+
+        <button class="standardButton" type="submit" [disabled]="formConfirm.invalid || loading">
+            Complete sign up
         </button>
-        <p class="errorMessage" *ngIf="serverMessage != null">{{serverMessage}}</p>
     </form>
 </div>

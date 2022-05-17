@@ -3,7 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  getPromotionEndPoint: 'https://07xlqbkgrg.execute-api.eu-central-1.amazonaws.com/default/getPromotion-prod',
+  getPromotionKey: 'l2oU7NoyWt74V7Bq821PC5O35c8r6RN8arj5A2Nd'
 };
 
 /*

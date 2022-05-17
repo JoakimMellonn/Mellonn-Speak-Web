@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/shared/auth-service/auth.service';
+import { PromotionService } from 'src/app/shared/promotion-service/promotion.service';
 
 @Component({
   selector: 'app-profile-page',
@@ -10,7 +11,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   profileType: string;
   loading: boolean = true;
 
-  constructor(public authService: AuthService) { }
+  constructor(public authService: AuthService, private promotionService: PromotionService) { }
 
   async ngOnInit() {
     await this.authService.signIn();
@@ -27,5 +28,9 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.loading = true;
+  }
+
+  async redeemPromotion() {
+    await this.promotionService.getPromotion('henlo', this.authService.email, this.authService.freePeriods);
   }
 }

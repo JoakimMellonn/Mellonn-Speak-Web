@@ -21,6 +21,7 @@ import { LabelEditComponent } from './home-page/recordings-page/transcription-pa
 import { SpeakerComponent } from './home-page/recordings-page/transcription-page/label-edit/speaker/speaker.component';
 import { InfoPanelComponent } from './home-page/recordings-page/transcription-page/info-panel/info-panel.component';
 import { VersionHistoryComponent } from './home-page/recordings-page/transcription-page/version-history/version-history.component';
+import { HttpClientModule } from '@angular/common/http';
 
 Amplify.configure(awsconfig);
 
@@ -45,7 +46,8 @@ Amplify.configure(awsconfig);
     AppRoutingModule,
     SharedModule,
     FormsModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
