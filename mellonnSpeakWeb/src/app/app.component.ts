@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from './shared/auth-service/auth.service';
+import { LanguageService } from './shared/language-service/language.service';
 
 @Component({
   selector: 'app-root',
@@ -11,9 +12,7 @@ export class AppComponent implements OnInit {
   title = 'mellonnSpeakWeb';
   signedIn: boolean = false;
 
-  constructor(private router: Router, private authService: AuthService) {}
-
-  url = window.location.href;
+  constructor(private router: Router, private authService: AuthService, private language: LanguageService) {}
 
   ngOnInit(): void {
     this.authService.signInStateCalled.subscribe((res) => {
@@ -23,6 +22,8 @@ export class AppComponent implements OnInit {
         this.signedIn = false;
       }
     });
+
+    this.language.getLanguages();
   }
 
   async signOut() {

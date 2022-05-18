@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { API } from 'aws-amplify';
 
 @Injectable({
   providedIn: 'root'
@@ -10,25 +11,24 @@ export class PromotionService {
   constructor(private http: HttpClient) { }
 
   async getPromotion(code: string, email: string, freePeriods: number) {
-    const params = new HttpParams();
-    params.set('code', code);
-    params.set('email', email);
-    let headers = new HttpHeaders({
-      'x-api-key': environment.getPromotionKey
-    });
-
-    console.log('Making the request');
-    const response = this.http.post(
-      environment.getPromotionEndPoint,
-      params,
-      {
-        headers: headers,
+    const params = {
+      body: {
+        "code": code,
+        "email": email
+      },
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": "true"
       }
-    );
+    };
 
-    response.subscribe((res) => {
-      console.log(res);
-    });
+    try {
+      const response = await API.put('getPromotion', '', params);
+
+      console.log('Response: ' + response);
+    } catch (err) {
+      console.log('Failed: ' + err);
+    }
 
     /*if (response.statusCode == 200) {
       gotPromotion = true;
