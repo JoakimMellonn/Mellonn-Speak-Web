@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { API } from 'aws-amplify';
 
@@ -15,17 +15,14 @@ export class PromotionService {
       body: {
         "code": code,
         "email": email
-      },
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": "true"
       }
     };
 
     try {
-      const response = await API.put('getPromotion', '', params);
+      const response = await API.put('getPromo', '/getPromo', params);
 
       console.log('Response: ' + response);
+      console.log('Json response: ' + JSON.stringify(response));
     } catch (err) {
       console.log('Failed: ' + err);
     }
