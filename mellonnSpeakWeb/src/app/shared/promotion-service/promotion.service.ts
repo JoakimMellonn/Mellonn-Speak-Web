@@ -15,6 +15,10 @@ export class PromotionService {
       body: {
         "code": code,
         "email": email
+      },
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": "true"
       }
     };
 
@@ -22,7 +26,6 @@ export class PromotionService {
       const response = await API.put('getPromo', '/getPromo', params);
 
       console.log('Response: ' + response);
-      console.log('Json response: ' + JSON.stringify(response));
     } catch (err) {
       console.log('Failed: ' + err);
     }
