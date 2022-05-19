@@ -15,10 +15,6 @@ export class PromotionService {
       body: {
         "code": code,
         "email": email
-      },
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": "true"
       }
     };
 
@@ -26,28 +22,19 @@ export class PromotionService {
       const response = await API.put('getPromo', '/getPromo', params);
 
       console.log('Response: ' + response);
-    } catch (err) {
-      console.log('Failed: ' + err);
-    }
 
-    /*if (response.statusCode == 200) {
-      gotPromotion = true;
-      stateSetter();
-      if (response.body == 'code no exist') {
-        return Promotion(type: 'noExist', freePeriods: 0);
+      if (response == 'code no exist') {
+        return new Promotion('noExist', 0);
       } else if (response.body == 'code already used') {
-        return Promotion(type: 'used', freePeriods: 0);
+        return new Promotion('used', 0);
       } else {
-        var jsonResponse = json.decode(response.body);
-        Promotion promotion = Promotion(
-            type: jsonResponse['type'],
-            freePeriods: int.parse(jsonResponse['freePeriods']));
-        await applyPromotion(stateSetter, promotion, email, freePeriods);
+        const promotion = new Promotion(response['type'], +response['freePeriods']);
         return promotion;
       }
-    } else {
-      return Promotion(type: 'error', freePeriods: 0);
-    }*/
+    } catch (err) {
+      console.log('Failed: ' + err);
+      return new Promotion('error', 0);
+    }
   }
 }
 
