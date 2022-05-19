@@ -1,4 +1,37 @@
 {
+  "prod": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-mellonnspeakeu-prod-94145-authRole",
+      "UnauthRoleArn": "arn:aws:iam::750760407006:role/amplify-mellonnspeakeu-prod-94145-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::750760407006:role/amplify-mellonnspeakeu-prod-94145-authRole",
+      "Region": "eu-central-1",
+      "DeploymentBucketName": "amplify-mellonnspeakeu-prod-94145-deployment",
+      "UnauthRoleName": "amplify-mellonnspeakeu-prod-94145-unauthRole",
+      "StackName": "amplify-mellonnspeakeu-prod-94145",
+      "StackId": "arn:aws:cloudformation:eu-central-1:750760407006:stack/amplify-mellonnspeakeu-prod-94145/450314c0-93bb-11ec-b091-025b93d6f7f4",
+      "AmplifyAppId": "d3km7wqa9jf06b",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-mellonnspeakeu-prod-94145-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
+    },
+    "categories": {
+      "auth": {
+        "MellonnSpeakEU": {}
+      },
+      "function": {
+        "MellonnSpeakEUFunction": {
+          "deploymentBucketName": "amplify-mellonnspeakeu-prod-94145-deployment",
+          "s3Key": "amplify-builds/MellonnSpeakEUFunction-4361554b306a64313974-build.zip"
+        },
+        "stripeFunction": {
+          "deploymentBucketName": "amplify-mellonnspeakeu-prod-94145-deployment",
+          "s3Key": "amplify-builds/stripeFunction-3735744f644156704d76-build.zip"
+        },
+        "transcriptionDoneFunction": {
+          "deploymentBucketName": "amplify-mellonnspeakeu-prod-94145-deployment",
+          "s3Key": "amplify-builds/transcriptionDoneFunction-5541474d52746a4f4958-build.zip"
+        }
+      }
+    }
+  },
   "staging": {
     "awscloudformation": {
       "AuthRoleName": "amplify-mellonnspeakeu-staging-102306-authRole",

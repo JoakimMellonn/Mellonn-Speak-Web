@@ -64,20 +64,6 @@
           ]
         }
       ]
-    },
-    "getPromotion": {
-      "service": "API Gateway",
-      "providerPlugin": "awscloudformation",
-      "dependsOn": [
-        {
-          "category": "function",
-          "resourceName": "getPromotion",
-          "attributes": [
-            "Name",
-            "Arn"
-          ]
-        }
-      ]
     }
   },
   "storage": {
@@ -111,11 +97,6 @@
           ]
         }
       ]
-    },
-    "getPromotion": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
     }
   },
   "analytics": {
