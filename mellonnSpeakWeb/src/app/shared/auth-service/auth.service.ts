@@ -32,6 +32,19 @@ export class AuthService {
     this.signInState.next(1);
   }
 
+  async checkCurrentUser() {
+    try {
+      const user = await Auth.currentAuthenticatedUser();
+      if (user != null) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (err) {
+      return false;
+    }
+  }
+
   forgetPasswordError: string;
 
   async forgotPassword(email: string) {

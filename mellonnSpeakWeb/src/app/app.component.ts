@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { AuthService } from './shared/auth-service/auth.service';
 import { LanguageService } from './shared/language-service/language.service';
 
@@ -12,9 +11,9 @@ export class AppComponent implements OnInit {
   title = 'mellonnSpeakWeb';
   signedIn: boolean = false;
 
-  constructor(private router: Router, private authService: AuthService, private language: LanguageService) {}
+  constructor(private authService: AuthService, private language: LanguageService) {}
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.authService.signInStateCalled.subscribe((res) => {
       if (res == 1) {
         this.signedIn = true;
@@ -23,6 +22,8 @@ export class AppComponent implements OnInit {
       }
     });
     this.language.getLanguages();
+    const isSignedIn = await this.authService.checkCurrentUser();
+    if (isSignedIn) await this.authService.registerSignIn();
   }
 
   async signOut() {
