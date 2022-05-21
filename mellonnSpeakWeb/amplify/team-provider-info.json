@@ -69,15 +69,15 @@
       "function": {
         "MellonnSpeakEUFunction": {
           "deploymentBucketName": "amplify-mellonnspeakeu-staging-102306-deployment",
-          "s3Key": "amplify-builds/MellonnSpeakEUFunction-337166364d63796e3137-build.zip"
+          "s3Key": "amplify-builds/MellonnSpeakEUFunction-4361554b306a64313974-build.zip"
         },
         "stripeFunction": {
           "deploymentBucketName": "amplify-mellonnspeakeu-staging-102306-deployment",
-          "s3Key": "amplify-builds/stripeFunction-6a766e4c54624a425975-build.zip"
+          "s3Key": "amplify-builds/stripeFunction-3735744f644156704d76-build.zip"
         },
         "transcriptionDoneFunction": {
           "deploymentBucketName": "amplify-mellonnspeakeu-staging-102306-deployment",
-          "s3Key": "amplify-builds/transcriptionDoneFunction-57634b76656370714156-build.zip"
+          "s3Key": "amplify-builds/transcriptionDoneFunction-34616434356a34577854-build.zip"
         },
         "getPromotion": {
           "deploymentBucketName": "amplify-mellonnspeakeu-staging-102306-deployment",
@@ -85,15 +85,15 @@
         },
         "getPromo": {
           "deploymentBucketName": "amplify-mellonnspeakeu-staging-102306-deployment",
-          "s3Key": "amplify-builds/getPromo-55766d2f46654b393642-build.zip"
+          "s3Key": "amplify-builds/getPromo-426b4745334936593674-build.zip"
         },
         "addPromo": {
           "deploymentBucketName": "amplify-mellonnspeakeu-staging-102306-deployment",
-          "s3Key": "amplify-builds/addPromo-39507a584f4c44635472-build.zip"
+          "s3Key": "amplify-builds/addPromo-76456e66673947493647-build.zip"
         },
         "addRemBenefit": {
           "deploymentBucketName": "amplify-mellonnspeakeu-staging-102306-deployment",
-          "s3Key": "amplify-builds/addRemBenefit-57582b6344563964554d-build.zip"
+          "s3Key": "amplify-builds/addRemBenefit-70624a69725561536831-build.zip"
         }
       }
     }
