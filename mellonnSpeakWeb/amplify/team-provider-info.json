@@ -36,6 +36,14 @@
         "getPromo": {
           "deploymentBucketName": "amplify-mellonnspeakeu-prod-94145-deployment",
           "s3Key": "amplify-builds/getPromo-55766d2f46654b393642-build.zip"
+        },
+        "addRemBenefit": {
+          "deploymentBucketName": "amplify-mellonnspeakeu-prod-94145-deployment",
+          "s3Key": "amplify-builds/addRemBenefit-57582b6344563964554d-build.zip"
+        },
+        "addPromo": {
+          "deploymentBucketName": "amplify-mellonnspeakeu-prod-94145-deployment",
+          "s3Key": "amplify-builds/addPromo-39507a584f4c44635472-build.zip"
         }
       }
     }
@@ -74,6 +82,18 @@
         "getPromotion": {
           "deploymentBucketName": "amplify-mellonnspeakeu-staging-102306-deployment",
           "s3Key": "amplify-builds/getPromotion-376e454265656b454d49-build.zip"
+        },
+        "getPromo": {
+          "deploymentBucketName": "amplify-mellonnspeakeu-staging-102306-deployment",
+          "s3Key": "amplify-builds/getPromo-55766d2f46654b393642-build.zip"
+        },
+        "addPromo": {
+          "deploymentBucketName": "amplify-mellonnspeakeu-staging-102306-deployment",
+          "s3Key": "amplify-builds/addPromo-39507a584f4c44635472-build.zip"
+        },
+        "addRemBenefit": {
+          "deploymentBucketName": "amplify-mellonnspeakeu-staging-102306-deployment",
+          "s3Key": "amplify-builds/addRemBenefit-57582b6344563964554d-build.zip"
         }
       }
     }

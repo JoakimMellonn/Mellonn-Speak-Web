@@ -22,7 +22,6 @@ export class AppComponent implements OnInit {
         this.signedIn = false;
       }
     });
-
     this.language.getLanguages();
   }
 

@@ -15,12 +15,10 @@ export class HomePageComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     const isLoggedIn = await this.checkCurrentUser();
     if (isLoggedIn) {
-      this.authService.signIn();
-      console.log('User is logged in');
+      this.authService.registerSignIn();
       this.router.navigate(['/home']);
     } else {
       this.authService.signOut();
-      console.log('User is not logged in');
       this.router.navigate(['/login']);
     }
   }

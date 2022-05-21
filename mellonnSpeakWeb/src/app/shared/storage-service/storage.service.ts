@@ -42,6 +42,19 @@ export class StorageService {
     }
   }
 
+  async updateUserData(newFreePeriods: number, email: string) {
+    const fileKey = 'userData/userData.json';
+    const newUserData = {
+      "email": email,
+      "freePeriods": newFreePeriods
+    };
+    try {
+      const res = await Storage.put(fileKey, newUserData, {level: 'private'});
+    } catch (err) {
+      console.log('Failed updating userData: ' + err);
+    }
+  }
+
   async createUserData(email: string, freePeriods: number) {
     const fileKey: string = 'userData/userData.json';
     const userData = {

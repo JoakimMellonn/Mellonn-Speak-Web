@@ -19,6 +19,32 @@
           "delete"
         ]
       }
+    },
+    "/addPromo": {
+      "name": "/addPromo",
+      "lambdaFunction": "addPromo",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "read",
+          "update",
+          "delete"
+        ]
+      }
+    },
+    "/addRemBenefit": {
+      "name": "/addRemBenefit",
+      "lambdaFunction": "addRemBenefit",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "read",
+          "update",
+          "delete"
+        ]
+      }
     }
   }
 }

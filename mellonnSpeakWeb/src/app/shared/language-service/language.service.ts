@@ -13,7 +13,7 @@ export class LanguageService {
 
   async getLanguages() {
     try {
-      const result = await fetch('https://docs.aws.amazon.com/transcribe/latest/dg/supported-languages.html');
+      const result = await fetch('https://docs.aws.amazon.com/transcribe/latest/dg/supported-languages.html', {mode: 'no-cors'});
       const text = await result.text();
       const doc = parse(text);
 

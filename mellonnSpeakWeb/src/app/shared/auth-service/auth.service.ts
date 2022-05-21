@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Auth, DataStore } from 'aws-amplify';
+import { Auth, DataStore, Storage } from 'aws-amplify';
 import { Subject } from 'rxjs';
 import { StorageService } from '../storage-service/storage.service';
 
@@ -27,7 +27,7 @@ export class AuthService {
 
   constructor(private router: Router, private storage: StorageService) { }
 
-  async signIn() {
+  async registerSignIn() {
     await this.getUserInfo();
     this.signInState.next(1);
   }
@@ -63,6 +63,13 @@ export class AuthService {
     this.firstName = attributes.name;
     this.lastName = attributes.family_name;
     this.group = attributes['custom:group'];
+    if (this.group != 'dev') {
+      const isBenefit = await this.checkBenefit(this.email);
+      console.log('Is benefit: ' + isBenefit);
+      if (this.group == 'benefit' && !isBenefit || this.group == 'user' && isBenefit) {
+        await this.changeBenefit(isBenefit);
+      }
+    }
     if (attributes['custom:superdev'] == 'true') {
       this.superDev = true;
     } else {
@@ -71,6 +78,47 @@ export class AuthService {
 
     const userData = await this.storage.getUserData(this.email);
     this.freePeriods = +userData['freePeriods'];
+  }
+
+  async checkBenefit(email: string): Promise<boolean> {
+    const key = 'data/benefitUsers.json';
+    let returnElement: boolean = false;
+  
+    try {
+      const url = await Storage.get(key);
+
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+        },
+      });
+      const result = await response.json();
+  
+      for (let benefitEmail of result.emails) {
+        if (benefitEmail == email) {
+          returnElement = true;
+          break;
+        }
+      }
+    } catch (err) {
+      console.log('Error while checking benefit: ' + err);
+      return false;
+    }
+    return returnElement;
+  }
+
+  async changeBenefit(isBenefit: boolean) {
+    try {
+      let group = 'benefit';
+      if (!isBenefit) group = 'user';
+      const user = await Auth.currentAuthenticatedUser();
+      await Auth.updateUserAttributes(user, {
+        'custom:group': group
+      });
+    } catch (err) {
+      console.log('Error while changing benefit: ' + err);
+    }
   }
 
   setCreate(val: boolean) {

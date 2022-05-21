@@ -89,6 +89,32 @@
                         }
                     }
 
+                    .redeemSegment {
+                        position: relative;
+                        width: 75%;
+                        left: 50%;
+                        transform: translate(-50%);
+                        margin-bottom: 25px;
+                        background-color: #F8F8F8;
+                        border-radius: 25px;
+                        box-shadow: 0px 2px 5px #00000024;
+        
+                        .child {
+                            padding: 25px;
+                            cursor: pointer;
+                        }
+
+                        #text {
+                            display: inline;
+                            position: fixed;
+                            left: 60px;
+                        }
+
+                        i {
+                            display: inline;
+                        }
+                    }
+
                     .segment:last-child {
                         margin-bottom: 0;
                     }
@@ -106,13 +132,70 @@
                         }
                     }
 
-                    #clickable {
+                    .clickable {
                         cursor: pointer;
                     }
 
-                    #clickable:hover {
+                    .clickable:hover {
                         background-color: #efefef;
                     }
+                }
+            }
+
+            .promo {
+                padding: 0 25px 25px 25px;
+
+                .inputField {
+                    width: 100%;
+                    margin-top: 10px;
+                }
+
+                .buttonRow {
+                    position: relative;
+                    display: flex;
+                    flex-direction: row;
+                    left: 50%;
+                    margin-top: 15px;
+                    transform: translate(-50%);
+
+                    button {
+                        flex: 1;
+                        background-color: #A5C644;
+                        border: 0;
+                        border-radius: 25px;
+                        height: 50px;
+                        box-shadow: 0px 2px 5px #00000024;
+                        font-size: 1em;
+                        cursor: pointer;
+                        margin-left: 5px;
+                    }
+
+                    button:hover {
+                        background-color: #9ACD3A;
+                    }
+
+                    #left {
+                        background-color: transparent;
+                        margin-right: 5px;
+                        margin-left: 0;
+                        box-shadow: none;
+                    }
+                }
+
+                .errorMessage {
+                    position: relative;
+                    display: block;
+                    margin-top: 10px;
+                    color: #FD594D;
+                    text-align: center;
+                }
+            }
+
+            .discount {
+                padding: 0 25px 25px 25px;
+
+                .standardButton {
+                    margin-top: 10px;
                 }
             }
         }

@@ -141,7 +141,7 @@ export class EmailLoginComponent implements OnInit {
         this.em = this.email!.value;
         this.pw = this.password!.value;
         const user = await Auth.signIn(this.em, this.pw);
-        this.authService.signIn();
+        this.authService.registerSignIn();
         this.router.navigateByUrl('/home');
       }
       if (this.isPasswordReset && this.verificationSent) {
@@ -149,7 +149,7 @@ export class EmailLoginComponent implements OnInit {
         console.log(res);
         if (res == 'SUCCESS') {
           const user = await Auth.signIn(this.email!.value, this.password!.value);
-          this.authService.signIn();
+          this.authService.registerSignIn();
           this.router.navigateByUrl('/home');
         }
       }

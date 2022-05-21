@@ -18,22 +18,37 @@
                             <i class="fa-solid fa-coins fa-lg"></i>
                             <p>Free credits: {{authService.freePeriods}}</p>
                         </div>
-                        <div id="clickable" class="segment" (click)="redeemPromotion()">
-                            <i class="fa-solid fa-percent fa-lg"></i>
-                            <p>Redeem promotional code</p>
+                        <div id="redeemSegment" class="redeemSegment clickable">
+                            <div class="child" (click)="toggleRedeemPromo()">
+                                <i class="fa-solid fa-percent fa-lg"></i>
+                                <p id="text">Redeem promotional code</p>
+                            </div>
+                            <div class="promo" *ngIf="redeemPromoActive && !promoRedeemed">
+                                <input class="inputField" placeholder="Promo code" [(ngModel)]="promoCode" (keyup.enter)="redeemPromotion()">
+                                <p class="errorMessage" *ngIf="errorMessage != ''">{{errorMessage}}</p>
+                                <div class="buttonRow">
+                                    <button id="left" class="button" (click)="toggleRedeemPromo()">Cancel</button>
+                                    <button class="button" (click)="redeemPromotion()">Redeem</button>
+                                </div>
+                            </div>
+                            <div class="discount" *ngIf="promoRedeemed">
+                                <p>Your discount: </p>
+                                <p>{{discountMessage}}</p>
+                                <button class="standardButton" (click)="toggleRedeemPromo()">Ok</button>
+                            </div>
                         </div>
                         <div id="divided" class="segment">
-                            <div id="clickable" class="dividedSegment">
+                            <div class="dividedSegment clickable">
                                 <i class="fa-solid fa-question fa-lg"></i>
                                 <p>Help</p>
                             </div>
                             <hr>
-                            <div id="clickable" class="dividedSegment">
+                            <div class="dividedSegment clickable">
                                 <i class="fa-solid fa-bug"></i>
                                 <p>Report issue</p>
                             </div>
                         </div>
-                        <div class="segment" id="clickable" (click)="authService.signOut()">
+                        <div class="segment clickable" (click)="authService.signOut()">
                             <i class="fa-solid fa-right-from-bracket fa-lg"></i>
                             <p>Sign out</p>
                         </div>
