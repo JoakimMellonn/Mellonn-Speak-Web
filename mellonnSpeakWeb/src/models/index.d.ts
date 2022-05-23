@@ -4,12 +4,27 @@ import { ModelInit, MutableModel, PersistentModelConstructor } from "@aws-amplif
 
 
 
+type SettingsMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+}
+
 type VersionMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 }
 
 type RecordingMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
+}
+
+export declare class Settings {
+  readonly id: string;
+  readonly themeMode: string;
+  readonly languageCode: string;
+  readonly jumpSeconds: number;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+  constructor(init: ModelInit<Settings, SettingsMetaData>);
+  static copyOf(source: Settings, mutator: (draft: MutableModel<Settings, SettingsMetaData>) => MutableModel<Settings, SettingsMetaData> | void): Settings;
 }
 
 export declare class Version {

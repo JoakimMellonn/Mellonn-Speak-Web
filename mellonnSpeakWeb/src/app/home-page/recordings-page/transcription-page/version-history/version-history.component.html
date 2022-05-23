@@ -22,7 +22,7 @@
         <div *ngIf="!loading">
             <hr *ngIf="versions.length != 0">
             <div class="versionElement" *ngFor="let version of versions" (click)="showTranscription(version.id)">
-                <p class="date">{{version.date | date}}</p>
+                <p class="date">{{version.date | date:'MMMM d, y, H:mm:ss'}}</p>
                 <p class="type">Type: {{version.editType}}</p>
             </div>
         </div>

@@ -4,6 +4,7 @@
         <input formControlName="password" type="password" class="inputField" placeholder="Password" *ngIf="isLogin || !isLogin && verificationSent">
         <input formControlName="passwordConfirm" type="password" class="inputField" placeholder="Confirm password" *ngIf="!isLogin && verificationSent">
         <input formControlName="verificationCode" type="text" class="inputField" placeholder="Verification code" *ngIf="verificationSent">
+        <p class="resend" (click)="resendCode()" *ngIf="verificationSent">Haven't received a code? Send it again!</p>
 
         <br><a class="forgotText" *ngIf="isLogin" (click)="changeType('reset')">Forgot your password?</a>
 
@@ -15,7 +16,7 @@
                 {{buttonString}}
             </button>
         </div>
-        <p id="msg" class="errorMessage" *ngIf="serverMessage != null">{{serverMessage}}</p>
+        <p id="msg" class="errorMessage" *ngIf="serverMessage != null || serverMessage != ''">{{serverMessage}}</p>
     </form>
 
     <form [formGroup]="formConfirm" (ngSubmit)="onSubmit()" *ngIf="isConfirm">

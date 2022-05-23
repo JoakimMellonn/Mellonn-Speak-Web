@@ -52,8 +52,8 @@ export class VersionHistoryService {
     const key = 'versions/' + recordingID + '/' + versionID + '.json';
 
     try {
-      const result = await Storage.put(key, transcription);
-      //print('Upload succesful, key: ${result.key}');
+      const result = await Storage.put(key, transcription, {level: 'private'});
+      console.log('Upload result: ' + result);
     } catch (e) {
       console.log('UploadFile Error: ' + e);
     }

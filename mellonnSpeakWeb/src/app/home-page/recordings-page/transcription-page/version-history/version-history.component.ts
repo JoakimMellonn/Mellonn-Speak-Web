@@ -34,7 +34,7 @@ export class VersionHistoryComponent implements OnInit {
   async getVersions() {
     try {
       const versions = await DataStore.query(Version, version => version.recordingID("eq", this.recording.id), {
-        sort: (s) => s.date(SortDirection.ASCENDING),
+        sort: (s) => s.date(SortDirection.DESCENDING),
       });
       this.versions = versions;
     } catch (err) {

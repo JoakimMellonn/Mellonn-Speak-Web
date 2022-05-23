@@ -1,9 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import {Router} from '@angular/router';
-import { Auth, syncExpression } from 'aws-amplify';
 import { DataStore, Predicates, SortDirection } from '@aws-amplify/datastore';
 import { Recording } from 'src/models';
-import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/shared/auth-service/auth.service';
 
 @Component({
@@ -17,10 +14,12 @@ export class RecordingsPageComponent implements OnInit, OnDestroy {
   recordings: Recording[] = [];
   loading: boolean = true;
   subscription: any;
+  offset: number;
 
   constructor(public authService: AuthService) { }
 
   async ngOnInit() {
+    this.offset = (new Date().getTimezoneOffset());
     await this.getRecordings();
     this.subscription = DataStore.observe(Recording).subscribe(rec => {
       this.getRecordings();
@@ -37,7 +36,7 @@ export class RecordingsPageComponent implements OnInit, OnDestroy {
   async getRecordings() {
     try {
       const recordings = await DataStore.query(Recording, Predicates.ALL, {
-        sort: (s) => s.date(SortDirection.ASCENDING),
+        sort: (s) => s.date(SortDirection.DESCENDING),
       });
       this.recordings = recordings;
     } catch (err) {

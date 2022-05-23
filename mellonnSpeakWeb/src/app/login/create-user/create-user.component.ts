@@ -94,7 +94,8 @@ export class CreateUserComponent implements OnInit {
           'family_name': this.lastName!.value,
           'custom:group': 'user'
         });
-        await this.storageService.createUserData(this.em, 1);
+        await this.authService.updateFreePeriods(1);
+        this.authService.registerSignIn();
         this.router.navigateByUrl('/home');
       }
     } catch (err) {
