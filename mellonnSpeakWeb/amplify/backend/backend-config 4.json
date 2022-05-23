@@ -49,13 +49,18 @@
             }
           ]
         }
-      },
+      }
+    },
+    "stripePayment": {
+      "service": "API Gateway",
+      "providerPlugin": "awscloudformation",
       "dependsOn": [
         {
-          "category": "auth",
-          "resourceName": "MellonnSpeakEU",
+          "category": "function",
+          "resourceName": "stripePaymentFunction",
           "attributes": [
-            "UserPoolId"
+            "Name",
+            "Arn"
           ]
         }
       ]
@@ -67,50 +72,6 @@
         {
           "category": "function",
           "resourceName": "stripeFunction",
-          "attributes": [
-            "Name",
-            "Arn"
-          ]
-        }
-      ]
-    },
-    "getPromo": {
-      "service": "API Gateway",
-      "providerPlugin": "awscloudformation",
-      "dependsOn": [
-        {
-          "category": "function",
-          "resourceName": "getPromo",
-          "attributes": [
-            "Name",
-            "Arn"
-          ]
-        },
-        {
-          "category": "function",
-          "resourceName": "addPromo",
-          "attributes": [
-            "Name",
-            "Arn"
-          ]
-        },
-        {
-          "category": "function",
-          "resourceName": "addRemBenefit",
-          "attributes": [
-            "Name",
-            "Arn"
-          ]
-        }
-      ]
-    },
-    "feedback": {
-      "service": "API Gateway",
-      "providerPlugin": "awscloudformation",
-      "dependsOn": [
-        {
-          "category": "function",
-          "resourceName": "giveFeedback",
           "attributes": [
             "Name",
             "Arn"
@@ -131,51 +92,15 @@
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
+    "stripePaymentFunction": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "stripeFunction": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
-    },
-    "transcriptionDoneFunction": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda",
-      "dependsOn": [
-        {
-          "category": "api",
-          "resourceName": "mellonnspeakeu",
-          "attributes": [
-            "GraphQLAPIIdOutput",
-            "GraphQLAPIEndpointOutput"
-          ]
-        }
-      ]
-    },
-    "getPromo": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
-    },
-    "addPromo": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
-    },
-    "addRemBenefit": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
-    },
-    "giveFeedback": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
-    }
-  },
-  "analytics": {
-    "SpeakAnalytics": {
-      "service": "Pinpoint",
-      "providerPlugin": "awscloudformation"
     }
   }
 }
