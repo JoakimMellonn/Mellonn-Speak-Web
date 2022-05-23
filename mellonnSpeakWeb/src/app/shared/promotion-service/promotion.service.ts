@@ -40,7 +40,7 @@ export class PromotionService {
     if (promotion.type == 'benefit') {
       await this.addEmail(email);
       if (promotion.freePeriods > 0) {
-        await this.storageService.updateUserData(freePeriods + promotion.freePeriods, email);
+        await this.authService.updateFreePeriods(freePeriods + promotion.freePeriods);
       }
     } else if (promotion.type == 'dev') {
       try {
@@ -53,7 +53,7 @@ export class PromotionService {
         console.log('Failed while applying promo: ' + err);
       }
     } else {
-      await this.storageService.updateUserData(freePeriods + promotion.freePeriods, email);
+      await this.authService.updateFreePeriods(freePeriods + promotion.freePeriods);
     }
   }
 

@@ -116,7 +116,7 @@ export class ChatBubbleComponent implements AfterViewInit {
 
   async save() {
     await this.textEdit.saveTranscription(this.transcription, this.recording.id, this.sww, this.text);
-    this.versionService.uploadVersion(this.recording.id, this.transcription, 'Edited Text');
+    await this.versionService.uploadVersion(this.recording.id, this.transcription, 'Edited Text');
     this.audio.resetState();
     this.changed = false;
   }
@@ -130,6 +130,7 @@ export class ChatBubbleComponent implements AfterViewInit {
   async speakerSave() {
     const newTranscription = this.speakerEdit.getNewSpeakerLabels(this.transcription, this.selection[0], this.selection[1], this.selectedSpeaker);
     const res = await this.transService.saveTranscription(newTranscription, this.recording.id);
+    await this.versionService.uploadVersion(this.recording.id, newTranscription, 'Edited Speaker');
     this.audio.resetState();
     this.speakerEdit.reloadTranscription(newTranscription);
   }

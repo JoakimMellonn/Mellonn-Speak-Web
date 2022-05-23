@@ -61,4 +61,12 @@ export class LanguageService {
       }
     }
   }
+
+  getLanguage(languageCode: string) {
+    return this.languageList[this.languageCodeList.indexOf(languageCode)];
+  }
+
+  getLanguageCode(language: string) {
+    return this.languageCodeList[this.languageList.indexOf(language)];
+  }
 }
