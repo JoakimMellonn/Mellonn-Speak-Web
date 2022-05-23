@@ -1,6 +1,11 @@
 import { Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { Auth } from 'aws-amplify';
 import { AuthService } from 'src/app/shared/auth-service/auth.service';
+import { LanguageService } from 'src/app/shared/language-service/language.service';
 import { PromotionService, Promotion } from 'src/app/shared/promotion-service/promotion.service';
+import { SettingsService } from 'src/app/shared/settings-service/settings.service';
+import { StorageService } from 'src/app/shared/storage-service/storage.service';
+import { Settings } from 'src/models';
 
 @Component({
   selector: 'app-profile-page',
@@ -14,13 +19,21 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   promoRedeemed: boolean = false;
   errorMessage: string = '';
   discountMessage: string = '';
+  settings: Settings;
+
+  languageSelect: string;
+  jumpSelect: number;
+  jumpValues: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   promoCode: string = '';
 
   constructor(
     public authService: AuthService,
+    public languageService: LanguageService,
     private promotionService: PromotionService,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private settingsService: SettingsService,
+    private storageService: StorageService
   ) { }
 
   async ngOnInit() {
@@ -31,6 +44,9 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     } else {
       this.profileType = 'Standard account';
     }
+    this.settings = await this.settingsService.getSettings();
+    this.languageSelect = this.settings.languageCode;
+    this.jumpSelect = this.settings.jumpSeconds;
     this.loading = false;
   }
 
@@ -77,6 +93,36 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       }
     } else {
       this.errorMessage = 'You need to enter a promo code.';
+    }
+  }
+
+  async onLanguageSelect() {
+    const saveSettings = Settings.copyOf(this.settings, copy => {
+      copy.languageCode = this.languageSelect
+    });
+    await this.settingsService.saveSettings(saveSettings);
+  }
+
+  async onJumpSelect() {
+    const saveSettings = Settings.copyOf(this.settings, copy => {
+      copy.jumpSeconds = +this.jumpSelect
+    });
+    await this.settingsService.saveSettings(saveSettings);
+  }
+
+  async resetSettings() {
+    const defaultS = await this.settingsService.getDefaultSettings();
+    this.settings = defaultS;
+    this.languageSelect = this.settings.languageCode;
+    this.jumpSelect = this.settings.jumpSeconds;
+    await this.settingsService.saveSettings(defaultS);
+  }
+
+  async deleteAccount() {
+    if (confirm('Are you ABSOLUTELY sure you want to delete your account? This will remove ALL data associated with your account, and this CANNOT be undone!')) {
+      await this.storageService.removeUserFiles();
+      await Auth.deleteUser();
+      this.authService.signOut();
     }
   }
 

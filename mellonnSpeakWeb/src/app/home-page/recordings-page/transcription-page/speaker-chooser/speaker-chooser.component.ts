@@ -79,7 +79,7 @@ export class SpeakerChooserComponent implements OnInit, AfterViewInit {
   async save() {
     this.switchSpeaker(this.audio.player.currentTime, this.lastSpeaker);
     const res = await this.transService.saveTranscription(this.unsavedTranscription, this.recording.id);
-    this.versionService.uploadVersion(this.recording.id, this.transcription, 'Edited Speaker Labels');
+    await this.versionService.uploadVersion(this.recording.id, this.transcription, 'Edited Speaker Labels');
     this.transcription = this.unsavedTranscription;
     this.speakerEdit.reloadTranscription(this.unsavedTranscription);
     this.saved = true;

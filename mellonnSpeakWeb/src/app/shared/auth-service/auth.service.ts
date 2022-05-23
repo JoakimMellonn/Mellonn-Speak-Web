@@ -78,7 +78,6 @@ export class AuthService {
     this.group = attributes['custom:group'];
     if (this.group != 'dev') {
       const isBenefit = await this.checkBenefit(this.email);
-      console.log('Is benefit: ' + isBenefit);
       if (this.group == 'benefit' && !isBenefit || this.group == 'user' && isBenefit) {
         await this.changeBenefit(isBenefit);
       }
@@ -89,8 +88,7 @@ export class AuthService {
       this.superDev = false;
     }
 
-    const userData = await this.storage.getUserData(this.email);
-    this.freePeriods = +userData['freePeriods'];
+    this.freePeriods = await this.getFreePeriods();
   }
 
   async checkBenefit(email: string): Promise<boolean> {
@@ -140,5 +138,67 @@ export class AuthService {
 
   setForgotState(val: boolean) {
     this.forgotState.next(val);
+  }
+
+  async getFreePeriods(): Promise<number> {
+    try {
+      const { attributes } = await Auth.currentAuthenticatedUser();
+
+      const result = attributes['custom:freeCredits'];
+      if (result == undefined) throw 'freeCredits does not exist';
+      return result;
+    } catch (err) {
+      console.log('Error while getting free credits: ' + err);
+      const oldRes = await this.getOldUserData();
+
+      if (oldRes == 'created new') {
+        return 0;
+      } else if (oldRes == 'error') {
+        return 0;
+      } else {
+        this.updateFreePeriods(oldRes);
+        return oldRes;
+      }
+    }
+  }
+
+  async updateFreePeriods(newFreePeriods: number) {
+    try {
+      const user = await Auth.currentAuthenticatedUser();
+      this.freePeriods = newFreePeriods;
+      await Auth.updateUserAttributes(user, {
+        'custom:freeCredits': newFreePeriods.toString(),
+      });
+    } catch (err) {
+      console.log('Failed updating free periods: ' + err);
+    }
+  }
+
+  async getOldUserData() {
+    const fileKey: string = 'userData/userData.json';
+    let userDataNotFetched: boolean = true;
+
+    try {
+      const url = await Storage.get(fileKey, {level: 'private'});
+
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+        },
+      });
+
+      const result = await response.json();
+      userDataNotFetched = false;
+      return +result['freePeriods'];
+    } catch (err) {
+      console.log('Error downloading file with key: ' + fileKey + ', error: ' + err);
+      if (err == 'Error: Error! status: 404') {
+        await this.updateFreePeriods(0);
+        return 'created new';
+      } else {
+        return 'error';
+      }
+    }
   }
 }

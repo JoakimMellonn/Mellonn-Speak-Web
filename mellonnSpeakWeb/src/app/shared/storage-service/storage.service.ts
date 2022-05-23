@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Storage } from 'aws-amplify';
+import { DataStore, Storage } from 'aws-amplify';
+import { Recording } from 'src/models';
+import { AuthService } from '../auth-service/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -8,59 +10,32 @@ export class StorageService {
 
   constructor() { }
 
-  async getUserData(email: string) {
-    const fileKey: string = 'userData/userData.json';
-    let userDataNotFetched: boolean = true;
-
-    while(userDataNotFetched) {
-      try {
-        const url = await Storage.get(fileKey, {level: 'private'});
-  
-        const response = await fetch(url, {
-          method: 'GET',
-          headers: {
-            Accept: 'application/json',
-          },
-        });
-  
-        if (!response.ok) {
-          throw new Error(`Error! status: ${response.status}`);
-        }
-  
-        const result = await response.json();
-        userDataNotFetched = false;
-        return result;
-      } catch (err) {
-        console.log('Error downloading file with key: ' + fileKey + ', error: ' + err);
-        if (err == 'Error: Error! status: 404') {
-          await this.createUserData(email, 0);
-        } else {
-          userDataNotFetched = false;
-          return 'null';
-        }
-      }
-    }
-  }
-
-  async updateUserData(newFreePeriods: number, email: string) {
-    const fileKey = 'userData/userData.json';
-    const newUserData = {
-      "email": email,
-      "freePeriods": newFreePeriods
-    };
+  async removeUserFiles() {
+    //Removing all recordings associated with the user
     try {
-      const res = await Storage.put(fileKey, newUserData, {level: 'private'});
+      const recordings = await DataStore.query(Recording);
+      for (let recording of recordings) {
+        try {
+          const key = 'finishedJobs/' + recording.id + '.json';
+          await Storage.remove(key);
+        } catch (err) {
+          console.log('Error while removing finished recording: ' + err);
+        }
+        await DataStore.delete(recording);
+      }
     } catch (err) {
-      console.log('Failed updating userData: ' + err);
+      console.log('Error when deleting datastore elements for user: ' + err);
     }
-  }
-
-  async createUserData(email: string, freePeriods: number) {
-    const fileKey: string = 'userData/userData.json';
-    const userData = {
-      "email": email,
-      "freePeriods": freePeriods
+  
+    //Removing all private files associated with the user
+    try {
+      const result = await Storage.list('', {level: 'private'});
+  
+      result.forEach(async (item) => {
+        await Storage.remove(item.key!, {level: 'private'});
+      })
+    } catch (err) {
+      console.log('Error while deleting all files: ' + err);
     }
-    const res = await Storage.put(fileKey, userData, {level: 'private'});
   }
 }

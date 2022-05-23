@@ -55,7 +55,30 @@
                     </div>
                     <div class="right">
                         <div class="segment">
-                            TODO: Settings sync
+                            <div style="display: block;">
+                                <i class="fa-solid fa-language fa-lg"></i>
+                                <p>Select default language:</p>
+                            </div>
+                            <select name="language" id="language" (change)="onLanguageSelect()" [(ngModel)]="languageSelect">
+                                <option *ngFor="let code of languageService.languageCodeList" value="{{code}}" [selected]="settings.languageCode == code">{{languageService.getLanguage(code)}}</option>
+                            </select>
+                        </div>
+                        <div class="segment">
+                            <div style="display: block;">
+                                <i class="fa-solid fa-stopwatch fa-lg"></i>
+                                <p>Time to jump (s):</p>
+                            </div>
+                            <select name="jump" id="jump" (change)="onJumpSelect()" [(ngModel)]="jumpSelect">
+                                <option *ngFor="let i of jumpValues" value="{{i}}" [selected]="settings.jumpSeconds == i">{{i}}</option>
+                            </select>
+                        </div>
+                        <div class="segment clickable" (click)="resetSettings()">
+                            <i class="fa-solid fa-undo fa-lg"></i>
+                            <p>Reset settings to default</p>
+                        </div>
+                        <div class="segment clickable" (click)="deleteAccount()">
+                            <i class="fa-solid fa-trash fa-lg"></i>
+                            <p>Delete my account and data</p>
                         </div>
                     </div>
                 </div>
