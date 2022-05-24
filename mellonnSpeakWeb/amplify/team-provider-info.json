@@ -81,7 +81,7 @@
         },
         "transcriptionDoneFunction": {
           "deploymentBucketName": "amplify-mellonnspeakeu-staging-102306-deployment",
-          "s3Key": "amplify-builds/transcriptionDoneFunction-385642314b5669516f51-build.zip"
+          "s3Key": "amplify-builds/transcriptionDoneFunction-354f514f77786e386374-build.zip"
         },
         "getPromotion": {
           "deploymentBucketName": "amplify-mellonnspeakeu-staging-102306-deployment",
@@ -101,7 +101,7 @@
         },
         "giveFeedback": {
           "deploymentBucketName": "amplify-mellonnspeakeu-staging-102306-deployment",
-          "s3Key": "amplify-builds/giveFeedback-397a6b446e4f6b766448-build.zip"
+          "s3Key": "amplify-builds/giveFeedback-6a4e4c48347946485979-build.zip"
         }
       }
     }
