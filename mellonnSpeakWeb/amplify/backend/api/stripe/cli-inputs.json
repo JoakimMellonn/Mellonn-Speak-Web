@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "paths": {
+    "/customer": {
+      "name": "/customer",
+      "lambdaFunction": "stripeCustomer",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "read",
+          "update",
+          "delete"
+        ]
+      }
+    }
+  }
+}

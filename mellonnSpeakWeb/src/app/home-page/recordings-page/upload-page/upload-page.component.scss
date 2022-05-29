@@ -1,0 +1,59 @@
+.content {
+    display: flex;
+    flex-direction: row;
+                
+    .left {
+        flex: 1;
+    }
+
+    .right {
+        flex: 1;
+    }
+
+    .segment {
+        position: relative;
+        width: 80%;
+        left: 50%;
+        transform: translate(-50%);
+    }
+
+    .orderBox {
+        position: relative;
+        width: 80%;
+        left: 50%;
+        transform: translate(-50%);
+        background-color: #F8F8F8;
+        border-radius: 25px;
+        box-shadow: 0px 2px 5px #00000024;
+        padding: 25px;
+    }
+
+    .inputField {
+        width: 100%;
+    }
+
+    .inputField:first-child {
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+
+    h4 {
+        margin: 25px 0 10px 0;
+    }
+
+    h4:first-child {
+        margin: 0;
+    }
+
+    select {
+        position: relative;
+        left: 49%;
+        padding-left: 1%;
+        transform: translate(-50%);
+    }
+}
+
+.standardButton {
+    max-width: 350px;
+    margin-top: 25px;
+}

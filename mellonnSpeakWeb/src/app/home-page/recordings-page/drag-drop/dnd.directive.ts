@@ -24,12 +24,15 @@ export class DndDirective {
   @HostListener('drop', ['$event']) public onDrop(event: DragEvent) {
     event.preventDefault();
     event.stopPropagation();
-    console.log('drop');
     this.fileOver = false;
     const files = event.dataTransfer!.files;
     
     if (files.length == 1) {
-      this.fileDropped.emit(files[0]);
+      if (files[0].name.match(/\.(wav|flac|m4p|m4a|m4b|mmf|aac|mp3|mp4|MP4)$/i)) {
+        this.fileDropped.emit(files[0]);
+      } else {
+        alert('This file type is not supported, a list of supported file types can be found here: www.mellonn.com/speak-help');
+      }
     } else if (files.length > 1) {
       alert('You can only upload one file at the time...');
     }

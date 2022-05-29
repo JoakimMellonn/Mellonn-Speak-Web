@@ -102,6 +102,10 @@
         "giveFeedback": {
           "deploymentBucketName": "amplify-mellonnspeakeu-staging-102306-deployment",
           "s3Key": "amplify-builds/giveFeedback-6a4e4c48347946485979-build.zip"
+        },
+        "stripeCustomer": {
+          "deploymentBucketName": "amplify-mellonnspeakeu-staging-102306-deployment",
+          "s3Key": "amplify-builds/stripeCustomer-6c2b696330416f794e55-build.zip"
         }
       }
     }

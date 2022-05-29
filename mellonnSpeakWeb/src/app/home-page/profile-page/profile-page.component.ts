@@ -5,6 +5,7 @@ import { LanguageService } from 'src/app/shared/language-service/language.servic
 import { PromotionService, Promotion } from 'src/app/shared/promotion-service/promotion.service';
 import { SettingsService } from 'src/app/shared/settings-service/settings.service';
 import { StorageService } from 'src/app/shared/storage-service/storage.service';
+import { UploadService } from 'src/app/shared/upload-service/upload.service';
 import { Settings } from 'src/models';
 
 @Component({

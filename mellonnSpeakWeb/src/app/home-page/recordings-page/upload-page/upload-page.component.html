@@ -1,1 +1,34 @@
-<p>Hello! your chosen file: {{ file.name }}</p>
+<div class="content">
+    <div class="left">
+        <div class="segment">
+            <h4>Please give your recording a title and description</h4>
+            <input class="inputField" type="text" placeholder="Title" maxlength="16" [(ngModel)]="title">
+            <input class="inputField" type="text" placeholder="Description" [(ngModel)]="description">
+
+            <h4>How many participants are there in the recording?</h4>
+            <select name="jump" id="jump" [(ngModel)]="speakerSelect">
+                <option value="1">1 participant</option>
+                <option value="2" selected>2 participants</option>
+                <option value="3">3 participants</option>
+                <option value="4">4 participants</option>
+                <option value="5">5 participants</option>
+                <option value="6">6 participants</option>
+                <option value="7">7 participants</option>
+                <option value="8">8 participants</option>
+                <option value="9">9 participants</option>
+                <option value="10">10 participants</option>
+            </select>
+
+            <h4>What language is spoken?</h4>
+            <select name="language" id="language" [(ngModel)]="languageSelect">
+                <option *ngFor="let code of languageService.languageCodeList" value="{{code}}" [selected]="settingsService.currentSettings.languageCode">{{languageService.getLanguage(code)}}</option>
+            </select>
+        </div>
+    </div>
+    <div class="right">
+        <div class="orderBox">
+            Helloooo
+        </div>
+    </div>
+</div>
+<button class="standardButton">Ok</button>

@@ -3,6 +3,7 @@ import { DataStore, Predicates, SortDirection } from '@aws-amplify/datastore';
 import { Recording } from 'src/models';
 import { AuthService } from 'src/app/shared/auth-service/auth.service';
 import { Router } from '@angular/router';
+import { UploadService } from 'src/app/shared/upload-service/upload.service';
 
 @Component({
   selector: 'app-recordings-page',
@@ -20,7 +21,7 @@ export class RecordingsPageComponent implements OnInit, OnDestroy {
   uploadActive: boolean = false;
   uploadFile: File;
 
-  constructor(public authService: AuthService, private router: Router) { }
+  constructor(public authService: AuthService, private router: Router, private upload: UploadService) { }
 
   async ngOnInit() {
     this.offset = (new Date().getTimezoneOffset());
