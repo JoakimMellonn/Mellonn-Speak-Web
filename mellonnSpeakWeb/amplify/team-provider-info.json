@@ -106,6 +106,10 @@
         "stripeCustomer": {
           "deploymentBucketName": "amplify-mellonnspeakeu-staging-102306-deployment",
           "s3Key": "amplify-builds/stripeCustomer-6c2b696330416f794e55-build.zip"
+        },
+        "stripePaymentIntent": {
+          "deploymentBucketName": "amplify-mellonnspeakeu-staging-102306-deployment",
+          "s3Key": "amplify-builds/stripePaymentIntent-643948542f5a644f4970-build.zip"
         }
       }
     }

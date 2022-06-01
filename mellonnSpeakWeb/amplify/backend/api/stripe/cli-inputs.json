@@ -13,6 +13,19 @@
           "delete"
         ]
       }
+    },
+    "/intent": {
+      "name": "/intent",
+      "lambdaFunction": "stripePaymentIntent",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "read",
+          "update",
+          "delete"
+        ]
+      }
     }
   }
 }

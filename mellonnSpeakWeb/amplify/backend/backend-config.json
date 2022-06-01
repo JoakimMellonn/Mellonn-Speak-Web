@@ -129,6 +129,14 @@
             "Name",
             "Arn"
           ]
+        },
+        {
+          "category": "function",
+          "resourceName": "stripePaymentIntent",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
         }
       ]
     }
@@ -186,6 +194,11 @@
       "service": "Lambda"
     },
     "stripeCustomer": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "stripePaymentIntent": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"

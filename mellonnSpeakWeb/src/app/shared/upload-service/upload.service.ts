@@ -27,4 +27,17 @@ export class UploadService {
     const response = await API.put('stripe', '/customer', params);
     return response;
   }
+
+  async createIntent(customerId: string, amount: number, currency: string): Promise<string> {
+    const params = {
+      body: {
+        "customerId": customerId,
+        "amount": amount,
+        "currency": currency
+      }
+    }
+
+    const response = await API.put('stripe', '/intent', params);
+    return response.secret;
+  }
 }

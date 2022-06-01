@@ -1,7 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { loadStripe } from '@stripe/stripe-js';
 import { LanguageService } from 'src/app/shared/language-service/language.service';
 import { SettingsService } from 'src/app/shared/settings-service/settings.service';
 import { UploadService } from 'src/app/shared/upload-service/upload.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-upload-page',
@@ -39,7 +41,29 @@ export class UploadPageComponent implements OnInit {
         this.audioLoaded = true;
       }
     }
+
+    this.setupPaymentElement();
   }
 
-  
+  async setupPaymentElement() {
+    const customer = await this.uploadService.getCustomerId();
+    const clientSecret = await this.uploadService.createIntent(customer, 2000, 'dkk');
+
+    console.log(`Customer: ${customer}, clientSecret: ${clientSecret}`);
+
+    const stripe = await loadStripe(environment.stripeKey);
+    const elements = stripe!.elements({clientSecret: clientSecret});
+    let paymentElement = elements.create('payment', {
+      fields: {
+        billingDetails: {
+          name: 'never',
+          email: 'never'
+        }
+      }
+    });
+
+    const form = document.getElementById('paymentForm');
+
+    paymentElement.mount(form!);
+  }
 }
