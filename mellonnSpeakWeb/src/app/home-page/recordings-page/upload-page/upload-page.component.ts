@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { loadStripe } from '@stripe/stripe-js';
+import { AuthService } from 'src/app/shared/auth-service/auth.service';
 import { LanguageService } from 'src/app/shared/language-service/language.service';
 import { SettingsService } from 'src/app/shared/settings-service/settings.service';
 import { UploadService } from 'src/app/shared/upload-service/upload.service';
@@ -23,10 +24,13 @@ export class UploadPageComponent implements OnInit {
   speakerSelect: number = 2;
   languageSelect: string;
 
+  paymentLoading: boolean = false;
+
   constructor(
     public languageService: LanguageService,
     public settingsService: SettingsService,
-    private uploadService: UploadService
+    private uploadService: UploadService,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
@@ -63,7 +67,27 @@ export class UploadPageComponent implements OnInit {
     });
 
     const form = document.getElementById('paymentForm');
-
     paymentElement.mount(form!);
+
+    form!.addEventListener('submit', async (event) => {
+      stripe!.confirmPayment({
+        elements,
+        confirmParams: {
+          return_url: 'https://example.com',
+          payment_method_data: {
+            billing_details: {
+              name: this.authService.firstName + ' ' + this.authService.lastName,
+              email: this.authService.email,
+            }
+          },
+        },
+        redirect: 'if_required'
+      })
+      .then(function(result) {
+        if (result.error) {
+          console.log('Something went wrong while completing the payment... ' + result.error.message);
+        }
+      });
+    });
   }
 }
