@@ -26,6 +26,32 @@
           "delete"
         ]
       }
+    },
+    "/setupIntent": {
+      "name": "/setupIntent",
+      "lambdaFunction": "stripeSetupIntent",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "read",
+          "update",
+          "delete"
+        ]
+      }
+    },
+    "/wallet": {
+      "name": "/wallet",
+      "lambdaFunction": "stripeGetWallet",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "read",
+          "update",
+          "delete"
+        ]
+      }
     }
   }
 }

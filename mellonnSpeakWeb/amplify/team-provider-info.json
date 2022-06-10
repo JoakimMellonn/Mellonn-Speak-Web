@@ -110,6 +110,14 @@
         "stripePaymentIntent": {
           "deploymentBucketName": "amplify-mellonnspeakeu-staging-102306-deployment",
           "s3Key": "amplify-builds/stripePaymentIntent-643948542f5a644f4970-build.zip"
+        },
+        "stripeSetupIntent": {
+          "deploymentBucketName": "amplify-mellonnspeakeu-staging-102306-deployment",
+          "s3Key": "amplify-builds/stripeSetupIntent-536761764b777a667a76-build.zip"
+        },
+        "stripeGetWallet": {
+          "deploymentBucketName": "amplify-mellonnspeakeu-staging-102306-deployment",
+          "s3Key": "amplify-builds/stripeGetWallet-50736173684770384754-build.zip"
         }
       }
     }

@@ -137,6 +137,22 @@
             "Name",
             "Arn"
           ]
+        },
+        {
+          "category": "function",
+          "resourceName": "stripeSetupIntent",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
+        },
+        {
+          "category": "function",
+          "resourceName": "stripeGetWallet",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
         }
       ]
     }
@@ -199,6 +215,16 @@
       "service": "Lambda"
     },
     "stripePaymentIntent": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "stripeSetupIntent": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "stripeGetWallet": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"

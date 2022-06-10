@@ -40,4 +40,26 @@ export class UploadService {
     const response = await API.put('stripe', '/intent', params);
     return response.secret;
   }
+
+  async createSetupIntent(customerId: string) {
+    const params = {
+      body: {
+        "customerId": customerId,
+      }
+    }
+
+    const response = await API.put('stripe', '/setupIntent', params);
+    return response;
+  }
+
+  async getCards(customerId: string) {
+    const params = {
+      body: {
+        "customerId": customerId,
+      }
+    }
+
+    const response = await API.put('stripe', '/wallet', params);
+    console.log(JSON.stringify(response));
+  }
 }

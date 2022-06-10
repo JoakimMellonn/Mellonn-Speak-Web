@@ -97,6 +97,18 @@ export type AmplifyDependentResourcesAttributes = {
             "Arn": "string",
             "Region": "string",
             "LambdaExecutionRole": "string"
+        },
+        "stripeSetupIntent": {
+            "Name": "string",
+            "Arn": "string",
+            "Region": "string",
+            "LambdaExecutionRole": "string"
+        },
+        "stripeGetWallet": {
+            "Name": "string",
+            "Arn": "string",
+            "Region": "string",
+            "LambdaExecutionRole": "string"
         }
     },
     "analytics": {

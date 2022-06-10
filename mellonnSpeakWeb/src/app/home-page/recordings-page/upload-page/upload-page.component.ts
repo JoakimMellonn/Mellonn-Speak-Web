@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { loadStripe } from '@stripe/stripe-js';
+import { loadStripe, PaymentIntentResult } from '@stripe/stripe-js';
 import { AuthService } from 'src/app/shared/auth-service/auth.service';
 import { LanguageService } from 'src/app/shared/language-service/language.service';
 import { SettingsService } from 'src/app/shared/settings-service/settings.service';
@@ -25,6 +25,7 @@ export class UploadPageComponent implements OnInit {
   languageSelect: string;
 
   paymentLoading: boolean = false;
+  paymentIntent: any;
 
   constructor(
     public languageService: LanguageService,
@@ -53,41 +54,28 @@ export class UploadPageComponent implements OnInit {
     const customer = await this.uploadService.getCustomerId();
     const clientSecret = await this.uploadService.createIntent(customer, 2000, 'dkk');
 
-    console.log(`Customer: ${customer}, clientSecret: ${clientSecret}`);
-
     const stripe = await loadStripe(environment.stripeKey);
     const elements = stripe!.elements({clientSecret: clientSecret});
-    let paymentElement = elements.create('payment', {
-      fields: {
-        billingDetails: {
-          name: 'never',
-          email: 'never'
-        }
-      }
-    });
 
+    let cardElement = elements.create('card');
+
+    const card = document.getElementById('cardElement');
     const form = document.getElementById('paymentForm');
-    paymentElement.mount(form!);
+
+    cardElement.mount(card!);
 
     form!.addEventListener('submit', async (event) => {
-      stripe!.confirmPayment({
-        elements,
-        confirmParams: {
-          return_url: 'https://example.com',
-          payment_method_data: {
-            billing_details: {
-              name: this.authService.firstName + ' ' + this.authService.lastName,
-              email: this.authService.email,
-            }
-          },
-        },
-        redirect: 'if_required'
-      })
-      .then(function(result) {
-        if (result.error) {
-          console.log('Something went wrong while completing the payment... ' + result.error.message);
-        }
+      const result = await stripe!.confirmCardPayment(clientSecret, {
+        payment_method: { card: cardElement },
       });
+
+      if (result.error) {
+        console.log('Error while paying: ' + result.error.message);
+        this.paymentIntent = result.paymentIntent;
+      } else {
+        console.log('Payment success!' + result.paymentIntent);
+        this.paymentIntent = result.paymentIntent;
+      }
     });
   }
 }
