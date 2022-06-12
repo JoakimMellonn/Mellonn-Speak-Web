@@ -1,19 +1,6 @@
 {
   "version": 1,
   "paths": {
-    "/customer": {
-      "name": "/customer",
-      "lambdaFunction": "stripeCustomer",
-      "permissions": {
-        "setting": "private",
-        "auth": [
-          "create",
-          "read",
-          "update",
-          "delete"
-        ]
-      }
-    },
     "/intent": {
       "name": "/intent",
       "lambdaFunction": "stripePaymentIntent",
@@ -40,9 +27,35 @@
         ]
       }
     },
-    "/wallet": {
-      "name": "/wallet",
-      "lambdaFunction": "stripeGetWallet",
+    "/customer": {
+      "name": "/customer",
+      "lambdaFunction": "stripeCustomer",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "read",
+          "update",
+          "delete"
+        ]
+      }
+    },
+    "/getCards": {
+      "name": "/getCards",
+      "lambdaFunction": "stripeGetCards",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "read",
+          "update",
+          "delete"
+        ]
+      }
+    },
+    "/removeCard": {
+      "name": "/removeCard",
+      "lambdaFunction": "stripeRemoveCard",
       "permissions": {
         "setting": "private",
         "auth": [

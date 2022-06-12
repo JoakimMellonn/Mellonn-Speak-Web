@@ -115,9 +115,15 @@
           "deploymentBucketName": "amplify-mellonnspeakeu-staging-102306-deployment",
           "s3Key": "amplify-builds/stripeSetupIntent-536761764b777a667a76-build.zip"
         },
-        "stripeGetWallet": {
+        "stripeGetCards": {
+          "stripeKey": "sk_test_51K1CskBLC2uA76LRFJrdtxDlDy1lLjry796RWVBInLSyj0tLd3hfuRrVopnNZZTsHUF2FXWVPU54jcIiXomYcWnp00WPxvYUl3",
           "deploymentBucketName": "amplify-mellonnspeakeu-staging-102306-deployment",
-          "s3Key": "amplify-builds/stripeGetWallet-50736173684770384754-build.zip"
+          "s3Key": "amplify-builds/stripeGetCards-6333723769715a34366e-build.zip"
+        },
+        "stripeRemoveCard": {
+          "stripeKey": "sk_test_51K1CskBLC2uA76LRFJrdtxDlDy1lLjry796RWVBInLSyj0tLd3hfuRrVopnNZZTsHUF2FXWVPU54jcIiXomYcWnp00WPxvYUl3",
+          "deploymentBucketName": "amplify-mellonnspeakeu-staging-102306-deployment",
+          "s3Key": "amplify-builds/stripeRemoveCard-5875754139476e65456d-build.zip"
         }
       }
     }

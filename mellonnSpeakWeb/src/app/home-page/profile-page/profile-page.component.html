@@ -72,6 +72,28 @@
                                 <option *ngFor="let i of jumpValues" value="{{i}}" [selected]="settings.jumpSeconds == i">{{i}}</option>
                             </select>
                         </div>
+                        <div class="segment">
+                            <div style="display: block;">
+                                <i class="fa-solid fa-credit-card fa-lg"></i>
+                                <p>Payment methods</p>
+                            </div>
+                            <hr>
+                            <div *ngIf="!addCardActive">
+                                <div *ngFor="let method of paymentMethods">
+                                    <input type="radio" name="card" value="{{method.id}}" [(ngModel)]="cardSelect" (ngModelChange)="onCardSelect()">**** **** **** {{method.card.last4}} expires {{method.card.exp_month}}/{{method.card.exp_year}} <i class="fa-solid fa-trash-can trashIcon" (click)="removeCard(method.id)"></i><br>
+                                </div>
+                            </div>
+                            <div>
+                                <button class="standardButton" style="margin-top: 15px;" *ngIf="!addCardActive" (click)="activateAddCard()">Add a card</button>
+                                <form id="addCardForm" *ngIf="addCardActive">
+                                    <mat-spinner [color]="'accent'" [diameter]="50" [strokeWidth]="5" *ngIf="addCardLoading"></mat-spinner>
+                                    <div class="card">
+                                        <div id="cardElement"></div>
+                                    </div>
+                                    <button class="standardButton" style="margin-top: 0;" type="submit">Add card</button>
+                                </form>
+                            </div>
+                        </div>
                         <div class="segment clickable" (click)="resetSettings()">
                             <i class="fa-solid fa-undo fa-lg"></i>
                             <p>Reset settings to default</p>

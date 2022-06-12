@@ -59,7 +59,18 @@ export class UploadService {
       }
     }
 
-    const response = await API.put('stripe', '/wallet', params);
-    console.log(JSON.stringify(response));
+    const response = await API.put('stripe', '/getCards', params);
+    return response.data;
+  }
+
+  async removeCard(cardId: string) {
+    const params = {
+      body: {
+        "cardId": cardId,
+      }
+    }
+
+    const response = await API.put('stripe', '/removeCard', params);
+    return response;
   }
 }

@@ -1,6 +1,6 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "{\"createdOn\":\"Mac\",\"createdBy\":\"Amplify\",\"createdWith\":\"8.3.1\",\"stackType\":\"function-Lambda\",\"metadata\":{}}",
+  "Description": "{\"createdOn\":\"Mac\",\"createdBy\":\"Amplify\",\"createdWith\":\"8.4.0\",\"stackType\":\"function-Lambda\",\"metadata\":{}}",
   "Parameters": {
     "CloudWatchRule": {
       "Type": "String",
@@ -14,6 +14,9 @@
       "Type": "String"
     },
     "s3Key": {
+      "Type": "String"
+    },
+    "stripeKey": {
       "Type": "String"
     }
   },
@@ -47,12 +50,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "stripeGetWallet",
+            "stripeGetCards",
             {
               "Fn::Join": [
                 "",
                 [
-                  "stripeGetWallet",
+                  "stripeGetCards",
                   "-",
                   {
                     "Ref": "env"
@@ -69,6 +72,9 @@
             },
             "REGION": {
               "Ref": "AWS::Region"
+            },
+            "stripeKey": {
+              "Ref": "stripeKey"
             }
           }
         },
@@ -89,12 +95,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "mellonnspeakeuLambdaRole75268b38",
+            "mellonnspeakeuLambdaRolebabaa5f0",
             {
               "Fn::Join": [
                 "",
                 [
-                  "mellonnspeakeuLambdaRole75268b38",
+                  "mellonnspeakeuLambdaRolebabaa5f0",
                   "-",
                   {
                     "Ref": "env"

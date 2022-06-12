@@ -104,7 +104,13 @@ export type AmplifyDependentResourcesAttributes = {
             "Region": "string",
             "LambdaExecutionRole": "string"
         },
-        "stripeGetWallet": {
+        "stripeGetCards": {
+            "Name": "string",
+            "Arn": "string",
+            "Region": "string",
+            "LambdaExecutionRole": "string"
+        },
+        "stripeRemoveCard": {
             "Name": "string",
             "Arn": "string",
             "Region": "string",

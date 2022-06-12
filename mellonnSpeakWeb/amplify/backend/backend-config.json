@@ -124,14 +124,6 @@
       "dependsOn": [
         {
           "category": "function",
-          "resourceName": "stripeCustomer",
-          "attributes": [
-            "Name",
-            "Arn"
-          ]
-        },
-        {
-          "category": "function",
           "resourceName": "stripePaymentIntent",
           "attributes": [
             "Name",
@@ -148,7 +140,23 @@
         },
         {
           "category": "function",
-          "resourceName": "stripeGetWallet",
+          "resourceName": "stripeCustomer",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
+        },
+        {
+          "category": "function",
+          "resourceName": "stripeGetCards",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
+        },
+        {
+          "category": "function",
+          "resourceName": "stripeRemoveCard",
           "attributes": [
             "Name",
             "Arn"
@@ -224,10 +232,17 @@
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
-    "stripeGetWallet": {
+    "stripeGetCards": {
       "build": true,
       "providerPlugin": "awscloudformation",
-      "service": "Lambda"
+      "service": "Lambda",
+      "dependsOn": []
+    },
+    "stripeRemoveCard": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": []
     }
   },
   "analytics": {

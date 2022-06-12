@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { loadStripe } from '@stripe/stripe-js';
 import { Auth } from 'aws-amplify';
 import { AuthService } from 'src/app/shared/auth-service/auth.service';
 import { LanguageService } from 'src/app/shared/language-service/language.service';
@@ -6,6 +7,7 @@ import { PromotionService, Promotion } from 'src/app/shared/promotion-service/pr
 import { SettingsService } from 'src/app/shared/settings-service/settings.service';
 import { StorageService } from 'src/app/shared/storage-service/storage.service';
 import { UploadService } from 'src/app/shared/upload-service/upload.service';
+import { environment } from 'src/environments/environment';
 import { Settings } from 'src/models';
 
 @Component({
@@ -26,6 +28,13 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   jumpSelect: number;
   jumpValues: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
+  paymentMethods: any[];
+  addCardActive: boolean = false;
+  addCardLoading: boolean = true;
+  setupIntent: any;
+  primaryCard: string;
+  cardSelect: string;
+
   promoCode: string = '';
 
   constructor(
@@ -34,7 +43,8 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     private promotionService: PromotionService,
     private renderer: Renderer2,
     private settingsService: SettingsService,
-    private storageService: StorageService
+    private storageService: StorageService,
+    private uploadService: UploadService
   ) { }
 
   async ngOnInit() {
@@ -46,6 +56,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       this.profileType = 'Standard account';
     }
     this.settings = await this.settingsService.getSettings();
+    this.getPaymentMethods();
     this.languageSelect = this.settings.languageCode;
     this.jumpSelect = this.settings.jumpSeconds;
     this.loading = false;
@@ -136,6 +147,93 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       return 'Developer user (everything is free)';
     } else {
       return promotion.freePeriods + ' free credits';
+    }
+  }
+
+  async getPaymentMethods() {
+    const customerId = await this.uploadService.getCustomerId();
+    this.paymentMethods = await this.uploadService.getCards(customerId);
+
+    if (this.paymentMethods.length > 0) {
+      if (this.settings.primaryCard) {
+        if (this.containsCard(this.paymentMethods, this.settings.primaryCard)) {
+          this.cardSelect = this.settings.primaryCard;
+        } else {
+          this.cardSelect = this.paymentMethods[0].id;
+        }
+      } else {
+        this.cardSelect = this.paymentMethods[0].id;
+        this.onCardSelect();
+      }
+    }
+  }
+
+  containsCard(methods: any[], primary: string): boolean {
+    for (let method of methods) {
+      if (method.id == primary) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  async activateAddCard() {
+    this.addCardActive = true;
+    this.addCardLoading = true;
+    const customer = await this.uploadService.getCustomerId();
+    const clientSecret = await this.uploadService.createSetupIntent(customer);
+
+    const stripe = await loadStripe(environment.stripeKey);
+    const elements = stripe!.elements({clientSecret: clientSecret});
+    this.addCardLoading = false;
+
+    let cardElement = elements.create('card');
+
+    const card = document.getElementById('cardElement');
+    const form = document.getElementById('addCardForm');
+
+    cardElement.mount(card!);
+
+    form!.addEventListener('submit', async () => {
+      this.addCardLoading = true;
+      const result = await stripe!.confirmCardSetup(clientSecret, {
+        payment_method: { card: cardElement },
+      });
+
+      if (result.error) {
+        this.setupIntent = result.setupIntent;
+      } else {
+        this.setupIntent = result.setupIntent;
+
+        await this.getPaymentMethods();
+        const saveSettings = Settings.copyOf(this.settings, copy => {
+          copy.primaryCard = this.paymentMethods[0].id
+        });
+        await this.settingsService.saveSettings(saveSettings);
+        this.cardSelect = this.paymentMethods[0].id;
+        this.addCardActive = false;
+      }
+    });
+  }
+
+  async onCardSelect() {
+    const saveSettings = Settings.copyOf(this.settings, copy => {
+      copy.primaryCard = this.cardSelect
+    });
+    await this.settingsService.saveSettings(saveSettings);
+  }
+
+  async removeCard(cardId: string) {
+    if (confirm('Are you sure you want to remove this card?')) {
+      const result = await this.uploadService.removeCard(cardId);
+      console.log('Card removed: ' + JSON.stringify(result));
+      await this.getPaymentMethods();
+      if (this.paymentMethods.length == 0) {
+        const saveSettings = Settings.copyOf(this.settings, copy => {
+          copy.primaryCard = null
+        });
+        await this.settingsService.saveSettings(saveSettings);
+      }
     }
   }
 }

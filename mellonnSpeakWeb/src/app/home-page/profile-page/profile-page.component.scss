@@ -94,6 +94,29 @@
                             transform: translate(-50%);
                             margin-top: 10px;
                         }
+
+                        .card {
+                            margin-top: 15px;
+                            height: 50px;
+                        }
+
+                        input {
+                            margin: 15px 15px 15px 0;
+                        }
+
+                        mat-spinner {
+                            position: relative;
+                            left: 50%;
+                            transform: translate(-50%);
+                            color: #FAB228;
+                        }
+
+                        .trashIcon {
+                            float: right;
+                            margin-top: 15px;
+                            margin-right: 15px;
+                            cursor: pointer;
+                        }
                     }
 
                     .redeemSegment {
