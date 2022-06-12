@@ -26,11 +26,31 @@
         </div>
     </div>
     <div class="right">
-        <div class="orderBox">
-            <form id="paymentForm">
-                <div id="cardElement"></div>
-            </form>
+        <div class="orderBox" *ngIf="audioLoaded">
+            <h3>Order summary</h3>
+            <hr>
+            <div class="orderLine">
+                <p class="leftText">Speak 15 Minutes</p>
+                <p class="rightText">49 DKK</p>
+            </div>
+            <div class="orderLine">
+                <p class="leftText">Quantity</p>
+                <p class="rightText">{{periods.total}}</p>
+            </div>
+            <hr>
+            <div class="orderLine" *ngIf="periods.total - periods.periods != 0">
+                <p class="leftText">Discount</p>
+                <p class="rightText">{{(periods.total - periods.periods) * 49}} DKK</p>
+                <hr>
+            </div>
+            <div class="orderLine">
+                <p class="leftText">Total</p>
+                <p class="rightText">{{periods.periods * 49}} DKK</p>
+            </div>
         </div>
     </div>
+    <form id="paymentForm" *ngIf="paymentActive">
+        <div id="cardElement"></div>
+    </form>
 </div>
-<button class="standardButton">Ok</button>
+<button class="standardButton" (click)="continueClick()" *ngIf="audioLoaded">{{buttonText}}</button>

@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { environment } from 'src/environments/environment';
-import { loadStripe } from '@stripe/stripe-js';
 import { AuthService } from '../auth-service/auth.service';
-import { API } from 'aws-amplify';
+import { API, DataStore, Storage } from 'aws-amplify';
+import { Recording } from 'src/models';
 
 @Injectable({
   providedIn: 'root'
@@ -12,10 +11,19 @@ export class UploadService {
 
   constructor(private authService: AuthService) { }
 
-  async setUpStripe() {
-    const stripe = await loadStripe(environment.stripeKey);
-
-    console.log();
+  getPeriods(duration: number): Periods {
+    const total = Math.ceil((duration / 60) / 15);
+    const freePeriods = this.authService.freePeriods;
+    let periods;
+    let freeLeft;
+    if (freePeriods < total) {
+      periods = total - freePeriods;
+      freeLeft = 0;
+    } else {
+      periods = 0;
+      freeLeft = freePeriods - total;
+    }
+    return new Periods(total, periods, freeLeft);
   }
 
   async getCustomerId(): Promise<string> {
@@ -72,5 +80,50 @@ export class UploadService {
 
     const response = await API.put('stripe', '/removeCard', params);
     return response;
+  }
+
+  async uploadRecording(file: File, title: string, desc: string, speakerCount: number, languageCode: string) {
+    const recording = new Recording({
+      name: title,
+      description: desc,
+      date: new Date().toISOString(),
+      fileName: file.name,
+      fileKey: '',
+      speakerCount: speakerCount,
+      languageCode: languageCode
+    });
+
+    const fileType = file.name.split('.')[file.name.split('.').length - 1];
+    const key = 'recordings/' + recording.id + '.' + fileType;
+    
+    const newRecording = Recording.copyOf(recording, copy => {
+      copy.fileKey = key
+    });
+    
+    try {
+      const datastoreResult = await DataStore.save(newRecording);
+      const storageResult = await Storage.put(key, file,
+        {
+          level: 'private',
+          progressCallback(progress) {
+            console.log(`Uploaded: ${progress.loaded}/${progress.total}`);
+          },
+        }
+      );
+    } catch (err) {
+      console.log('Error while uploading recording: ' + err);
+    }
+  }
+}
+
+export class Periods {
+  total: number;
+  periods: number;
+  freeLeft: number;
+
+  constructor(total: number, periods: number, freeLeft: number) {
+    this.total = total;
+    this.periods = periods;
+    this.freeLeft = freeLeft;
   }
 }
