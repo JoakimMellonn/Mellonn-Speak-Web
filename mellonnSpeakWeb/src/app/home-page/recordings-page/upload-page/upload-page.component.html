@@ -1,5 +1,5 @@
-<div class="content">
-    <div class="left">
+<div class="content" *ngIf="!isUploading">
+    <div class="left" *ngIf="!paymentActive">
         <div class="segment">
             <h4>Please give your recording a title and description</h4>
             <input class="inputField" type="text" placeholder="Title" maxlength="16" [(ngModel)]="title">
@@ -25,13 +25,32 @@
             </select>
         </div>
     </div>
+    <div class="left" *ngIf="paymentActive">
+        <div class="segment">
+            <form id="paymentForm" *ngIf="paymentActive">
+                <p class="titleP">Current payment method:</p><br>
+                <div class="cardBox" *ngIf="!cardsLoading && !otherMethod">
+                    <p class="cardInfo"><i class="{{getCardIcon(defaultMethod.card.brand)}} cardIcon" id="defaultCardIcon"></i>•••• {{defaultMethod.card.last4}} </p>
+                    <p class="expireText">Expires {{monthNames[defaultMethod.card.exp_month - 1]}} {{defaultMethod.card.exp_year}}</p>
+                </div>
+                <select name="cards" id="cards" [(ngModel)]="cardSelect" *ngIf="!cardsLoading && otherMethod && !otherCard">
+                    <option *ngFor="let method of paymentMethods" value="{{method.id}}" [selected]="method.id == defaultMethod.id">{{capFirstLetter(method.card.brand)}} card ending with {{method.card.last4}}</option>
+                </select>
+                <p class="otherMethodText" *ngIf="otherMethod && !otherCard" (click)="setupCardElement()">Use another card?</p>
+                <div id="cardElement"></div>
+                <p class="otherMethodText" *ngIf="!otherMethod" (click)="otherMethod = true">Use another payment method?</p>
+                <p class="errorMessage" *ngIf="errorMessage != ''">{{errorMessage}}</p>
+                <button class="standardButton" type="submit">Pay and upload recording</button>
+            </form>
+        </div>
+    </div>
     <div class="right">
         <div class="orderBox" *ngIf="audioLoaded">
             <h3>Order summary</h3>
             <hr>
             <div class="orderLine">
                 <p class="leftText">Speak 15 Minutes</p>
-                <p class="rightText">49 DKK</p>
+                <p class="rightText">{{unitPrice}} {{currency.toUpperCase()}}</p>
             </div>
             <div class="orderLine">
                 <p class="leftText">Quantity</p>
@@ -40,17 +59,20 @@
             <hr>
             <div class="orderLine" *ngIf="periods.total - periods.periods != 0">
                 <p class="leftText">Discount</p>
-                <p class="rightText">{{(periods.total - periods.periods) * 49}} DKK</p>
+                <p class="rightText">{{(periods.total - periods.periods) * unitPrice}} {{currency.toUpperCase()}}</p>
                 <hr>
             </div>
             <div class="orderLine">
                 <p class="leftText">Total</p>
-                <p class="rightText">{{periods.periods * 49}} DKK</p>
+                <p class="rightText">{{periods.periods * unitPrice}} {{currency.toUpperCase()}}</p>
             </div>
         </div>
     </div>
-    <form id="paymentForm" *ngIf="paymentActive">
-        <div id="cardElement"></div>
-    </form>
 </div>
-<button class="standardButton" (click)="continueClick()" *ngIf="audioLoaded">{{buttonText}}</button>
+<button class="standardButton" (click)="continueClick()" *ngIf="audioLoaded && !isUploading && !paymentActive">{{buttonText}}</button>
+<div class="uploadProgress" *ngIf="isUploading">
+    <div class="spinnerBox">
+        <mat-progress-spinner class="spinner" [color]="'accent'" [diameter]="100" [strokeWidth]="10" [value]="uploadLoaded / uploadTotal * 100"></mat-progress-spinner>
+        <p>Uploading recording...</p>
+    </div>
+</div>

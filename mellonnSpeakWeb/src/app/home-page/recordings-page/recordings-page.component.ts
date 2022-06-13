@@ -29,6 +29,10 @@ export class RecordingsPageComponent implements OnInit, OnDestroy {
     this.subscription = DataStore.observe(Recording).subscribe(rec => {
       this.getRecordings();
     });
+
+    this.upload.uploadDoneCalled.subscribe((res) => {
+      if (res == true) this.uploadActive = false;
+    });
     this.loading = false;
   }
 

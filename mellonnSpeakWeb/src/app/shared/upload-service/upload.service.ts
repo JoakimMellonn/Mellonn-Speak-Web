@@ -2,12 +2,19 @@ import { Injectable } from '@angular/core';
 import { AuthService } from '../auth-service/auth.service';
 import { API, DataStore, Storage } from 'aws-amplify';
 import { Recording } from 'src/models';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UploadService {
   uploadFile: File;
+
+  private uploadProgress = new Subject<number[]>();
+  uploadProgressCalled = this.uploadProgress.asObservable();
+
+  private uploadDone = new Subject<boolean>();
+  uploadDoneCalled = this.uploadDone.asObservable();
 
   constructor(private authService: AuthService) { }
 
@@ -82,7 +89,7 @@ export class UploadService {
     return response;
   }
 
-  async uploadRecording(file: File, title: string, desc: string, speakerCount: number, languageCode: string) {
+  async uploadRecording(file: File, title: string, desc: string, speakerCount: number, languageCode: string, periods: Periods) {
     const recording = new Recording({
       name: title,
       description: desc,
@@ -105,14 +112,19 @@ export class UploadService {
       const storageResult = await Storage.put(key, file,
         {
           level: 'private',
-          progressCallback(progress) {
-            console.log(`Uploaded: ${progress.loaded}/${progress.total}`);
+          progressCallback: (progress) => {
+            this.uploadProgress.next([progress.loaded, progress.total]);
           },
         }
       );
+      await this.authService.updateFreePeriods(periods.freeLeft);
     } catch (err) {
       console.log('Error while uploading recording: ' + err);
     }
+  }
+
+  returnToRecordings() {
+    this.uploadDone.next(true);
   }
 }
 

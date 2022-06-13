@@ -77,10 +77,15 @@
                                 <i class="fa-solid fa-credit-card fa-lg"></i>
                                 <p>Payment methods</p>
                             </div>
-                            <hr>
+                            <hr class="cardHR">
                             <div *ngIf="!addCardActive">
                                 <div *ngFor="let method of paymentMethods">
-                                    <input type="radio" name="card" value="{{method.id}}" [(ngModel)]="cardSelect" (ngModelChange)="onCardSelect()">**** **** **** {{method.card.last4}} expires {{method.card.exp_month}}/{{method.card.exp_year}} <i class="fa-solid fa-trash-can trashIcon" (click)="removeCard(method.id)"></i><br>
+                                    <input type="radio" name="card" value="{{method.id}}" [(ngModel)]="cardSelect" (ngModelChange)="onCardSelect()">
+                                    <div style="display: inline; cursor: pointer;" (click)="onCardSelect(method.id)">
+                                        <i class="{{getCardIcon(method.card.brand)}} cardIcon" id="defaultCardIcon"></i><a>•••• {{method.card.last4}} </a>
+                                        <a class="expireText">Expires {{monthNames[method.card.exp_month - 1]}} {{method.card.exp_year}}</a>
+                                    </div>
+                                    <i class="fa-solid fa-trash-can trashIcon" (click)="removeCard(method.id)"></i>
                                 </div>
                             </div>
                             <div>

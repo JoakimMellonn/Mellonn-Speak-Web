@@ -31,11 +31,6 @@
         box-shadow: 0px 2px 5px #00000024;
         padding: 25px;
 
-        h3 {
-            margin: 0;
-            font-size: 1.3em;
-        }
-
         .orderLine{
             width: 100%;
         }
@@ -78,9 +73,97 @@
         padding-left: 1%;
         transform: translate(-50%);
     }
+
+    #paymentForm {
+        .titleP {
+            font-size: 1.1em;
+        }
+
+        .cardInfo {
+            text-align: center;
+        }
+
+        .cardBox {
+            margin-top: 10px;
+            width: 100%;
+            text-align: center;
+            align-items: center;
+
+            .cardIcon {
+                position: relative;
+                top: 1px;
+                margin-right: 15px;
+            }
+    
+            .expireText {
+                font-weight: 400;
+                font-size: 0.9em;
+            }
+        }
+
+        select {
+            margin-top: 15px;
+        }
+
+        .otherMethodText {
+            display: block;
+            text-decoration: underline;
+            text-align: center;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+
+        #cardElement {
+            width: 80%;
+            margin: 0 auto;
+            margin-top: 25px;
+        }
+
+        .errorMessage {
+            position: relative;
+            display: block;
+            margin-top: 10px;
+            color: #FD594D;
+            text-align: center;
+        }
+
+        p {
+            margin-top: 10px;
+            display: inline;
+        }
+    }
+}
+
+.uploadProgress {
+    width: 100%;
+    height: 500px;
+
+    .spinnerBox {
+        position: relative;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        align-items: center;
+
+        mat-progress-spinner {
+            position: relative;
+            left: 50%;
+            transform: translate(-50%);
+        }
+
+        p {
+            text-align: center;
+            margin-top: 15px;
+        }
+    }
 }
 
 .standardButton {
     max-width: 350px;
     margin-top: 25px;
+}
+
+h3 {
+    margin: 0;
+    font-size: 1.3em;
 }

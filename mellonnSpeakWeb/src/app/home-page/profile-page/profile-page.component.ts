@@ -34,6 +34,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   setupIntent: any;
   primaryCard: string;
   cardSelect: string;
+  monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
   promoCode: string = '';
 
@@ -177,6 +178,24 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     return false;
   }
 
+  getCardFromId(methods: any[], id: string) {
+    for (let method of methods) {
+      if (method.id == id) {
+        return method;
+      }
+    }
+  }
+
+  getCardIcon(brand: string) {
+    if (brand == 'visa') {
+      return 'fa-brands fa-cc-visa fa-lg';
+    } else if (brand == 'mastercard') {
+      return 'fa-brands fa-cc-mastercard fa-lg';
+    } else {
+      return 'fa-solid fa-credit-card fa-lg';
+    }
+  }
+
   async activateAddCard() {
     this.addCardActive = true;
     this.addCardLoading = true;
@@ -216,9 +235,12 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     });
   }
 
-  async onCardSelect() {
+  async onCardSelect(id?: string) {
+    if (id != undefined) {
+      this.cardSelect = id;
+    }
     const saveSettings = Settings.copyOf(this.settings, copy => {
-      copy.primaryCard = this.cardSelect
+      copy.primaryCard = id ?? this.cardSelect
     });
     await this.settingsService.saveSettings(saveSettings);
   }
