@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { loadStripe } from '@stripe/stripe-js';
 import { Auth } from 'aws-amplify';
+import { AnalyticsService } from 'src/app/shared/analytics-service/analytics.service';
 import { AuthService } from 'src/app/shared/auth-service/auth.service';
 import { LanguageService } from 'src/app/shared/language-service/language.service';
 import { PromotionService, Promotion } from 'src/app/shared/promotion-service/promotion.service';
@@ -20,9 +21,16 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   loading: boolean = true;
   redeemPromoActive: boolean = false;
   promoRedeemed: boolean = false;
-  errorMessage: string = '';
+  promoError: string = '';
   discountMessage: string = '';
   settings: Settings;
+
+  feedbackActive: boolean = false;
+  feedbackMessage: string;
+  accepted: boolean = true;
+  sendingFeedback: boolean = false;
+  feedbackSent: boolean = false;
+  feedbackError: string = '';
 
   languageSelect: string;
   jumpSelect: number;
@@ -45,7 +53,8 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     private renderer: Renderer2,
     private settingsService: SettingsService,
     private storageService: StorageService,
-    private uploadService: UploadService
+    private uploadService: UploadService,
+    private analyticsService: AnalyticsService
   ) { }
 
   async ngOnInit() {
@@ -85,27 +94,52 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     this.redeemPromoActive = false;
     const segment = document.getElementById('redeemSegment');
     this.renderer.addClass(segment, 'clickable');
-    this.errorMessage = '';
+    this.promoError = '';
     this.promoCode = '';
     this.discountMessage = '';
     this.promoRedeemed = false;
+  }
+
+  toggleFeedback() {
+    if (this.feedbackActive) {
+      this.deactivateFeedback();
+    } else {
+      this.activateFeedback();
+    }
+  }
+
+  activateFeedback() {
+    this.feedbackActive = true;
+    const segment = document.getElementById('feedbackSegment');
+    this.renderer.removeClass(segment, 'clickable');
+  }
+
+  deactivateFeedback() {
+    this.feedbackActive = false;
+    const segment = document.getElementById('feedbackSegment');
+    this.renderer.addClass(segment, 'clickable');
+    this.feedbackMessage = '';
+    this.accepted = true;
+    this.sendingFeedback = false;
+    this.feedbackSent = false;
+    this.feedbackError = '';
   }
 
   async redeemPromotion() {
     if (this.promoCode.split('').length != 0) {
       const promotion = await this.promotionService.getPromotion(this.promoCode, this.authService.email, this.authService.freePeriods);
       if (promotion.type == 'noExist') {
-        this.errorMessage = "This code doesn't exist, make sure you've written it correctly.";
+        this.promoError = "This code doesn't exist, make sure you've written it correctly.";
       } else if (promotion.type == 'used') {
-        this.errorMessage = "You have already used this code.";
+        this.promoError = "You have already used this code.";
       } else if (promotion.type == 'error' || promotion.type == undefined) {
-        this.errorMessage = "Something went wrong while redeeming the code, please try again later."
+        this.promoError = "Something went wrong while redeeming the code, please try again later."
       } else {
         this.discountMessage = this.discountString(promotion);
         this.promoRedeemed = true;
       }
     } else {
-      this.errorMessage = 'You need to enter a promo code.';
+      this.promoError = 'You need to enter a promo code.';
     }
   }
 
@@ -256,6 +290,23 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
         });
         await this.settingsService.saveSettings(saveSettings);
       }
+    }
+  }
+
+  async sendFeedback() {
+    if (this.feedbackMessage == null || this.feedbackMessage!.length == 0) {
+      this.feedbackError = 'You need to write a message'
+    } else {
+      this.feedbackError = '';
+      this.sendingFeedback = true;
+      await this.analyticsService.sendFeedback(
+        this.authService.email,
+        `${this.authService.firstName} ${this.authService.lastName}`,
+        'Feedback/report - web',
+        this.feedbackMessage,
+        this.accepted
+      );
+      this.feedbackSent = true;
     }
   }
 }

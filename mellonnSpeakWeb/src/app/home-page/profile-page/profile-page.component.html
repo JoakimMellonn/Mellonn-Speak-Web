@@ -25,7 +25,7 @@
                             </div>
                             <div class="promo" *ngIf="redeemPromoActive && !promoRedeemed">
                                 <input class="inputField" placeholder="Promo code" [(ngModel)]="promoCode" (keyup.enter)="redeemPromotion()">
-                                <p class="errorMessage" *ngIf="errorMessage != ''">{{errorMessage}}</p>
+                                <p class="errorMessage" *ngIf="promoError != ''">{{promoError}}</p>
                                 <div class="buttonRow">
                                     <button id="left" class="button" (click)="toggleRedeemPromo()">Cancel</button>
                                     <button class="button" (click)="redeemPromotion()">Redeem</button>
@@ -43,9 +43,24 @@
                                 <p>Help</p>
                             </div>
                             <hr>
-                            <div class="dividedSegment clickable">
-                                <i class="fa-solid fa-bug"></i>
-                                <p>Report issue</p>
+                            <div id="feedbackSegment" class="dividedSegment clickable">
+                                <div style="cursor: pointer;" (click)="toggleFeedback()">
+                                    <i class="fa-solid fa-bug"></i>
+                                    <p>Report issue/send feedback</p>
+                                </div>
+                                <div class="messageDiv" *ngIf="feedbackActive">
+                                    <div *ngIf="!sendingFeedback">
+                                        <textarea [(ngModel)]="feedbackMessage"></textarea>
+                                        <input type="checkbox" [(ngModel)]="accepted"><a>Mellonn can email me with questions</a>
+                                        <button class="standardButton" (click)="sendFeedback()" *ngIf="!sendingFeedback">Send report/feedback</button>
+                                        <p class="errorMessage" *ngIf="feedbackError != ''">{{feedbackError}}</p>
+                                    </div>
+                                    <mat-spinner *ngIf="sendingFeedback && !feedbackSent" [color]="'accent'" [diameter]="50" [strokeWidth]="5"></mat-spinner>
+                                    <div *ngIf="feedbackSent">
+                                        <p class="success">Your report/feedback have been sent!</p>
+                                        <button class="standardButton" (click)="toggleFeedback()">Ok</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="segment clickable" (click)="authService.signOut()">
