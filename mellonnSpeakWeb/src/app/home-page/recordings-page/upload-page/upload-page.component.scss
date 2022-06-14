@@ -88,17 +88,32 @@
             width: 100%;
             text-align: center;
             align-items: center;
+        }
 
-            .cardIcon {
+        .cardsBox {
+            margin-top: 10px;
+
+            .div {
+                margin: 15px 0;
+                cursor: pointer;
+            }
+
+            input {
                 position: relative;
-                top: 1px;
-                margin-right: 15px;
+                top: 2px;
+                margin-left: 15px;
             }
-    
-            .expireText {
-                font-weight: 400;
-                font-size: 0.9em;
-            }
+        }
+
+        .cardIcon {
+            position: relative;
+            top: 1px;
+            margin-right: 15px;
+        }
+
+        .expireText {
+            font-weight: 400;
+            font-size: 0.9em;
         }
 
         select {
@@ -119,18 +134,25 @@
             margin-top: 25px;
         }
 
-        .errorMessage {
-            position: relative;
-            display: block;
-            margin-top: 10px;
-            color: #FD594D;
-            text-align: center;
-        }
-
         p {
             margin-top: 10px;
             display: inline;
         }
+    }
+
+    .paymentSpinner {
+        position: relative;
+        left: 50%;
+        transform: translate(-50%);
+        color: #FAB228;
+    }
+
+    .errorMessage {
+        position: relative;
+        display: block;
+        margin-top: 10px;
+        color: #FD594D;
+        text-align: center;
     }
 }
 

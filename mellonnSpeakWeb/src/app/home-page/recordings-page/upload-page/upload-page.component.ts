@@ -25,6 +25,7 @@ export class UploadPageComponent implements OnInit {
   description: string;
   speakerSelect: number = 2;
   languageSelect: string;
+  errorMessage: string = '';
 
   unitPrice: number = 49;
   currency: string = 'dkk';
@@ -33,6 +34,7 @@ export class UploadPageComponent implements OnInit {
   cardElement: StripeCardElement;
   cardsLoading: boolean = true;
   paymentActive: boolean = false;
+  paymentProcessing: boolean = false;
   customerId: string;
   paymentMethods: any[];
   defaultMethod: any;
@@ -42,7 +44,7 @@ export class UploadPageComponent implements OnInit {
   cardSelect: string;
   otherMethod: boolean = false;
   otherCard: boolean = false;
-  errorMessage: string = '';
+  paymentError: string = '';
   monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
   uploadLoaded: number;
@@ -53,8 +55,6 @@ export class UploadPageComponent implements OnInit {
     public languageService: LanguageService,
     public settingsService: SettingsService,
     private uploadService: UploadService,
-    private authService: AuthService,
-    private renderer: Renderer2,
     @Inject(LOCALE_ID) private locale: string
   ) { }
 
@@ -99,10 +99,6 @@ export class UploadPageComponent implements OnInit {
       } else {
         this.defaultMethod = this.paymentMethods[0];
       }
-    }
-    const defaultCardIcon = document.getElementById('defaultCardIcon');
-    if (defaultCardIcon) {
-      this.renderer.addClass(defaultCardIcon, this.getCardIcon(this.defaultMethod.card.brand));
     }
     this.cardSelect = this.defaultMethod.id;
     this.cardsLoading = false;
@@ -153,6 +149,7 @@ export class UploadPageComponent implements OnInit {
 
     const form = document.getElementById('paymentForm');
     form!.addEventListener('submit', async (event) => {
+      this.paymentProcessing = true;
       let paymentMethod = this.defaultMethod.id;
 
       if (this.otherCard) {
@@ -167,11 +164,14 @@ export class UploadPageComponent implements OnInit {
 
       if (result.error) {
         console.log('Error while paying: ' + result.error.message);
-        this.errorMessage = result.error.message!;
+        this.paymentProcessing = false;
+        this.paymentError = result.error.message!;
         this.paymentIntent = result.paymentIntent;
       } else {
         console.log('Payment success!' + result.paymentIntent);
         this.paymentIntent = result.paymentIntent;
+        this.startUpload();
+        this.paymentProcessing = false;
       }
     });
   }
@@ -186,16 +186,43 @@ export class UploadPageComponent implements OnInit {
     if (this.periods.periods == 0) {
       await this.startUpload();
     } else {
-      this.paymentActive = true;
-      await this.setupPayment();
+      if (this.title == null || this.title!.length == 0 && this.description == null || this.description!.length == 0) {
+        this.errorMessage = 'You need to fill in the title and description';
+      } else if (this.title == null || this.title!.length == 0) {
+        this.errorMessage = 'You need to fill in the title';
+      } else if (this.description == null || this.description!.length == 0) {
+        this.errorMessage = 'You need to fill in the description';
+      } else {
+        this.errorMessage = '';
+        this.paymentActive = true;
+        await this.setupPayment();
+      }
+    }
+  }
+
+  async onCardSelect(id?: string) {
+    if (id != undefined) {
+      this.cardSelect = id;
     }
   }
 
   async startUpload() {
     this.isUploading = true;
     await this.uploadService.uploadRecording(this.file, this.title, this.description, this.speakerSelect, this.languageSelect, this.periods);
-    alert('Recording uploaded.'); //TODO: make a better message.
+    alert('Recording has been uploaded and will be transcribed! Estimated time for completion: ' + this.estimatedTime(this.periods.total) + '.This is only an estimate, it can take up to 2 hours. If it takes longer, please report an issue on the profile page.');
     this.isUploading = false;
     this.uploadService.returnToRecordings();
+  }
+
+  estimatedTime(totalPeriods: number): string {
+    let returnString: string = '';
+    if (totalPeriods <= 4) {
+      returnString = 'ca. 10-15 minutes';
+    } else if (totalPeriods <= 8) {
+      returnString = 'ca. 20-30 minutes';
+    } else {
+      returnString = 'ca. 35-45 minutes';
+    }
+    return returnString;
   }
 }
