@@ -21,6 +21,7 @@ export declare class Settings {
   readonly themeMode: string;
   readonly languageCode: string;
   readonly jumpSeconds: number;
+  readonly primaryCard?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   constructor(init: ModelInit<Settings, SettingsMetaData>);

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from './shared/auth-service/auth.service';
 import { LanguageService } from './shared/language-service/language.service';
+import { SettingsService } from './shared/settings-service/settings.service';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +12,11 @@ export class AppComponent implements OnInit {
   title = 'mellonnSpeakWeb';
   signedIn: boolean = false;
 
-  constructor(private authService: AuthService, private language: LanguageService) {}
+  constructor(
+    private authService: AuthService,
+    private language: LanguageService,
+    private settingsService: SettingsService
+  ) {}
 
   async ngOnInit() {
     this.authService.signInStateCalled.subscribe((res) => {
@@ -23,7 +28,10 @@ export class AppComponent implements OnInit {
     });
     this.language.getLanguages();
     const isSignedIn = await this.authService.checkCurrentUser();
-    if (isSignedIn) await this.authService.registerSignIn();
+    if (isSignedIn) {
+      await this.authService.registerSignIn();
+      await this.settingsService.getSettings();
+    }
   }
 
   async signOut() {

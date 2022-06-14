@@ -4,8 +4,7 @@
 
 export const environment = {
   production: false,
-  getPromotionEndPoint: 'https://07xlqbkgrg.execute-api.eu-central-1.amazonaws.com/default/getPromotion-prod',
-  getPromotionKey: 'l2oU7NoyWt74V7Bq821PC5O35c8r6RN8arj5A2Nd'
+  stripeKey: 'pk_test_51K1CskBLC2uA76LR7UUHX9TtTwmoEVwit5GvUMyYiQ5J9JhZn86z9Bf4hQ1Ii29Da4DWiIcT8bMTMqrqHCtCQwxO00MnhWkMke'
 };
 
 /*

@@ -25,7 +25,7 @@
                             </div>
                             <div class="promo" *ngIf="redeemPromoActive && !promoRedeemed">
                                 <input class="inputField" placeholder="Promo code" [(ngModel)]="promoCode" (keyup.enter)="redeemPromotion()">
-                                <p class="errorMessage" *ngIf="errorMessage != ''">{{errorMessage}}</p>
+                                <p class="errorMessage" *ngIf="promoError != ''">{{promoError}}</p>
                                 <div class="buttonRow">
                                     <button id="left" class="button" (click)="toggleRedeemPromo()">Cancel</button>
                                     <button class="button" (click)="redeemPromotion()">Redeem</button>
@@ -43,9 +43,24 @@
                                 <p>Help</p>
                             </div>
                             <hr>
-                            <div class="dividedSegment clickable">
-                                <i class="fa-solid fa-bug"></i>
-                                <p>Report issue</p>
+                            <div id="feedbackSegment" class="dividedSegment clickable">
+                                <div style="cursor: pointer;" (click)="toggleFeedback()">
+                                    <i class="fa-solid fa-bug"></i>
+                                    <p>Report issue/send feedback</p>
+                                </div>
+                                <div class="messageDiv" *ngIf="feedbackActive">
+                                    <div *ngIf="!sendingFeedback">
+                                        <textarea [(ngModel)]="feedbackMessage"></textarea>
+                                        <input type="checkbox" [(ngModel)]="accepted"><a>Mellonn can email me with questions</a>
+                                        <button class="standardButton" (click)="sendFeedback()" *ngIf="!sendingFeedback">Send report/feedback</button>
+                                        <p class="errorMessage" *ngIf="feedbackError != ''">{{feedbackError}}</p>
+                                    </div>
+                                    <mat-spinner *ngIf="sendingFeedback && !feedbackSent" [color]="'accent'" [diameter]="50" [strokeWidth]="5"></mat-spinner>
+                                    <div *ngIf="feedbackSent">
+                                        <p class="success">Your report/feedback have been sent!</p>
+                                        <button class="standardButton" (click)="toggleFeedback()">Ok</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="segment clickable" (click)="authService.signOut()">
@@ -71,6 +86,33 @@
                             <select name="jump" id="jump" (change)="onJumpSelect()" [(ngModel)]="jumpSelect">
                                 <option *ngFor="let i of jumpValues" value="{{i}}" [selected]="settings.jumpSeconds == i">{{i}}</option>
                             </select>
+                        </div>
+                        <div class="segment">
+                            <div style="display: block;">
+                                <i class="fa-solid fa-credit-card fa-lg"></i>
+                                <p>Payment methods</p>
+                            </div>
+                            <hr class="cardHR">
+                            <div *ngIf="!addCardActive">
+                                <div *ngFor="let method of paymentMethods">
+                                    <input type="radio" name="card" value="{{method.id}}" [(ngModel)]="cardSelect" (ngModelChange)="onCardSelect()">
+                                    <div style="display: inline; cursor: pointer;" (click)="onCardSelect(method.id)">
+                                        <i class="{{getCardIcon(method.card.brand)}} cardIcon" id="defaultCardIcon"></i><a>•••• {{method.card.last4}} </a>
+                                        <a class="expireText">Expires {{monthNames[method.card.exp_month - 1]}} {{method.card.exp_year}}</a>
+                                    </div>
+                                    <i class="fa-solid fa-trash-can trashIcon" (click)="removeCard(method.id)"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <button class="standardButton" style="margin-top: 15px;" *ngIf="!addCardActive" (click)="activateAddCard()">Add a card</button>
+                                <form id="addCardForm" *ngIf="addCardActive">
+                                    <mat-spinner [color]="'accent'" [diameter]="50" [strokeWidth]="5" *ngIf="addCardLoading"></mat-spinner>
+                                    <div class="card">
+                                        <div id="cardElement"></div>
+                                    </div>
+                                    <button class="standardButton" style="margin-top: 0;" type="submit">Add card</button>
+                                </form>
+                            </div>
                         </div>
                         <div class="segment clickable" (click)="resetSettings()">
                             <i class="fa-solid fa-undo fa-lg"></i>
