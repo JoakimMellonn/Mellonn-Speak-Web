@@ -1,7 +1,5 @@
-import { getLocaleCurrencyCode } from '@angular/common';
-import { Component, Inject, Input, LOCALE_ID, OnInit, Renderer2 } from '@angular/core';
-import { loadStripe, PaymentIntentResult, Stripe, StripeCardElement } from '@stripe/stripe-js';
-import { AuthService } from 'src/app/shared/auth-service/auth.service';
+import { Component, Inject, Input, LOCALE_ID, OnInit } from '@angular/core';
+import { loadStripe, Stripe, StripeCardElement } from '@stripe/stripe-js';
 import { LanguageService } from 'src/app/shared/language-service/language.service';
 import { SettingsService } from 'src/app/shared/settings-service/settings.service';
 import { Periods, UploadService } from 'src/app/shared/upload-service/upload.service';
@@ -44,6 +42,7 @@ export class UploadPageComponent implements OnInit {
   cardSelect: string;
   otherMethod: boolean = false;
   otherCard: boolean = false;
+  rememberCard: boolean = false;
   paymentError: string = '';
   monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
@@ -136,8 +135,7 @@ export class UploadPageComponent implements OnInit {
   }
 
   async setupPayment() {
-    this.clientSecret = await this.uploadService.createIntent(this.customerId, 2000, 'dkk');
-
+    this.clientSecret = await this.uploadService.createIntent(this.customerId, this.unitPrice * this.periods.periods * 100, this.currency);
     this.stripe = await loadStripe(environment.stripeKey);
     const elements = this.stripe!.elements({clientSecret: this.clientSecret});
     this.cardElement = elements.create('card');
@@ -149,11 +147,18 @@ export class UploadPageComponent implements OnInit {
 
     const form = document.getElementById('paymentForm');
     form!.addEventListener('submit', async (event) => {
+      if (this.paymentProcessing) return;
       this.paymentProcessing = true;
       let paymentMethod = this.defaultMethod.id;
 
       if (this.otherCard) {
         paymentMethod = {card: this.cardElement};
+        if (this.rememberCard) {
+          const setupIntent = await this.uploadService.createSetupIntent(this.customerId);
+          const result = await this.stripe!.confirmCardSetup(setupIntent, {
+            payment_method: { card: this.cardElement },
+          });
+        }
       } else if (this.otherMethod) {
         paymentMethod = this.cardSelect;
       }
@@ -209,7 +214,7 @@ export class UploadPageComponent implements OnInit {
   async startUpload() {
     this.isUploading = true;
     await this.uploadService.uploadRecording(this.file, this.title, this.description, this.speakerSelect, this.languageSelect, this.periods);
-    alert('Recording has been uploaded and will be transcribed! Estimated time for completion: ' + this.estimatedTime(this.periods.total) + '.This is only an estimate, it can take up to 2 hours. If it takes longer, please report an issue on the profile page.');
+    alert('Recording has been uploaded and will be transcribed! Estimated time for completion: ' + this.estimatedTime(this.periods.total) + '. \nThis is only an estimate, it can take up to 2 hours. If it takes longer, please report an issue on the profile page.');
     this.isUploading = false;
     this.uploadService.returnToRecordings();
   }

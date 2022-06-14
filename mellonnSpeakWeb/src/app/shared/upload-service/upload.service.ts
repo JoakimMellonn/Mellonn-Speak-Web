@@ -53,7 +53,7 @@ export class UploadService {
     }
 
     const response = await API.put('stripe', '/intent', params);
-    return response.secret;
+    return response;
   }
 
   async createSetupIntent(customerId: string) {

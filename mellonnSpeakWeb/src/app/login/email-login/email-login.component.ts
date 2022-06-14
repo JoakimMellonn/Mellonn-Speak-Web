@@ -1,13 +1,8 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Auth } from 'aws-amplify';
 import { AuthService } from 'src/app/shared/auth-service/auth.service';
-import { StorageService } from 'src/app/shared/storage-service/storage.service';
 
 @Component({
   selector: 'app-email-login',
@@ -32,7 +27,6 @@ export class EmailLoginComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private renderer: Renderer2,
-    private storageService: StorageService
   ) {}
 
   ngOnInit(): void {

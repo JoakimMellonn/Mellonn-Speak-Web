@@ -28,7 +28,7 @@
     </div>
     <div class="left" *ngIf="paymentActive">
         <div class="segment">
-            <form id="paymentForm" *ngIf="!paymentProcessing && !cardsLoading">
+            <form id="paymentForm" *ngIf="!cardsLoading">
                 <p class="titleP">Current payment method:</p><br>
                 <div class="cardBox" *ngIf="!cardsLoading && !otherMethod">
                     <p class="cardInfo"><i class="{{getCardIcon(defaultMethod.card.brand)}} cardIcon" id="defaultCardIcon"></i>•••• {{defaultMethod.card.last4}} </p>
@@ -45,6 +45,9 @@
                 </div>
                 <p class="otherMethodText" *ngIf="otherMethod && !otherCard" (click)="setupCardElement()">Use another card?</p>
                 <div id="cardElement"></div>
+                <div *ngIf="otherCard" style="margin-top: 15px;">
+                    <input type="checkbox" [(ngModel)]="rememberCard" [ngModelOptions]="{standalone: true}"><a>Remember card for future purchases?</a>
+                </div>
                 <p class="otherMethodText" *ngIf="!otherMethod" (click)="otherMethod = true">Use another payment method?</p>
                 <p class="errorMessage" *ngIf="paymentError != ''">{{paymentError}}</p>
                 <button class="standardButton" type="submit">Pay and upload recording</button>
