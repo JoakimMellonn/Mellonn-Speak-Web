@@ -31,6 +31,13 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
+                "primaryCard": {
+                    "name": "primaryCard",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -302,5 +309,5 @@ export const schema = {
     },
     "enums": {},
     "nonModels": {},
-    "version": "eea723d67a2a276dcf57aef94d66b912"
+    "version": "efa51b6f78585cd521b51890eac824b5"
 };
