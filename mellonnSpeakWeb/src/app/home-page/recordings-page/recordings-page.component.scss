@@ -1,5 +1,6 @@
 .center {
     min-width: 700px;
+    max-width: 1200px;
 }
 
 .mainContent {
@@ -187,6 +188,7 @@
     .pageContainer {
         .center {
             min-width: 75%;
+            max-width: none;
 
             .mainContent {
                 flex-direction: column;
