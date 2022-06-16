@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DataStore } from 'aws-amplify';
 import { Settings } from 'src/models';
-import { LanguageService } from '../language-service/language.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +14,7 @@ export class SettingsService {
   currentSettings: Settings;
   jumpSecs: number = 3;
 
-  constructor(private languageService: LanguageService) { }
+  constructor() { }
 
   async getSettings(): Promise<Settings> {
     try {
@@ -33,10 +32,13 @@ export class SettingsService {
         }
         downloadedSettings = settings[0];
       }
+      this.currentSettings = downloadedSettings
       return downloadedSettings;
     } catch (err) {
       console.log('Error downloading Settings: ' + err);
-      return await this.getDefaultSettings();
+      const returnSettings = await this.getDefaultSettings();
+      this.currentSettings = returnSettings;
+      return returnSettings;
     }
   }
 

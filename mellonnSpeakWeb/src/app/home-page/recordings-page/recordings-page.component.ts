@@ -2,6 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DataStore, Predicates, SortDirection } from '@aws-amplify/datastore';
 import { Recording } from 'src/models';
 import { AuthService } from 'src/app/shared/auth-service/auth.service';
+import { Router } from '@angular/router';
+import { UploadService } from 'src/app/shared/upload-service/upload.service';
 
 @Component({
   selector: 'app-recordings-page',
@@ -16,13 +18,20 @@ export class RecordingsPageComponent implements OnInit, OnDestroy {
   subscription: any;
   offset: number;
 
-  constructor(public authService: AuthService) { }
+  uploadActive: boolean = false;
+  uploadFile: File;
+
+  constructor(public authService: AuthService, private router: Router, private upload: UploadService) { }
 
   async ngOnInit() {
     this.offset = (new Date().getTimezoneOffset());
     await this.getRecordings();
     this.subscription = DataStore.observe(Recording).subscribe(rec => {
       this.getRecordings();
+    });
+
+    this.upload.uploadDoneCalled.subscribe((res) => {
+      if (res == true) this.uploadActive = false;
     });
     this.loading = false;
   }
@@ -42,5 +51,18 @@ export class RecordingsPageComponent implements OnInit, OnDestroy {
     } catch (err) {
       console.log('error getting recordings', err);
     }
+  }
+
+  openRecording(recording: Recording) {
+    if (typeof recording.fileUrl === "string") {
+      this.router.navigateByUrl('/home/transcription/' + recording.id);
+    } else {
+      alert('The selected recording is currently being transcribed, this can take some time depending on the length of the audio clip. If this takes longer than 2 hours, please contact Mellonn by using Report issue on the profile page.');
+    }
+  }
+
+  onFileDropped(file: File) {
+    this.uploadFile = file;
+    this.uploadActive = true;
   }
 }

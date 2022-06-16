@@ -1,7 +1,7 @@
 <div class="pageContainer">
     <div class="center">
         <div class="mainContent" *ngIf="!loading">
-            <div class="recordings">
+            <div class="recordings" *ngIf="!uploadActive">
                 <div class="titleBox">
                     <h1>
                         Here's your Recordings
@@ -9,8 +9,9 @@
                 </div>
                 <div class="contentBox">
                     <p *ngIf="recordings.length == 0">You don't have any recordings</p>
-                    <div class="recordingElement" *ngFor="let recording of recordings" [routerLink]="['/home', recording.id]">
+                    <div class="recordingElement" *ngFor="let recording of recordings" (click)="openRecording(recording)">
                         <p class="title">{{recording.name}}</p>
+                        <mat-spinner class="spinner" [color]="'accent'" [diameter]="20" [strokeWidth]="3" *ngIf="recording.fileUrl == null || recording.fileUrl == undefined"></mat-spinner>
                         <p class="date">{{recording.date | date}}</p>
                         <p class="description">{{recording.description}}</p>
                     </div>
@@ -20,24 +21,23 @@
                 <div class="uploadRecording">
                     <div class="titleBox">
                         <h1>
-                            Upload a Recording (Not working!)
+                            Upload a Recording
                         </h1>
                     </div>
                     <div class="contentBox">
-                        <form>
+                        <div class="dropZone" appDnd (fileDropped)="onFileDropped($event)" *ngIf="!uploadActive">
+                            <input type="file" #fileDropRef id="fileDropRef" accept=".waw,.flac,.m4p,.m4a,.m4b,.mmf,.aac,.mp3,.mp4,.MP4">
+                            <i class="fa-solid fa-upload fa-2xl"></i>
+                            <h3>Drop an audio file here</h3>
+                            <h3>or</h3>
                             <button class="standardButton">
-                                Choose file
+                                Choose a file
                             </button>
-                            <p class="text">Chosen file: None</p>
-                            <input type="text" class="inputField" placeholder="Title">
-                            <input type="text" class="inputField" placeholder="Description">
-                        </form>
-                        <button class="standardButton">
-                            Upload
-                        </button>
+                        </div>
+                        <app-upload-page [file]="uploadFile" *ngIf="uploadActive && (uploadFile != null || uploadFile != undefined)"></app-upload-page>
                     </div>
                 </div>
-                <div class="admin" *ngIf="authService.superDev">
+                <div class="admin" *ngIf="authService.superDev && !uploadActive">
                     <div class="titleBox">
                         <h2>
                             Administrate group

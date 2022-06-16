@@ -22,6 +22,9 @@ import { SpeakerComponent } from './home-page/recordings-page/transcription-page
 import { InfoPanelComponent } from './home-page/recordings-page/transcription-page/info-panel/info-panel.component';
 import { VersionHistoryComponent } from './home-page/recordings-page/transcription-page/version-history/version-history.component';
 import { HttpClientModule } from '@angular/common/http';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { UploadPageComponent } from './home-page/recordings-page/upload-page/upload-page.component';
+import { DndDirective } from './home-page/recordings-page/drag-drop/dnd.directive';
 
 Amplify.configure(awsconfig);
 
@@ -40,6 +43,8 @@ Amplify.configure(awsconfig);
     SpeakerComponent,
     InfoPanelComponent,
     VersionHistoryComponent,
+    UploadPageComponent,
+    DndDirective,
   ],
   imports: [
     BrowserModule,
@@ -47,7 +52,8 @@ Amplify.configure(awsconfig);
     SharedModule,
     FormsModule,
     BrowserAnimationsModule,
-    HttpClientModule
+    HttpClientModule,
+    MatProgressSpinnerModule
   ],
   providers: [],
   bootstrap: [AppComponent]
