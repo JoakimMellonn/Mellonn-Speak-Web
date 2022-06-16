@@ -1,5 +1,6 @@
 import { Component, Inject, Input, LOCALE_ID, OnInit } from '@angular/core';
 import { loadStripe, Stripe, StripeCardElement } from '@stripe/stripe-js';
+import { AuthService } from 'src/app/shared/auth-service/auth.service';
 import { LanguageService } from 'src/app/shared/language-service/language.service';
 import { SettingsService } from 'src/app/shared/settings-service/settings.service';
 import { Periods, UploadService } from 'src/app/shared/upload-service/upload.service';
@@ -26,6 +27,7 @@ export class UploadPageComponent implements OnInit {
   errorMessage: string = '';
 
   unitPrice: number = 49;
+  benefitPrice: number = 29;
   currency: string = 'dkk';
 
   stripe: Stripe | null;
@@ -54,6 +56,7 @@ export class UploadPageComponent implements OnInit {
     public languageService: LanguageService,
     public settingsService: SettingsService,
     private uploadService: UploadService,
+    private authService: AuthService,
     @Inject(LOCALE_ID) private locale: string
   ) { }
 
@@ -67,13 +70,13 @@ export class UploadPageComponent implements OnInit {
       if (!this.audioLoaded) {
         this.duration = this.player.duration;
         this.periods = this.uploadService.getPeriods(this.duration);
-        console.log('Total: ' + this.periods.total + ', periods: ' + this.periods.periods + ', freeLeft: ' + this.periods.freeLeft);
+        //console.log('Total: ' + this.periods.total + ', periods: ' + this.periods.periods + ', freeLeft: ' + this.periods.freeLeft);
         if (this.periods.periods == 0) this.buttonText = 'Upload recording';
         this.audioLoaded = true;
       }
     }
     //TODO: set currency and price automatically (not hardcoded...)
-    //this.currency = getLocaleCurrencyCode(this.locale)!.toUpperCase();
+    if (this.authService.group == 'benefit') this.unitPrice = this.benefitPrice;
 
     this.uploadService.uploadProgressCalled.subscribe((progress) => {
       //progress index 0 = loaded, index 1 = total
@@ -188,8 +191,17 @@ export class UploadPageComponent implements OnInit {
   }
 
   async continueClick() {
-    if (this.periods.periods == 0) {
-      await this.startUpload();
+    if (this.periods.periods == 0 || this.authService.group == 'dev') {
+      if (this.title == null || this.title!.length == 0 && this.description == null || this.description!.length == 0) {
+        this.errorMessage = 'You need to fill in the title and description';
+      } else if (this.title == null || this.title!.length == 0) {
+        this.errorMessage = 'You need to fill in the title';
+      } else if (this.description == null || this.description!.length == 0) {
+        this.errorMessage = 'You need to fill in the description';
+      } else {
+        this.errorMessage = '';
+        await this.startUpload();
+      }
     } else {
       if (this.title == null || this.title!.length == 0 && this.description == null || this.description!.length == 0) {
         this.errorMessage = 'You need to fill in the title and description';
