@@ -1,3 +1,6 @@
+.center {
+    max-width: 1200px;
+}
 
 .profilePic {
     position: relative;
@@ -271,6 +274,7 @@ h1 {
     .pageContainer {
         .center {
             min-width: 90%;
+            max-width: none;
 
             .content {
                 display: block;
