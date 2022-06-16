@@ -1,201 +1,173 @@
-.pageContainer {
-    position: relative;
-    top: 120px;
+.center {
+    min-width: 700px;
+}
 
-    .center {
-        position: absolute;
-        left: 50%;
-        transform: translate(-50%);
-        width: 50%;
-        min-width: 1100px;
+.mainContent {
+    display: flex;
 
-        .mainContent {
-            position: relative;
-            left: 50%;
-            transform: translate(-50%);
-            display: flex;
+    .contentBox {
+        padding: 25px;
+        
+        p {
+            text-align: center;
+        }
+    }
 
-            .titleBox {
-                width: 100%;
-                background-color: #FAB228;
-                box-shadow: 0px 2px 5px #00000024;
-                border-radius: 25px;
-                padding: 25px;
-    
-                h1 {
-                    margin: 0;
-                    font-size: 2.5em;
-                }
+    .recordings {
+        flex: 1.5;
+        background-color: #F8F8F8;
+        border-radius: 25px;
+        box-shadow: 0px 2px 5px #00000024;
+        box-sizing: border-box;
+        height: 100%;
+        margin-bottom: 50px;
 
-                h2 {
-                    margin: 0;
-                    font-size: 2em;
-                }
+        .recordingElement {
+            background-color: #F8F8F8;
+            border-radius: 25px;
+            box-shadow: 0px 2px 5px #00000024;
+            width: 100%;
+            margin-top: 25px;
+            padding: 25px;
+            cursor: pointer;
+
+            .title {
+                display: inline;
+                font-size: 1.1em;
+                text-align: left;
+                margin: 0;
             }
 
-            .contentBox {
-                padding: 25px;
-                
-                p {
+            .spinner {
+                position: relative;
+                display: inline;
+                margin-left: 10px;
+                top: -3px;
+                color: #FAB228;
+            }
+
+            .date {
+                text-align: left;
+                margin: 10px 0 8px 0;
+                font-size: 0.9em;
+            }
+
+            .description {
+                text-align: left;
+                margin: 0;
+                font-weight: 400;
+                text-shadow: 0px 1px 0.5px #00000024;
+                font-size: 0.9em;
+            }
+        }
+
+        .recordingElement:hover {
+            background-color: #efefef;
+        }
+
+        .recordingElement:first-child {
+            margin-top: 0;
+        }
+    }
+
+    .sideColumn {
+        position: sticky;
+        top: 120px;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        margin-left: 25px;
+
+        .uploadRecording {
+            background-color: #F8F8F8;
+            border-radius: 25px;
+            box-shadow: 0px 2px 5px #00000024;
+            box-sizing: border-box;
+
+            .dropZone {
+                position: relative;
+                width: 100%;
+                border: dashed 2px #00000024;
+                border-radius: 25px;
+
+                i {
+                    position: relative;
+                    margin-top: 35px;
+                    left: 50%;
+                    transform: translate(-50%);
+                }
+
+                input {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    opacity: 0;
+                    z-index: 2;
+                    border-radius: 25px;
+                }
+
+                h3 {
                     text-align: center;
                 }
-            }
 
-            .recordings {
-                flex: 1.5;
-                background-color: #F8F8F8;
-                border-radius: 25px;
-                box-shadow: 0px 2px 5px #00000024;
-                box-sizing: border-box;
-                height: 100%;
-                margin-bottom: 50px;
-
-                .recordingElement {
-                    background-color: #F8F8F8;
-                    border-radius: 25px;
-                    box-shadow: 0px 2px 5px #00000024;
-                    width: 100%;
-                    margin-top: 25px;
-                    padding: 25px;
-                    cursor: pointer;
-
-                    .title {
-                        display: inline;
-                        font-size: 1.3em;
-                        text-align: left;
-                        margin: 0;
-                    }
-
-                    .spinner {
-                        position: relative;
-                        display: inline;
-                        margin-left: 10px;
-                        top: -3px;
-                        color: #FAB228;
-                    }
-
-                    .date {
-                        text-align: left;
-                        margin: 10px 0 8px 0;
-                    }
-
-                    .description {
-                        text-align: left;
-                        margin: 0;
-                        font-weight: 400;
-                        text-shadow: 0px 1px 0.5px #00000024;
-                    }
-                }
-
-                .recordingElement:hover {
-                    background-color: #efefef;
-                }
-
-                .recordingElement:first-child {
+                .standardButton{
                     margin-top: 0;
+                    margin-bottom: 25px;
                 }
             }
 
-            .sideColumn {
-                position: sticky;
-                top: 120px;
+            .fileOver {
+                border: dashed 2px #A5C644;
+                border-radius: 25px;
+            }
+        }
+
+        .admin {
+            background-color: #F8F8F8;
+            border-radius: 25px;
+            box-shadow: 0px 2px 5px #00000024;
+            box-sizing: border-box;
+            margin-top: 25px;
+
+            .inputField {
+                margin-top: 10px;
+            }
+
+            .addRemove {
+                position: relative;
                 display: flex;
-                flex-direction: column;
-                flex: 1;
-                margin-left: 25px;
+                flex-direction: row;
+                left: 50%;
+                margin-top: 15px;
+                transform: translate(-50%);
+                width: 80%;
 
-                .uploadRecording {
-                    background-color: #F8F8F8;
+                button {
+                    flex: 1;
+                    background-color: #A5C644;
+                    border: 0;
                     border-radius: 25px;
+                    height: 50px;
                     box-shadow: 0px 2px 5px #00000024;
-                    box-sizing: border-box;
-
-                    .dropZone {
-                        position: relative;
-                        width: 100%;
-                        border: dashed 2px #00000024;
-                        border-radius: 25px;
-
-                        i {
-                            position: relative;
-                            margin-top: 35px;
-                            left: 50%;
-                            transform: translate(-50%);
-                        }
-
-                        input {
-                            position: absolute;
-                            top: 0;
-                            left: 0;
-                            width: 100%;
-                            height: 100%;
-                            opacity: 0;
-                            z-index: 2;
-                            border-radius: 25px;
-                        }
-
-                        h3 {
-                            text-align: center;
-                        }
-
-                        .standardButton{
-                            margin-top: 0;
-                            margin-bottom: 25px;
-                        }
-                    }
-
-                    .fileOver {
-                        border: dashed 2px #A5C644;
-                        border-radius: 25px;
-                    }
+                    font-size: 0.9em;
+                    cursor: pointer;
+                    margin-left: 5px;
                 }
-    
-                .admin {
-                    background-color: #F8F8F8;
-                    border-radius: 25px;
-                    box-shadow: 0px 2px 5px #00000024;
-                    box-sizing: border-box;
-                    margin-top: 25px;
 
-                    .inputField {
-                        margin-top: 10px;
-                    }
+                button:hover {
+                    background-color: #9ACD3A;
+                }
 
-                    .addRemove {
-                        position: relative;
-                        display: flex;
-                        flex-direction: row;
-                        left: 50%;
-                        margin-top: 15px;
-                        transform: translate(-50%);
-                        width: 80%;
+                #remove {
+                    background-color: #FD594D;
+                    margin-right: 5px;
+                    margin-left: 0;
+                }
 
-                        button {
-                            flex: 1;
-                            background-color: #A5C644;
-                            border: 0;
-                            border-radius: 25px;
-                            height: 50px;
-                            box-shadow: 0px 2px 5px #00000024;
-                            font-size: 1em;
-                            cursor: pointer;
-                            margin-left: 5px;
-                        }
-
-                        button:hover {
-                            background-color: #9ACD3A;
-                        }
-
-                        #remove {
-                            background-color: #FD594D;
-                            margin-right: 5px;
-                            margin-left: 0;
-                        }
-
-                        #remove:hover {
-                            background-color: #FF675C;
-                        }
-                    }
+                #remove:hover {
+                    background-color: #FF675C;
                 }
             }
         }
@@ -211,25 +183,28 @@
     margin-top: 0;
 }
 
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 800px) {
     .pageContainer {
         .center {
             min-width: 75%;
 
             .mainContent {
-                display: block;
+                flex-direction: column;
         
                 .recordings {
                     position: relative;
                     left: 50%;
                     transform: translate(-50%);
+                    margin-bottom: 50px;
                 }
         
                 .sideColumn {
                     position: relative;
                     left: 50%;
+                    top: 0;
                     transform: translate(-50%);
-                    margin-left: 0;
+                    margin: 0 0 25px 0;
+                    order: -1;
                 }
             }
         }
