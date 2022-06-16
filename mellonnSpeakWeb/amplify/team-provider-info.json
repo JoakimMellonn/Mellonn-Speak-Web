@@ -27,7 +27,7 @@
         },
         "transcriptionDoneFunction": {
           "deploymentBucketName": "amplify-mellonnspeakeu-prod-94145-deployment",
-          "s3Key": "amplify-builds/transcriptionDoneFunction-385642314b5669516f51-build.zip"
+          "s3Key": "amplify-builds/transcriptionDoneFunction-354f514f77786e386374-build.zip"
         },
         "getPromotion": {
           "deploymentBucketName": "amplify-mellonnspeakeu-prod-94145-deployment",
@@ -47,7 +47,29 @@
         },
         "giveFeedback": {
           "deploymentBucketName": "amplify-mellonnspeakeu-prod-94145-deployment",
-          "s3Key": "amplify-builds/giveFeedback-397a6b446e4f6b766448-build.zip"
+          "s3Key": "amplify-builds/giveFeedback-6a4e4c48347946485979-build.zip"
+        },
+        "stripeCustomer": {
+          "deploymentBucketName": "amplify-mellonnspeakeu-prod-94145-deployment",
+          "s3Key": "amplify-builds/stripeCustomer-6c2b696330416f794e55-build.zip"
+        },
+        "stripePaymentIntent": {
+          "deploymentBucketName": "amplify-mellonnspeakeu-prod-94145-deployment",
+          "s3Key": "amplify-builds/stripePaymentIntent-643948542f5a644f4970-build.zip"
+        },
+        "stripeSetupIntent": {
+          "deploymentBucketName": "amplify-mellonnspeakeu-prod-94145-deployment",
+          "s3Key": "amplify-builds/stripeSetupIntent-536761764b777a667a76-build.zip"
+        },
+        "stripeGetCards": {
+          "stripeKey": "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",
+          "deploymentBucketName": "amplify-mellonnspeakeu-prod-94145-deployment",
+          "s3Key": "amplify-builds/stripeGetCards-6333723769715a34366e-build.zip"
+        },
+        "stripeRemoveCard": {
+          "stripeKey": "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",
+          "deploymentBucketName": "amplify-mellonnspeakeu-prod-94145-deployment",
+          "s3Key": "amplify-builds/stripeRemoveCard-5875754139476e65456d-build.zip"
         }
       }
     }
