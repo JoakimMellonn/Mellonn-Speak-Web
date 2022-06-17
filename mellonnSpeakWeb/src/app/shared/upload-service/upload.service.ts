@@ -49,7 +49,8 @@ export class UploadService {
       body: {
         "customerId": customerId,
         "amount": amount,
-        "currency": currency
+        "currency": currency,
+        "email": this.authService.email,
       }
     }
 
