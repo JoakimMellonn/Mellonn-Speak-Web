@@ -1,4 +1,4 @@
-import { Component, Inject, Input, LOCALE_ID, OnInit } from '@angular/core';
+import { Component, Inject, Input, LOCALE_ID, OnDestroy, OnInit } from '@angular/core';
 import { loadStripe, Stripe, StripeCardElement } from '@stripe/stripe-js';
 import { AuthService } from 'src/app/shared/auth-service/auth.service';
 import { LanguageService } from 'src/app/shared/language-service/language.service';
@@ -11,7 +11,7 @@ import { environment } from 'src/environments/environment';
   templateUrl: './upload-page.component.html',
   styleUrls: ['./upload-page.component.scss']
 })
-export class UploadPageComponent implements OnInit {
+export class UploadPageComponent implements OnInit, OnDestroy {
   @Input() file: File;
 
   player = new Audio();
@@ -86,6 +86,10 @@ export class UploadPageComponent implements OnInit {
     this.getCards();
   }
 
+  ngOnDestroy(): void {
+      
+  }
+
   async getCards() {
     this.cardsLoading = true;
     this.customerId = await this.uploadService.getCustomerId();
@@ -101,8 +105,8 @@ export class UploadPageComponent implements OnInit {
       } else {
         this.defaultMethod = this.paymentMethods[0];
       }
+      this.cardSelect = this.defaultMethod.id;
     }
-    this.cardSelect = this.defaultMethod.id;
     this.cardsLoading = false;
   }
 
@@ -152,9 +156,9 @@ export class UploadPageComponent implements OnInit {
     form!.addEventListener('submit', async (event) => {
       if (this.paymentProcessing) return;
       this.paymentProcessing = true;
-      let paymentMethod = this.defaultMethod.id;
+      let paymentMethod;
 
-      if (this.otherCard) {
+      if (this.otherCard || this.paymentMethods.length == 0) {
         paymentMethod = {card: this.cardElement};
         if (this.rememberCard) {
           const setupIntent = await this.uploadService.createSetupIntent(this.customerId);
@@ -164,6 +168,8 @@ export class UploadPageComponent implements OnInit {
         }
       } else if (this.otherMethod) {
         paymentMethod = this.cardSelect;
+      } else {
+        paymentMethod = this.defaultMethod.id;
       }
 
       const result = await this.stripe!.confirmCardPayment(this.clientSecret, {

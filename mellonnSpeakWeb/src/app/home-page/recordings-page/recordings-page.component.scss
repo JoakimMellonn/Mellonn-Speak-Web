@@ -113,7 +113,7 @@
                     text-align: center;
                 }
 
-                .standardButton{
+                .standardButton {
                     margin-top: 0;
                     margin-bottom: 25px;
                 }
@@ -123,6 +123,11 @@
                 border: dashed 2px #A5C644;
                 border-radius: 25px;
             }
+        }
+
+        .uploadCancel {
+            background-color: transparent;
+            max-width: 300px;
         }
 
         .admin {

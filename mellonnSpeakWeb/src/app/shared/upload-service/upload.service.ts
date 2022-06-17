@@ -40,6 +40,7 @@ export class UploadService {
       }
     };
     const response = await API.put('stripe', '/customer', params);
+    console.log('Customer: ' + this.authService.email + ' ' + response);
     return response;
   }
 
