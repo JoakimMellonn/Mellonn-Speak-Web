@@ -21,7 +21,11 @@ export class RecordingsPageComponent implements OnInit, OnDestroy {
   uploadActive: boolean = false;
   uploadFile: File;
 
-  constructor(public authService: AuthService, private router: Router, private upload: UploadService) { }
+  constructor(
+    public authService: AuthService,
+    public uploadService: UploadService,
+    private router: Router
+  ) { }
 
   async ngOnInit() {
     this.offset = (new Date().getTimezoneOffset());
@@ -30,7 +34,7 @@ export class RecordingsPageComponent implements OnInit, OnDestroy {
       this.getRecordings();
     });
 
-    this.upload.uploadDoneCalled.subscribe((res) => {
+    this.uploadService.uploadDoneCalled.subscribe((res) => {
       if (res == true) this.uploadActive = false;
     });
     this.loading = false;

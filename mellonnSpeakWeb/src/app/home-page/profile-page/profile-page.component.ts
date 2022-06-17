@@ -76,6 +76,10 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     this.loading = true;
   }
 
+  goToLink(url: string){
+    window.open(url, "_blank");
+  }
+
   toggleRedeemPromo() {
     if (this.redeemPromoActive) {
       this.deactivateRedeemPromo();

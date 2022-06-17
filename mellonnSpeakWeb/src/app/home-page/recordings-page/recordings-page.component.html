@@ -37,6 +37,7 @@
                         <app-upload-page [file]="uploadFile" *ngIf="uploadActive && (uploadFile != null || uploadFile != undefined)"></app-upload-page>
                     </div>
                 </div>
+                <button class="standardButton uploadCancel" *ngIf="uploadActive && (uploadFile != null || uploadFile != undefined)" (click)="uploadService.returnToRecordings()">Cancel upload</button>
                 <div class="admin" *ngIf="authService.superDev && !uploadActive">
                     <div class="titleBox">
                         <h2>
