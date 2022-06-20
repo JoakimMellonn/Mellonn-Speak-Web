@@ -243,6 +243,28 @@
       "providerPlugin": "awscloudformation",
       "service": "Lambda",
       "dependsOn": []
+    },
+    "recordingsExpiryChecker": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": [
+        {
+          "category": "api",
+          "resourceName": "mellonnspeakeu",
+          "attributes": [
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput"
+          ]
+        },
+        {
+          "category": "storage",
+          "resourceName": "mellonnSpeakS3EU",
+          "attributes": [
+            "BucketName"
+          ]
+        }
+      ]
     }
   },
   "analytics": {
