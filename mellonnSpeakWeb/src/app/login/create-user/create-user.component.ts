@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Auth } from 'aws-amplify';
 import { AuthService } from 'src/app/shared/auth-service/auth.service';
-import { StorageService } from 'src/app/shared/storage-service/storage.service';
 
 @Component({
   selector: 'app-create-user',
@@ -25,14 +24,14 @@ export class CreateUserComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private authService: AuthService,
-    private storageService: StorageService
   ) { }
 
   ngOnInit(): void {
     this.formP1 = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.minLength(6), Validators.required]],
-      passwordConfirm: ['', []]
+      passwordConfirm: ['', []],
+      termsAccept: [false, [Validators.requiredTrue]],
     });
 
     this.formP2 = this.fb.group({
