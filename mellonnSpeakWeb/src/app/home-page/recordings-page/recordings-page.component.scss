@@ -1,6 +1,6 @@
 .center {
     min-width: 700px;
-    max-width: 1200px;
+    max-width: 1000px;
 }
 
 .mainContent {
@@ -15,7 +15,7 @@
     }
 
     .recordings {
-        flex: 1.5;
+        flex: 1.4;
         background-color: #F8F8F8;
         border-radius: 25px;
         box-shadow: 0px 2px 5px #00000024;
@@ -78,12 +78,14 @@
         flex-direction: column;
         flex: 1;
         margin-left: 25px;
+        margin-bottom: 50px;
 
         .uploadRecording {
             background-color: #F8F8F8;
             border-radius: 25px;
             box-shadow: 0px 2px 5px #00000024;
             box-sizing: border-box;
+            margin-bottom: 25px;
 
             .dropZone {
                 position: relative;
@@ -131,51 +133,14 @@
         }
 
         .admin {
+            position: relative;
+            left: 50%;
+            transform: translate(-50%);
             background-color: #F8F8F8;
             border-radius: 25px;
             box-shadow: 0px 2px 5px #00000024;
             box-sizing: border-box;
-            margin-top: 25px;
-
-            .inputField {
-                margin-top: 10px;
-            }
-
-            .addRemove {
-                position: relative;
-                display: flex;
-                flex-direction: row;
-                left: 50%;
-                margin-top: 15px;
-                transform: translate(-50%);
-                width: 80%;
-
-                button {
-                    flex: 1;
-                    background-color: #A5C644;
-                    border: 0;
-                    border-radius: 25px;
-                    height: 50px;
-                    box-shadow: 0px 2px 5px #00000024;
-                    font-size: 0.9em;
-                    cursor: pointer;
-                    margin-left: 5px;
-                }
-
-                button:hover {
-                    background-color: #9ACD3A;
-                }
-
-                #remove {
-                    background-color: #FD594D;
-                    margin-right: 5px;
-                    margin-left: 0;
-                }
-
-                #remove:hover {
-                    background-color: #FF675C;
-                }
-            }
+            max-width: 600px;
         }
     }
 }

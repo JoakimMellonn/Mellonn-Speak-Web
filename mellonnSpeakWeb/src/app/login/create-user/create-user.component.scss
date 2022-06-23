@@ -4,8 +4,24 @@
     position: relative;
 
     .inputField:focus {
-        outline: none;
         background-color: #cacaca;
+    }
+
+    .termsBlock {
+        display: block;
+        text-align: center;
+        margin-top: 15px;
+
+        input {
+            position: relative;
+            top: 1px;
+            margin-right: 10px;
+        }
+
+        a {
+            cursor: pointer;
+            text-decoration: underline;
+        }
     }
 
     .errorMessage {
@@ -31,6 +47,37 @@
         text-decoration: underline;
         text-align: center;
         cursor: pointer;
+    }
+
+    .promo {
+        margin-top: 25px;
+
+        .title {
+            width: 80%;
+            margin: auto;
+        }
+
+        input {
+            margin-top: 10px;
+        }
+
+        .standardButton {
+            width: 80%;
+            margin-top: 20px;
+        }
+    }
+
+    .discount {
+        position: relative;
+        left: 50%;
+        transform: translate(-50%);
+        margin-top: 25px;
+        width: 80%;
+        text-align: center;
+    
+        .standardButton {
+            margin-top: 20px;
+        }
     }
 
     .buttonRow {

@@ -1,18 +1,20 @@
 
 .pageContainer {
     position: relative;
+    width: 100%;
 
     .loginCenter {
         position: absolute;
         top: 110px;
         left: 50%;
         transform: translate(-50%);
+        max-width: 500px;
+        width: 80%;
 
         .loginBox {
             background-color: #f8f8f8;
             box-shadow: 0px 2px 5px #00000024;
             border-radius: 25px;
-            width: 500px;
         }
 
         .createAccount {

@@ -25,6 +25,9 @@ import { HttpClientModule } from '@angular/common/http';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { UploadPageComponent } from './home-page/recordings-page/upload-page/upload-page.component';
 import { DndDirective } from './home-page/recordings-page/drag-drop/dnd.directive';
+import { AdminPageComponent } from './home-page/recordings-page/admin-page/admin-page.component';
+import { SearchPipe } from './home-page/recordings-page/admin-page/search-pipe/search.pipe';
+import { SearchPromoPipe } from './home-page/recordings-page/admin-page/searchPromo-pipe/search-promo.pipe';
 
 Amplify.configure(awsconfig);
 
@@ -45,6 +48,9 @@ Amplify.configure(awsconfig);
     VersionHistoryComponent,
     UploadPageComponent,
     DndDirective,
+    AdminPageComponent,
+    SearchPipe,
+    SearchPromoPipe,
   ],
   imports: [
     BrowserModule,

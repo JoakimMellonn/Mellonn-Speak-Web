@@ -1,7 +1,7 @@
 <div class="pageContainer">
     <div class="center">
         <div class="mainContent" *ngIf="!loading">
-            <div class="recordings" *ngIf="!uploadActive">
+            <div class="recordings" *ngIf="currentMode == 'default'">
                 <div class="titleBox">
                     <h1>
                         Here's your Recordings
@@ -18,15 +18,15 @@
                 </div>
             </div>
             <div class="sideColumn">
-                <div class="uploadRecording">
+                <div class="uploadRecording" *ngIf="currentMode != 'admin'">
                     <div class="titleBox">
                         <h1>
                             Upload a Recording
                         </h1>
                     </div>
                     <div class="contentBox">
-                        <div class="dropZone" appDnd (fileDropped)="onFileDropped($event)" *ngIf="!uploadActive">
-                            <input type="file" #fileDropRef id="fileDropRef" accept=".waw,.flac,.m4p,.m4a,.m4b,.mmf,.aac,.mp3,.mp4,.MP4">
+                        <div class="dropZone" appDnd (fileDropped)="onFileDropped($event)" *ngIf="currentMode == 'default'">
+                            <input type="file" #fileDropRef id="fileDropRef" (change)="onUploadChange($event)" accept=".waw,.flac,.m4p,.m4a,.m4b,.mmf,.aac,.mp3,.mp4,.MP4">
                             <i class="fa-solid fa-upload fa-2xl"></i>
                             <h3>Drop an audio file here</h3>
                             <h3>or</h3>
@@ -34,25 +34,17 @@
                                 Choose a file
                             </button>
                         </div>
-                        <app-upload-page [file]="uploadFile" *ngIf="uploadActive && (uploadFile != null || uploadFile != undefined)"></app-upload-page>
+                        <app-upload-page [file]="uploadFile" *ngIf="currentMode == 'upload' && (uploadFile != null || uploadFile != undefined)"></app-upload-page>
                     </div>
                 </div>
-                <button class="standardButton uploadCancel" *ngIf="uploadActive && (uploadFile != null || uploadFile != undefined)" (click)="uploadService.returnToRecordings()">Cancel upload</button>
-                <div class="admin" *ngIf="authService.superDev && !uploadActive">
+                <button class="standardButton uploadCancel" *ngIf="currentMode == 'upload' && (uploadFile != null || uploadFile != undefined)" (click)="uploadService.returnToRecordings()">Cancel upload</button>
+                <div class="admin" *ngIf="authService.superDev && currentMode == 'default' || authService.groupAdmin && currentMode == 'default' || currentMode == 'admin'">
                     <div class="titleBox">
                         <h2>
                             Administrate group
                         </h2>
                     </div>
-                    <div class="contentBox">
-                        <p>Add/remove benefit user</p>
-                        <input type="text" class="inputField" placeholder="Email">
-                        <div class="addRemove">
-                            <button id="remove">Remove</button>
-                            <button>Add</button>
-                        </div>
-                        <button class="standardButton">View all users in group</button>
-                    </div>
+                    <app-admin-page></app-admin-page>
                 </div>
             </div>
         </div>

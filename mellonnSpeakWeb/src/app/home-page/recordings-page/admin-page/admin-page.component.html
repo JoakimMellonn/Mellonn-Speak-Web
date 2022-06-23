@@ -1,0 +1,64 @@
+<div class="contentBox">
+    <button class="standardButton" (click)="changeMode('addPromo')" style="margin: 0 0 25px 0;" *ngIf="authService.superDev && currentMode == 'groupAdmin'">Add/remove promotion</button>
+    <div *ngIf="authService.superDev && currentMode == 'addPromo'">
+        <p>Add/remove promo code</p>
+        <select name="promoType" id="promoType" [(ngModel)]="promoType">
+            <option value="benefit">Benefit</option>
+            <option value="periods">Periods</option>
+            <option value="referrer">Referrer</option>
+            <option value="referGroup">Refer Group</option>
+            <option value="dev">Dev</option>
+        </select>
+        <input type="text" class="inputField" placeholder="Code" [(ngModel)]="promoCode">
+        <input type="number" class="inputField" placeholder="Uses (0 for infinite)" [(ngModel)]="promoUses">
+        <input type="number" class="inputField" placeholder="Free periods" [(ngModel)]="promoPeriods">
+        <input type="text" class="inputField" placeholder="Referrer" [(ngModel)]="promoReferrer" *ngIf="promoType == 'referrer' || promoType == 'referGroup'">
+        <input type="text" class="inputField" placeholder="Refer Group" [(ngModel)]="promoReferGroup" *ngIf="promoType == 'referGroup'">
+        <p class="successMessage" *ngIf="promoSuccess != ''">{{promoSuccess}}</p>
+        <p class="errorMessage" *ngIf="promoError != ''">{{promoError}}</p>
+        <div class="addRemove" *ngIf="!isLoading">
+            <button id="remove" (click)="removePromoCode()">Remove</button>
+            <button (click)="addPromoCode()">Add</button>
+        </div>
+        <button class="standardButton" (click)="changeMode('promoList')">View all promo codes</button>
+        <button class="standardButton" (click)="changeMode(defaultMode)" *ngIf="defaultMode != 'addPromo'">Cancel</button>
+    </div>
+    <div *ngIf="authService.groupAdmin && currentMode == 'groupAdmin'">
+        <p>Add/remove user to {{authService.referGroup}}</p>
+        <input type="text" class="inputField" placeholder="Email" [(ngModel)]="groupEmail">
+        <p class="successMessage" *ngIf="groupSuccess != ''">{{groupSuccess}}</p>
+        <p class="errorMessage" *ngIf="groupError != ''">{{groupError}}</p>
+        <div class="addRemove" *ngIf="!isLoading">
+            <button id="remove" (click)="removeUserFromGroup(groupEmail)">Remove</button>
+            <button (click)="addUserToGroup()">Add</button>
+        </div>
+        <button class="standardButton" (click)="changeMode('groupList')">View all users in group</button>
+    </div>
+    <div *ngIf="currentMode == 'groupList'">
+        <button class="standardButton" style="margin: 0 0 15px 0;" (click)="changeMode(defaultMode)">Close</button>
+        <input type="text" class="inputField" style="margin-bottom: 15px;" placeholder="Search" [(ngModel)]="groupSearch">
+        <div class="groupElement" *ngFor="let email of groupList | search:groupSearch">
+            {{email}}
+            <i class="fa-solid fa-trash" (click)="removeUserClick(email)"></i>
+        </div>
+    </div>
+    <div *ngIf="currentMode == 'promoList'">
+        <button class="standardButton" style="margin: 0 0 15px 0;" (click)="changeMode(defaultMode)">Close</button>
+        <input type="text" class="inputField" style="margin-bottom: 15px;" placeholder="Search" [(ngModel)]="promoSearch">
+        <div class="groupElement" *ngFor="let promo of promoList | searchPromo:promoSearch">
+            <i class="fa-solid fa-trash" (click)="removePromoClick(promo.code)"></i>
+            <a>
+                Code: {{promo.code}}<br>
+                Type: {{promo.type}}<br>
+                Periods: {{promo.freePeriods}}
+            </a>
+            <a *ngIf="promo.type == 'referrer'"><br>Referrer: {{promo.referrer}}</a><br>
+            <a *ngIf="promo.type == 'referGroup'">
+                <br>
+                Referrer: {{promo.referrer}}<br>
+                Refer Group: {{promo.referGroup}}
+            </a>
+        </div>
+    </div>
+    <mat-spinner [color]="'accent'" [diameter]="50" [strokeWidth]="6" *ngIf="isLoading"></mat-spinner>
+</div>
