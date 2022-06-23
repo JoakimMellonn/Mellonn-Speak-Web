@@ -72,6 +72,21 @@ export class RecordingsPageComponent implements OnInit, OnDestroy {
     }
   }
 
+  onUploadChange(event: Event) {
+    const target = event.target as HTMLInputElement;
+    const files = target.files as FileList;
+    
+    if (files.length == 1) {
+      if (files[0].name.match(/\.(wav|flac|m4p|m4a|m4b|mmf|aac|mp3|mp4|MP4)$/i)) {
+        this.onFileDropped(files[0]);
+      } else {
+        alert('This file type is not supported, a list of supported file types can be found here: www.mellonn.com/speak-help');
+      }
+    } else if (files.length > 1) {
+      alert('You can only upload one file at the time...');
+    }
+  }
+
   onFileDropped(file: File) {
     this.uploadFile = file;
     this.currentMode = 'upload';
