@@ -49,6 +49,37 @@
         cursor: pointer;
     }
 
+    .promo {
+        margin-top: 25px;
+
+        .title {
+            width: 80%;
+            margin: auto;
+        }
+
+        input {
+            margin-top: 10px;
+        }
+
+        .standardButton {
+            width: 80%;
+            margin-top: 20px;
+        }
+    }
+
+    .discount {
+        position: relative;
+        left: 50%;
+        transform: translate(-50%);
+        margin-top: 25px;
+        width: 80%;
+        text-align: center;
+    
+        .standardButton {
+            margin-top: 20px;
+        }
+    }
+
     .buttonRow {
         width: 80%;
         margin-top: 25px;

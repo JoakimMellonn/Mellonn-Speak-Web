@@ -17,9 +17,9 @@ import { Settings } from 'src/models';
   styleUrls: ['./profile-page.component.scss']
 })
 export class ProfilePageComponent implements OnInit, OnDestroy {
-  profileType: string;
   loading: boolean = true;
   redeemPromoActive: boolean = false;
+  promoCode: string = '';
   promoRedeemed: boolean = false;
   promoError: string = '';
   discountMessage: string = '';
@@ -44,8 +44,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   cardSelect: string;
   monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-  promoCode: string = '';
-
   constructor(
     public authService: AuthService,
     public languageService: LanguageService,
@@ -58,18 +56,21 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   ) { }
 
   async ngOnInit() {
-    if (this.authService.group == 'dev') {
-      this.profileType = 'Developer account';
-    } else if (this.authService.group == 'benefit') {
-      this.profileType = 'Benefit account';
-    } else {
-      this.profileType = 'Standard account';
-    }
     this.settings = await this.settingsService.getSettings();
     this.getPaymentMethods();
     this.languageSelect = this.settings.languageCode;
     this.jumpSelect = this.settings.jumpSeconds;
     this.loading = false;
+  }
+
+  get userGroup() {
+    if (this.authService.group == 'dev') {
+      return 'Developer account';
+    } else if (this.authService.group == 'benefit') {
+      return 'Benefit account';
+    } else {
+      return 'Standard account';
+    }
   }
 
   ngOnDestroy(): void {

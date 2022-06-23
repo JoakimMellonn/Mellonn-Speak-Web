@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Auth } from 'aws-amplify';
 import { AuthService } from 'src/app/shared/auth-service/auth.service';
+import { Promotion, PromotionService } from 'src/app/shared/promotion-service/promotion.service';
 
 @Component({
   selector: 'app-create-user',
@@ -12,10 +13,16 @@ import { AuthService } from 'src/app/shared/auth-service/auth.service';
 export class CreateUserComponent implements OnInit {
   formP1: FormGroup;
   formP2: FormGroup;
+  promoForm: FormGroup;
   loading: boolean = false;
   verificationSent: boolean = false;
   em: string;
   pw: string;
+
+  promoRedeemed: boolean = false;
+  promoError: string = '';
+  discountMessage: string = '';
+  promotion: Promotion;
 
   buttonText: string = 'Send verification code';
   serverMessage: string;
@@ -24,6 +31,7 @@ export class CreateUserComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private authService: AuthService,
+    private promotionService: PromotionService
   ) { }
 
   ngOnInit(): void {
@@ -37,8 +45,12 @@ export class CreateUserComponent implements OnInit {
     this.formP2 = this.fb.group({
       name: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
-      verificationCode: ['', [Validators.required, Validators.minLength(6)]]
+      verificationCode: ['', [Validators.required, Validators.minLength(6)]],
     });
+
+    this.promoForm = this.fb.group({
+      promoCode: [''],
+    })
   }
 
   get email() {
@@ -73,9 +85,30 @@ export class CreateUserComponent implements OnInit {
     }
   }
 
+  get promoCode() {
+    return this.promoForm.get('promoCode');
+  }
+
+  async redeemPromotion() {
+    if (this.promoCode!.value.split('').length != 0) {
+      this.promotion = await this.promotionService.getPromotion(this.promoCode!.value, this.email!.value, 0, false);
+      if (this.promotion.type == 'noExist') {
+        this.promoError = "This code doesn't exist, make sure you've written it correctly.";
+      } else if (this.promotion.type == 'used') {
+        this.promoError = "You have already used this code.";
+      } else if (this.promotion.type == 'error' || this.promotion.type == undefined) {
+        this.promoError = "Something went wrong while redeeming the code, please try again later."
+      } else {
+        this.discountMessage = this.discountString(this.promotion);
+        this.promoRedeemed = true;
+      }
+    } else {
+      this.promoError = 'You need to enter a promo code.';
+    }
+  }
+
   async onSubmit() {
     this.loading = true;
-    console.log('Hello');
 
     try {
       if (!this.verificationSent) {
@@ -91,10 +124,11 @@ export class CreateUserComponent implements OnInit {
         res = await Auth.updateUserAttributes(user, {
           'name': this.name!.value,
           'family_name': this.lastName!.value,
-          'custom:group': 'user'
+          'custom:group': 'user',
         });
-        await this.authService.updateFreePeriods(1);
-        this.authService.registerSignIn();
+        const signupPromo = await this.promotionService.getPromotion('signup', this.em, 0);
+        if (this.promoRedeemed) await this.promotionService.applyPromotion(this.promoCode!.value, this.promotion, this.em, signupPromo.freePeriods);
+        await this.authService.registerSignIn();
         this.router.navigateByUrl('/home');
       }
     } catch (err) {
@@ -115,6 +149,18 @@ export class CreateUserComponent implements OnInit {
     } catch (err) {
       console.log('Error while resending mail: ' + err);
       this.serverMessage = String(err).split(': ')[1];
+    }
+  }
+
+  discountString(promotion: Promotion): string {
+    if (promotion.type == 'benefit' && promotion.freePeriods > 0) {
+      return 'Benefit user (-40% on all purchases) and ' + promotion.freePeriods + ' free credit(s)';
+    } else if (promotion.type == 'benefit' && promotion.freePeriods == 0) {
+      return 'Benefit user (-40% on all purchases)';
+    } else if (promotion.type == 'dev') {
+      return 'Developer user (everything is free)';
+    } else {
+      return promotion.freePeriods + ' free credits';
     }
   }
 }

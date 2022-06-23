@@ -4,6 +4,7 @@ import { Recording } from 'src/models';
 import { AuthService } from 'src/app/shared/auth-service/auth.service';
 import { Router } from '@angular/router';
 import { UploadService } from 'src/app/shared/upload-service/upload.service';
+import { PromotionService } from 'src/app/shared/promotion-service/promotion.service';
 
 @Component({
   selector: 'app-recordings-page',
@@ -18,13 +19,15 @@ export class RecordingsPageComponent implements OnInit, OnDestroy {
   subscription: any;
   offset: number;
 
-  uploadActive: boolean = false;
+  currentMode: 'default' | 'upload' | 'admin' = 'default';
+
   uploadFile: File;
 
   constructor(
     public authService: AuthService,
     public uploadService: UploadService,
-    private router: Router
+    private router: Router,
+    private promotionService: PromotionService
   ) { }
 
   async ngOnInit() {
@@ -35,8 +38,12 @@ export class RecordingsPageComponent implements OnInit, OnDestroy {
     });
 
     this.uploadService.uploadDoneCalled.subscribe((res) => {
-      if (res == true) this.uploadActive = false;
+      if (res == true) this.currentMode = 'default';
     });
+    this.promotionService.switchCurrentModeCalled.subscribe((res) => {
+      this.currentMode = res;
+    });
+
     this.loading = false;
   }
 
@@ -67,6 +74,6 @@ export class RecordingsPageComponent implements OnInit, OnDestroy {
 
   onFileDropped(file: File) {
     this.uploadFile = file;
-    this.uploadActive = true;
+    this.currentMode = 'upload';
   }
 }
