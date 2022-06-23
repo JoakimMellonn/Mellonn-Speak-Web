@@ -1,13 +1,13 @@
 .center {
-    max-width: 1200px;
+    max-width: 850px;
 }
 
 .profilePic {
     position: relative;
     left: 50%;
     transform: translate(-50%);
-    width: 200px;
-    height: 200px;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
     background-color: #F8F8F8;
     box-shadow: 0px 2px 5px #00000024;
@@ -16,6 +16,7 @@
 
 h1 {
     text-align: center;
+    font-size: 1.7em;
 }
 
 .contentBox {
@@ -33,18 +34,19 @@ h1 {
         
         .left {
             flex: 1;
+            margin-right: 12.5px;
         }
 
         .right {
             flex: 1;
+            margin-left: 12.5px;
         }
 
         .segment {
             position: relative;
-            width: 75%;
+            margin-bottom: 25px;
             left: 50%;
             transform: translate(-50%);
-            margin-bottom: 25px;
             background-color: #F8F8F8;
             border-radius: 25px;
             box-shadow: 0px 2px 5px #00000024;
@@ -97,7 +99,7 @@ h1 {
 
             .expireText {
                 font-weight: 400;
-                font-size: 0.8em;
+                font-size: 0.75em;
             }
 
             .cardIcon {
@@ -116,10 +118,9 @@ h1 {
 
         .redeemSegment {
             position: relative;
-            width: 75%;
+            margin-bottom: 25px;
             left: 50%;
             transform: translate(-50%);
-            margin-bottom: 25px;
             background-color: #F8F8F8;
             border-radius: 25px;
             box-shadow: 0px 2px 5px #00000024;
@@ -244,32 +245,6 @@ h1 {
     text-align: center;
 }
 
-@media screen and (max-width: 1200px) {
-    .pageContainer {
-        .center {
-            min-width: 90%;
-
-            .content {
-                .left {
-                    margin-right: 12.5px;
-                }
-                
-                .right {
-                    margin-left: 12.5px;
-                }
-
-                .segment {
-                    width: 100%;
-                }
-
-                .redeemSegment {
-                    width: 100%;
-                }
-            }
-        }
-    }
-}
-
 @media screen and (max-width: 800px) {
     .pageContainer {
         .center {
@@ -285,10 +260,6 @@ h1 {
                 
                 .right {
                     margin: 25px 0 0 0;
-                }
-
-                .segment {
-                    width: 100%;
                 }
 
                 .redeemSegment {
