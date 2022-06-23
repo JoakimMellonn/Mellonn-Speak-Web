@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { DataStore, Storage } from 'aws-amplify';
+import { API, DataStore, Storage } from 'aws-amplify';
 import { Recording } from 'src/models';
-import { AuthService } from '../auth-service/auth.service';
+import { Promotion } from '../promotion-service/promotion.service';
+import { Periods } from '../upload-service/upload.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +10,136 @@ import { AuthService } from '../auth-service/auth.service';
 export class StorageService {
 
   constructor() { }
+
+  async getReferrer(referrer: string): Promise<string[]> {
+    const key: string = `data/referrers/${referrer}.json`;
+
+    try {
+      const url = await Storage.get(key);
+
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+        },
+      });
+
+      if (response.status == 404) {
+        return [];
+      }
+      const result = await response.json();
+      return result.emails;
+    } catch (err) {
+      console.log('Error while getting referrer: ' + err);
+      return [];
+    }
+  }
+
+  async getPromos(): Promise<Promotion[]> {
+    let returnList: Promotion[] = [];
+    const key: string = `data/promotions.json`;
+
+    try {
+      const url = await Storage.get(key);
+
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+        },
+      });
+
+      if (response.status == 404) {
+        return [];
+      }
+      const result = await response.json();
+      for (let promo of result.promotions) {
+        returnList.push(new Promotion(
+          promo.code,
+          promo.type,
+          promo.freePeriods,
+          promo.referrer ?? '',
+          promo.referGroup ?? ''
+        ));
+      }
+      return returnList;
+    } catch (err) {
+      console.log('Error while getting referrer: ' + err);
+      return [];
+    }
+  }
+
+  async createReferrer(referrer: string) {
+    const key: string = `data/referrers/${referrer}.json`;
+    const defaultReferrer = {
+      referrer: referrer,
+      purchases: 0,
+      periods: 0,
+      emails: []
+    }
+
+    try {
+      const url = await Storage.get(key);
+
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+        },
+      });
+
+      if (response.status == 404) {
+        await Storage.put(key, defaultReferrer);
+        return true;
+      }
+      return false;
+    } catch (err) {
+      console.log('Error while creating referrer: ' + err);
+      return false;
+    }
+  }
+
+  async removeReferrer(referrer: string) {
+    const key: string = `data/referrers/${referrer}.json`;
+    
+    try {
+      await Storage.remove(key);
+      return true;
+    } catch (err) {
+      console.log('Error while removing referrer: ' + err);
+      return false;
+    }
+  }
+
+  async updateReferrerPurchases(referrer: string, periods: Periods) {
+    const key: string = `data/referrers/${referrer}.json`;
+
+    try {
+      const url = await Storage.get(key);
+
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+        },
+      });
+
+      if (response.status == 404) {
+        return false;
+      }
+      const result = await response.json();
+      let updatedFile = result;
+      updatedFile.purchases = result.purchases + 1;
+      updatedFile.periods = result.periods + periods.total;
+
+      await Storage.put(key, updatedFile);
+
+      return true;
+    } catch (err) {
+      console.log('Error while updating referrer: ' + err);
+      return false;
+    }
+  }
 
   async removeUserFiles() {
     //Removing all recordings associated with the user

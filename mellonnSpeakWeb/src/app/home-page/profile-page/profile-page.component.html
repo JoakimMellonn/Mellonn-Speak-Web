@@ -13,7 +13,12 @@
                             <p>{{authService.email}}</p>
                             <hr>
                             <i class="fa-solid fa-user fa-lg"></i>
-                            <p>{{profileType}}</p>
+                            <p>{{userGroup}}</p>
+                            <div *ngIf="authService.referGroup != null">
+                                <hr>
+                                <i class="fa-solid fa-user-group fa-lg"></i>
+                                <p>{{authService.referGroup}}</p>
+                            </div>
                             <hr>
                             <i class="fa-solid fa-coins fa-lg"></i>
                             <p>Free credits: {{authService.freePeriods}}</p>

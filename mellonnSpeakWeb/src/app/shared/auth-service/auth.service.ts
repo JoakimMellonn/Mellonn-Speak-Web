@@ -13,6 +13,9 @@ export class AuthService {
   lastName: string;
   group: string;
   superDev: boolean = false;
+  referrer: string;
+  referGroup: string;
+  groupAdmin: boolean = false;
 
   freePeriods: number = 0;
 
@@ -76,17 +79,16 @@ export class AuthService {
     this.firstName = attributes.name;
     this.lastName = attributes.family_name;
     this.group = attributes['custom:group'];
+    this.referrer = attributes['custom:referrer'];
+    this.referGroup = attributes['custom:referGroup'];
     if (this.group != 'dev') {
       const isBenefit = await this.checkBenefit(this.email);
       if (this.group == 'benefit' && !isBenefit || this.group == 'user' && isBenefit) {
         await this.changeBenefit(isBenefit);
       }
     }
-    if (attributes['custom:superdev'] == 'true') {
-      this.superDev = true;
-    } else {
-      this.superDev = false;
-    }
+    if (attributes['custom:groupAdmin'] == 'true') this.groupAdmin = true;
+    if (attributes['custom:superdev'] == 'true') this.superDev = true;
 
     this.freePeriods = await this.getFreePeriods();
   }

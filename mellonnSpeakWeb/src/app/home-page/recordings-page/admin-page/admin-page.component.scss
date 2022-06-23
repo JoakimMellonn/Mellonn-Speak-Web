@@ -1,0 +1,101 @@
+.contentBox {
+    padding: 25px;
+
+    p {
+        text-align: center;
+    }
+    
+    .inputField {
+        margin-top: 10px;
+    }
+
+    .addRemove {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        left: 50%;
+        margin-top: 15px;
+        transform: translate(-50%);
+        width: 80%;
+
+        button {
+            flex: 1;
+            background-color: #A5C644;
+            border: 0;
+            border-radius: 25px;
+            height: 50px;
+            box-shadow: 0px 2px 5px #00000024;
+            font-size: 0.9em;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+
+        button:hover {
+            background-color: #9ACD3A;
+        }
+
+        #remove {
+            background-color: #FD594D;
+            margin-right: 5px;
+            margin-left: 0;
+        }
+
+        #remove:hover {
+            background-color: #FF675C;
+        }
+    }
+
+    select {
+        position: relative;
+        left: 50%;
+        transform: translate(-50%);
+        margin-top: 15px;
+    }
+
+    .groupElement {
+        background-color: #F8F8F8;
+        border-radius: 25px;
+        box-shadow: 0px 2px 5px #00000024;
+        width: 100%;
+        margin-top: 15px;
+        padding: 15px 25px 15px 25px;
+
+        i {
+            float: right;
+            cursor: pointer;
+        }
+
+        .promoIcon {
+            position: relative;
+            top: 50%;
+        }
+    }
+
+    mat-spinner {
+        position: relative;
+        left: 50%;
+        transform: translate(-50%);
+        margin-top: 15px;
+    }
+}
+
+.errorMessage {
+    position: relative;
+    display: block;
+    margin-top: 10px;
+    color: #FD594D;
+    text-align: center;
+}
+
+.successMessage {
+    position: relative;
+    display: block;
+    margin-top: 10px;
+    color: #A5C644;
+    text-align: center;
+}
+
+.standardButton {
+    margin: 25px 0 5px 0;
+    width: 80%;
+}
