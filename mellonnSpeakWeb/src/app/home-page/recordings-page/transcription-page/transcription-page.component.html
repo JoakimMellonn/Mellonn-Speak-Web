@@ -10,7 +10,8 @@
                         {{ recording.name }}
                     </h1>
                     <div class="dropdown">
-                        <i class="fa-solid fa-ellipsis-vertical fa-2xl icon"></i>
+                        <input class="checkbox" type="checkbox" id="menu">
+                        <label for="menu"><i class="fa-solid fa-ellipsis-vertical fa-2xl icon"></i></label>
                         <div class="dropdown-content">
                             <a (click)="labelEditOpen = true">Edit labels</a>
                             <a (click)="downloadDOCX()">Download as DOCX</a>
