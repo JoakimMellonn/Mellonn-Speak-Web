@@ -1,5 +1,5 @@
 <div class="content" *ngIf="!isUploading">
-    <div class="left" *ngIf="!paymentActive">
+    <div class="left" *ngIf="!paymentActive && audioLoaded">
         <div class="segment">
             <h4>Please give your recording a title and description</h4>
             <input class="inputField" type="text" placeholder="Title" maxlength="16" [(ngModel)]="title" (keydown.enter)="continueClick()">
@@ -28,9 +28,9 @@
     </div>
     <div class="left" *ngIf="paymentActive">
         <div class="segment">
-            <mat-spinner class="paymentSpinner" [color]="'accent'" [diameter]="50" [strokeWidth]="5" *ngIf="paymentProcessing || cardsLoading"></mat-spinner>
-            <form id="paymentForm" *ngIf="!cardsLoading">
-                <p class="titleP">Current payment method:</p><br>
+            <form id="paymentForm">
+
+                <!--<p class="titleP">Current payment method:</p><br>
                 <div class="cardBox" *ngIf="!cardsLoading && !otherMethod && paymentMethods.length != 0">
                     <p class="cardInfo"><i class="{{getCardIcon(defaultMethod.card.brand)}} cardIcon" id="defaultCardIcon"></i>•••• {{defaultMethod.card.last4}} </p>
                     <p class="expireText">Expires {{monthNames[defaultMethod.card.exp_month - 1]}} {{defaultMethod.card.exp_year}}</p>
@@ -44,14 +44,18 @@
                         </div>
                     </div>
                 </div>
-                <p class="otherMethodText" *ngIf="otherMethod && !otherCard" (click)="setupCardElement()">Use another card?</p>
+                <p class="otherMethodText" *ngIf="otherMethod && !otherCard" (click)="setupCardElement()">Use another card?</p>-->
+
                 <div id="cardElement"></div>
-                <div *ngIf="otherCard || paymentMethods.length == 0" style="margin-top: 15px;">
+                <mat-spinner class="paymentSpinner" [color]="'accent'" [diameter]="50" [strokeWidth]="5" *ngIf="paymentProcessing"></mat-spinner>
+
+                <!--<div *ngIf="otherCard || paymentMethods.length == 0" style="margin-top: 15px;">
                     <input type="checkbox" [(ngModel)]="rememberCard" [ngModelOptions]="{standalone: true}"><a>Remember card for future purchases?</a>
                 </div>
-                <p class="otherMethodText" *ngIf="!otherMethod && paymentMethods.length != 0" (click)="otherMethod = true">Use another payment method?</p>
+                <p class="otherMethodText" *ngIf="!otherMethod && paymentMethods.length != 0" (click)="otherMethod = true">Use another payment method?</p>-->
+                
                 <p class="errorMessage" *ngIf="paymentError != ''">{{paymentError}}</p>
-                <button class="standardButton" type="submit">Pay and upload recording</button>
+                <button class="standardButton" type="submit" *ngIf="!paymentProcessing && !paymentLoading">Pay and upload recording</button>
             </form>
         </div>
     </div>

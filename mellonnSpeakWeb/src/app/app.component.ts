@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
 import { AuthService } from './shared/auth-service/auth.service';
 import { LanguageService } from './shared/language-service/language.service';
 import { SettingsService } from './shared/settings-service/settings.service';
+import { UploadService } from './shared/upload-service/upload.service';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +16,9 @@ export class AppComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private language: LanguageService,
-    private settingsService: SettingsService
+    private settingsService: SettingsService,
+    private uploadService: UploadService,
+    @Inject(LOCALE_ID) public locale: string
   ) {}
 
   async ngOnInit() {
@@ -31,6 +34,10 @@ export class AppComponent implements OnInit {
     if (isSignedIn) {
       await this.authService.registerSignIn();
       await this.settingsService.getSettings();
+
+      if (!this.uploadService.hasProduct) {
+        await this.uploadService.getProduct(this.locale);
+      }
     }
   }
 

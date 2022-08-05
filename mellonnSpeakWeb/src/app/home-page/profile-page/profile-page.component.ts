@@ -52,7 +52,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     private settingsService: SettingsService,
     private storageService: StorageService,
     private uploadService: UploadService,
-    private analyticsService: AnalyticsService
+    private analyticsService: AnalyticsService,
   ) { }
 
   async ngOnInit() {

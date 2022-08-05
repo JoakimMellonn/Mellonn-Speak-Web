@@ -170,6 +170,11 @@
         "addRemReferGroup": {
           "deploymentBucketName": "amplify-mellonnspeakeu-staging-102306-deployment",
           "s3Key": "amplify-builds/addRemReferGroup-506363307a6245556b67-build.zip"
+        },
+        "stripeGetProduct": {
+          "stripeKey": "sk_test_51K1CskBLC2uA76LRFJrdtxDlDy1lLjry796RWVBInLSyj0tLd3hfuRrVopnNZZTsHUF2FXWVPU54jcIiXomYcWnp00WPxvYUl3",
+          "deploymentBucketName": "amplify-mellonnspeakeu-staging-102306-deployment",
+          "s3Key": "amplify-builds/stripeGetProduct-454f6f676e783764362b-build.zip"
         }
       }
     }

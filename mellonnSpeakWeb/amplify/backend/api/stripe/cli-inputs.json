@@ -65,6 +65,18 @@
           "delete"
         ]
       }
+    },
+    "/getProduct": {
+      "name": "/getProduct",
+      "lambdaFunction": "stripeGetProduct",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "read",
+          "update"
+        ]
+      }
     }
   }
 }
