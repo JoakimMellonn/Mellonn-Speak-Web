@@ -49,7 +49,6 @@ export declare class Recording {
   readonly fileUrl?: string | null;
   readonly speakerCount: number;
   readonly languageCode?: string | null;
-  readonly versions?: (Version | null)[] | null;
   readonly interviewers?: (string | null)[] | null;
   readonly labels?: (string | null)[] | null;
   readonly createdAt?: string | null;

@@ -16,11 +16,6 @@ export type AmplifyDependentResourcesAttributes = {
             "GraphQLAPIIdOutput": "string",
             "GraphQLAPIEndpointOutput": "string"
         },
-        "stripeFunction": {
-            "RootUrl": "string",
-            "ApiName": "string",
-            "ApiId": "string"
-        },
         "getPromo": {
             "RootUrl": "string",
             "ApiName": "string",
@@ -45,12 +40,6 @@ export type AmplifyDependentResourcesAttributes = {
     },
     "function": {
         "MellonnSpeakEUFunction": {
-            "Name": "string",
-            "Arn": "string",
-            "Region": "string",
-            "LambdaExecutionRole": "string"
-        },
-        "stripeFunction": {
             "Name": "string",
             "Arn": "string",
             "Region": "string",

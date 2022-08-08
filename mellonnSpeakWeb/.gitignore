@@ -42,6 +42,9 @@ testem.log
 .DS_Store
 Thumbs.db
 
+
+amplify/*
+
 #amplify-do-not-edit-begin
 amplify/\#current-cloud-backend
 amplify/.config/local-*
