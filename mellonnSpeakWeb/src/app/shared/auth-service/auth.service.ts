@@ -35,7 +35,7 @@ export class AuthService {
     this.signInState.next(1);
   }
 
-  async checkCurrentUser() {
+  async checkCurrentUser(): Promise<boolean> {
     try {
       const user = await Auth.currentAuthenticatedUser();
       if (user != null) {

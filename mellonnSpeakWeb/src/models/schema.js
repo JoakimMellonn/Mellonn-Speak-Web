@@ -231,6 +231,20 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "versions": {
+                    "name": "versions",
+                    "isArray": true,
+                    "type": {
+                        "model": "Version"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true,
+                    "association": {
+                        "connectionType": "HAS_MANY",
+                        "associatedWith": "recordingID"
+                    }
+                },
                 "interviewers": {
                     "name": "interviewers",
                     "isArray": true,
@@ -295,5 +309,5 @@ export const schema = {
     },
     "enums": {},
     "nonModels": {},
-    "version": "221c882f395e49dc3099214a00d61ce0"
+    "version": "efa51b6f78585cd521b51890eac824b5"
 };

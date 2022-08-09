@@ -38,7 +38,9 @@ export class AppComponent implements OnInit {
       if (!this.uploadService.hasProduct) {
         await this.uploadService.getProduct(this.locale);
       }
-    }
+    } else {
+      this.authService.signOut();
+    }    
   }
 
   async signOut() {
