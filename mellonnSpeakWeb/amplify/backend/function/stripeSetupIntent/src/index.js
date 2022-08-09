@@ -14,20 +14,22 @@ Parameters will be of the form { Name: 'secretName', Value: 'secretValue', ... }
 */
 exports.handler = async (event) => {
     const aws = require('aws-sdk');
-
+    
     const { Parameters } = await (new aws.SSM())
-      .getParameters({
-        Names: ["stripeKey"].map(secretName => process.env[secretName]),
-        WithDecryption: true,
-      })
-      .promise();
+  .getParameters({
+    Names: ["stripeKey"].map(secretName => process.env[secretName]),
+    WithDecryption: true,
+  })
+  .promise();
 
     const stripe = require("stripe")(Parameters[0].Value);
     const body = JSON.parse(event.body);
     const customerId = body.customerId;
 
+    let setupIntent;
+
     try {
-        const setupIntent = await stripe.setupIntents.create({
+        setupIntent = await stripe.setupIntents.create({
             customer: customerId,
         });
 
