@@ -21,7 +21,6 @@ export class AudioControlComponent implements OnInit, OnDestroy {
     this.jumpSecs = this.settings.jumpSecs;
 
     this.audio.audioControlSetChosenCalled.subscribe((res) => {
-      console.log('res: ' + res);
       this.setChosenBar(res[0], res[1]);
     });
 

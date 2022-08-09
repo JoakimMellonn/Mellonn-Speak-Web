@@ -142,7 +142,6 @@ export class EmailLoginComponent implements OnInit {
       }
       if (this.isPasswordReset && this.verificationSent) {
         const res = await Auth.forgotPasswordSubmit(this.email!.value, this.verificationCode!.value, this.password!.value);
-        console.log(res);
         if (res == 'SUCCESS') {
           const user = await Auth.signIn(this.email!.value, this.password!.value);
           this.authService.registerSignIn();
@@ -173,7 +172,7 @@ export class EmailLoginComponent implements OnInit {
         this.loading = false;
         return;
       }
-      console.log('Error during sign in/sign up: ', err);
+      console.error('Error during sign in/sign up: ', err);
       this.serverMessage = String(err).split(': ')[1].replace('username', 'email').replace('Username', 'Email');
       const msg = document.getElementById('msg');
       this.renderer.setStyle(msg, 'color', '#FD594D');
@@ -186,7 +185,7 @@ export class EmailLoginComponent implements OnInit {
     try {
       await Auth.resendSignUp(this.em);
     } catch (err) {
-      console.log('Error while resending mail: ' + err);
+      console.error('Error while resending mail: ' + err);
       this.serverMessage = String(err).split(': ')[1];
     }
   }

@@ -141,7 +141,6 @@ export class SpeakerChooserComponent implements OnInit, AfterViewInit {
     }
 
     if (startTime < endTime) {
-      //console.log('Changing speakerlabel start: ' + startTime + ', end: ' + endTime + ', spk: ' + this.lastSpeaker);
       const newTranscription: Transcription = this.speakerEdit.getNewSpeakerLabels(oldTranscription, startTime, endTime, this.lastSpeaker);
 
       this.unsavedTranscription = newTranscription;

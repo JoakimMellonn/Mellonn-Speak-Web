@@ -30,7 +30,7 @@ export class StorageService {
       const result = await response.json();
       return result.emails;
     } catch (err) {
-      console.log('Error while getting referrer: ' + err);
+      console.error('Error while getting referrer: ' + err);
       return [];
     }
   }
@@ -64,7 +64,7 @@ export class StorageService {
       }
       return returnList;
     } catch (err) {
-      console.log('Error while getting referrer: ' + err);
+      console.error('Error while getting referrer: ' + err);
       return [];
     }
   }
@@ -94,7 +94,7 @@ export class StorageService {
       }
       return false;
     } catch (err) {
-      console.log('Error while creating referrer: ' + err);
+      console.error('Error while creating referrer: ' + err);
       return false;
     }
   }
@@ -106,7 +106,7 @@ export class StorageService {
       await Storage.remove(key);
       return true;
     } catch (err) {
-      console.log('Error while removing referrer: ' + err);
+      console.error('Error while removing referrer: ' + err);
       return false;
     }
   }
@@ -136,7 +136,7 @@ export class StorageService {
 
       return true;
     } catch (err) {
-      console.log('Error while updating referrer: ' + err);
+      console.error('Error while updating referrer: ' + err);
       return false;
     }
   }
@@ -150,12 +150,12 @@ export class StorageService {
           const key = 'finishedJobs/' + recording.id + '.json';
           await Storage.remove(key);
         } catch (err) {
-          console.log('Error while removing finished recording: ' + err);
+          console.error('Error while removing finished recording: ' + err);
         }
         await DataStore.delete(recording);
       }
     } catch (err) {
-      console.log('Error when deleting datastore elements for user: ' + err);
+      console.error('Error when deleting datastore elements for user: ' + err);
     }
   
     //Removing all private files associated with the user
@@ -166,7 +166,7 @@ export class StorageService {
         await Storage.remove(item.key!, {level: 'private'});
       })
     } catch (err) {
-      console.log('Error while deleting all files: ' + err);
+      console.error('Error while deleting all files: ' + err);
     }
   }
 }

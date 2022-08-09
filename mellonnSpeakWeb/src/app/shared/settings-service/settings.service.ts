@@ -35,7 +35,7 @@ export class SettingsService {
       this.currentSettings = downloadedSettings
       return downloadedSettings;
     } catch (err) {
-      console.log('Error downloading Settings: ' + err);
+      console.error('Error downloading Settings: ' + err);
       const returnSettings = await this.getDefaultSettings();
       this.currentSettings = returnSettings;
       return returnSettings;
@@ -48,13 +48,12 @@ export class SettingsService {
       await DataStore.save(saveData);
       return true;
     } catch (err) {
-      console.log('Error uploading settings: ' + err);
+      console.error('Error uploading settings: ' + err);
       return false;
     }
   }
 
   async getDefaultSettings(): Promise<Settings> {
-    console.log('Get default settings...');
     try {
       const settings = await DataStore.query(Settings);
       if (settings.length != 0) {
@@ -69,7 +68,7 @@ export class SettingsService {
         return this.defaultSettings;
       }
     } catch (err) {
-      console.log('Error downloading Settings: ' + err);
+      console.error('Error downloading Settings: ' + err);
       return this.defaultSettings;
     }
   }

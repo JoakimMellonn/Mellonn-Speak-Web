@@ -43,7 +43,7 @@ export class PromotionService {
         return promotion;
       }
     } catch (err) {
-      console.log('Failed: ' + err);
+      console.error('Failed: ' + err);
       return new Promotion(code, 'error', 0, '', '');
     }
   }
@@ -57,7 +57,6 @@ export class PromotionService {
     };
     await API.put('getPromo', '/applyPromotion', params);
 
-    console.log('Applying promo: ' + promotion.type + ', to user: ' + email);
     if (promotion.type == 'benefit') {
       await this.addRemBenefit(email, 'add');
       if (promotion.freePeriods > 0) {
@@ -71,7 +70,7 @@ export class PromotionService {
         });
         await this.authService.registerSignIn();
       } catch (err) {
-        console.log('Failed while applying promo: ' + err);
+        console.error('Failed while applying promo: ' + err);
       }
     } else if (promotion.type == 'referrer') {
       await this.addUserToReferrer(promotion.referrer, email);
@@ -97,7 +96,6 @@ export class PromotionService {
     };
   
     const response = await API.put('getPromo', '/addRemBenefit', params);
-    console.log('AddRemBenefit response: ' + response);
     if (response.statusCode == 200) {
       return true;
     } else {
@@ -124,7 +122,6 @@ export class PromotionService {
     }
 
     const response = await API.put('getPromo', '/addPromo', params);
-    console.log('AddPromo: ' + response);
     if (response == 'Successfully added code: ' + code) {
       return true;
     } else {
@@ -139,7 +136,6 @@ export class PromotionService {
     };
   
     const response = await API.put('getPromo', '/addPromo', params);
-    console.log('AddPromo' + response);
     if (response.statusCode == 200) {
       return true;
     } else {
@@ -161,7 +157,6 @@ export class PromotionService {
         },
       });
       if (response.status == 404) {
-        console.log('Group doesnt exist');
         return false;
       }
       const result = await response.json();
@@ -182,7 +177,7 @@ export class PromotionService {
 
       return true;
     } catch (err) {
-      console.log('Error when adding user to group: ' + err);
+      console.error('Error when adding user to group: ' + err);
       return false;
     }
   }
@@ -219,7 +214,7 @@ export class PromotionService {
 
       return true;
     } catch (err) {
-      console.log('Error when adding user to group: ' + err);
+      console.error('Error when adding user to group: ' + err);
       return false;
     }
   }
@@ -239,7 +234,7 @@ export class PromotionService {
       await this.addRemBenefit(email, action);
       return true;
     } catch (err) {
-      console.log('Error while adding user to referGroup: ' + err);
+      console.error('Error while adding user to referGroup: ' + err);
       return false;
     }
   }

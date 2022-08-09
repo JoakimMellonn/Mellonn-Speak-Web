@@ -64,11 +64,10 @@ export class AuthService {
     try {
       await DataStore.clear();
       await Auth.signOut();
-      console.log('User is signed out');
       this.signInState.next(0);
       this.router.navigate(['/login']);
     } catch (err) {
-      console.log('error signing out', err);
+      console.error('error signing out', err);
     }
   }
 
@@ -115,7 +114,7 @@ export class AuthService {
         }
       }
     } catch (err) {
-      console.log('Error while checking benefit: ' + err);
+      console.error('Error while checking benefit: ' + err);
       return false;
     }
     return returnElement;
@@ -130,7 +129,7 @@ export class AuthService {
         'custom:group': group
       });
     } catch (err) {
-      console.log('Error while changing benefit: ' + err);
+      console.error('Error while changing benefit: ' + err);
     }
   }
 
@@ -150,7 +149,7 @@ export class AuthService {
       if (result == undefined) throw 'freeCredits does not exist';
       return result;
     } catch (err) {
-      console.log('Error while getting free credits: ' + err);
+      console.error('Error while getting free credits: ' + err);
       const oldRes = await this.getOldUserData();
 
       if (oldRes == 'created new') {
@@ -172,7 +171,7 @@ export class AuthService {
         'custom:freeCredits': newFreePeriods.toString(),
       });
     } catch (err) {
-      console.log('Failed updating free periods: ' + err);
+      console.error('Failed updating free periods: ' + err);
     }
   }
 
@@ -194,7 +193,7 @@ export class AuthService {
       userDataNotFetched = false;
       return +result['freePeriods'];
     } catch (err) {
-      console.log('Error downloading file with key: ' + fileKey + ', error: ' + err);
+      console.error('Error downloading file with key: ' + fileKey + ', error: ' + err);
       if (err == 'Error: Error! status: 404') {
         await this.updateFreePeriods(0);
         return 'created new';

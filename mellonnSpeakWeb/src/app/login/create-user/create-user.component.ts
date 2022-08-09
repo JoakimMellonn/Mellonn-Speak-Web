@@ -132,7 +132,7 @@ export class CreateUserComponent implements OnInit {
         this.router.navigateByUrl('/home');
       }
     } catch (err) {
-      console.log('Error signing up: ' + err);
+      console.error('Error signing up: ' + err);
       this.serverMessage = String(err).split(': ')[1];
     }
 
@@ -147,7 +147,7 @@ export class CreateUserComponent implements OnInit {
     try {
       await Auth.resendSignUp(this.em);
     } catch (err) {
-      console.log('Error while resending mail: ' + err);
+      console.error('Error while resending mail: ' + err);
       this.serverMessage = String(err).split(': ')[1];
     }
   }

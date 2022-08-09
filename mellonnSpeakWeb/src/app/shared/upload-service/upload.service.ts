@@ -157,7 +157,7 @@ export class UploadService {
       );
       await this.authService.updateFreePeriods(periods.freeLeft);
     } catch (err) {
-      console.log('Error while uploading recording: ' + err);
+      console.error('Error while uploading recording: ' + err);
     }
   }
 

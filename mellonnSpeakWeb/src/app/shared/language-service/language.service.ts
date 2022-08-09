@@ -57,7 +57,7 @@ export class LanguageService {
         this.languageList = json.languages;
         this.languageCodeList = json.languageCodes;
       } catch (err) {
-        console.log('Error while getting backup language list: ' + err);
+        console.error('Error while getting backup language list: ' + err);
       }
     }
   }

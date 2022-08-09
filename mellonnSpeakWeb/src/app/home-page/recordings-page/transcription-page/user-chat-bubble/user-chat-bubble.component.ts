@@ -63,7 +63,6 @@ export class UserChatBubbleComponent implements AfterViewInit, OnInit {
   }
 
   onChanged(event: Event) {
-    //console.log('Event: ' + event);
     this.selected = false;
     if (this.text == this.sww.pronouncedWords) {
       this.changed = false;
@@ -82,7 +81,6 @@ export class UserChatBubbleComponent implements AfterViewInit, OnInit {
     if (start != this.lastSelection[0] || end != this.lastSelection [1]) {
       this.lastSelection = [start, end];
       this.selection = this.speakerEdit.getStartEndFromSelection(this.sww, this.transcription, start, end);
-      console.log('Result start: ' + this.selection[0] + ', end: ' + this.selection[1]);
       this.selected = true;
       await new Promise(r => setTimeout(r, 10));
       this.selectSpeaker(+this.sww.speakerLabel.split('_')[1]);
