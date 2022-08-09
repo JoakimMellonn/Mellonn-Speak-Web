@@ -37,6 +37,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   jumpValues: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   paymentMethods: any[];
+  paymentLoading: boolean = true;
   addCardActive: boolean = false;
   addCardLoading: boolean = true;
   setupIntent: any;
@@ -193,6 +194,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   async getPaymentMethods() {
     const customerId = await this.uploadService.getCustomerId();
     this.paymentMethods = await this.uploadService.getCards(customerId);
+    this.paymentLoading = false;
 
     if (this.paymentMethods.length > 0) {
       if (this.settings.primaryCard) {
@@ -287,7 +289,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   async removeCard(cardId: string) {
     if (confirm('Are you sure you want to remove this card?')) {
       const result = await this.uploadService.removeCard(cardId);
-      console.log('Card removed: ' + JSON.stringify(result));
       await this.getPaymentMethods();
       if (this.paymentMethods.length == 0) {
         const saveSettings = Settings.copyOf(this.settings, copy => {

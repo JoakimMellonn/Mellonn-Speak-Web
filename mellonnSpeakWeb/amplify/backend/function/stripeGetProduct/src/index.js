@@ -30,20 +30,39 @@ exports.handler = async (event) => {
     })
     .promise();
 
-    const stripe = require("stripe")(process.env.stripeKey);
+    console.log('Secret: ' + Parameters[0].Value);
+
+    const stripe = require("stripe")(Parameters[0].Value);
     
     const group = JSON.parse(event.body).group;
     const currency = JSON.parse(event.body).currency;
 
-    let product = 'prod_LtZIbFmc9pe9VQ';
-    if (group == 'benefit') product = 'prod_MCxCO7M4beTl5y';
+    let product = process.env.product;
+    if (group == 'benefit') product = process.env.benefitProduct;
 
     try {
-        const product = stripe.product.retrieve(
-            'prod_LtZIbFmc9pe9VQ'
-        );
+        console.log('Getting product: ' + product);
 
-        console.log(JSON.stringify(product));
+        const productResponse = await stripe.products.retrieve(product);
+        console.log('Product: ' + JSON.stringify(productResponse));
+
+        const priceResponse = await stripe.prices.retrieve(
+            productResponse.default_price,
+            {expand: ['currency_options']}
+        );
+        console.log('Price: ' + JSON.stringify(priceResponse));
+
+        let currencyPrice = priceResponse;
+        let returnCurrency = priceResponse.currency;
+
+        try {
+            currencyPrice = priceResponse.currency_options[currency.toLowerCase()];
+            returnCurrency = currency;
+            console.log('Price asked for: ' + currencyPrice.unit_amount);
+        } catch (err) {
+            console.log(`Currency (${currency}) isn't in the system`);
+            currencyPrice = priceResponse;
+        }
 
         return {
             statusCode: 200,
@@ -51,7 +70,11 @@ exports.handler = async (event) => {
                 "Access-Control-Allow-Origin": "*",
                 "Access-Control-Allow-Headers": "*"
             }, 
-            body: JSON.stringify(product),
+            body: JSON.stringify({
+                product: productResponse,
+                price: currencyPrice,
+                currency: returnCurrency,
+            }),
         };
     } catch (err) {
         console.log(`Error: ${err}`);

@@ -57,7 +57,7 @@ export class AudioService {
     }
 
     this.player.onerror = (err) => {
-      console.log('Audio error: ' + err);
+      console.error('Audio error: ' + err);
     }
   }
 
@@ -67,7 +67,6 @@ export class AudioService {
   }
 
   resetState() {
-    console.log('Reset audio state...');
     this.player.pause();
     this.player.src = this.playerUrl;
     this.loadedFirst = false;
@@ -79,13 +78,12 @@ export class AudioService {
       const url = await Storage.get(key, {level: 'private', expires: 360});
       return url;
     } catch (err) {
-      console.log('Error while getting audio url: ' + err);
+      console.error('Error while getting audio url: ' + err);
       return '' + err;
     }
   }
 
   setStartEnd(start: number, end: number) {
-    console.log('Setting start-end: ' + start + 's - ' + end + 's');
     const newUrl: string = this.playerUrl + '#t=' + start + ',' + end;
     this.player.src = newUrl;
     this.player.currentTime = 0;

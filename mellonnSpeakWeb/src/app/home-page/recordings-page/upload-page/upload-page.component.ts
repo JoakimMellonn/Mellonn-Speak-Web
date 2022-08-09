@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { getLocaleCurrencyCode } from '@angular/common';
+import { Component, Inject, Input, LOCALE_ID, OnInit } from '@angular/core';
 import { loadStripe, Stripe, StripeCardElement, StripePaymentElement } from '@stripe/stripe-js';
 import { AuthService } from 'src/app/shared/auth-service/auth.service';
 import { LanguageService } from 'src/app/shared/language-service/language.service';
@@ -26,6 +27,10 @@ export class UploadPageComponent implements OnInit {
   languageSelect: string;
   errorMessage: string = '';
 
+  //Tax stuff
+  zipType: 'US' | 'CA' | 'none' = 'none';
+  zipCode: string;
+
   unitPrice: number = 49;
   currency: string = 'dkk';
 
@@ -35,7 +40,7 @@ export class UploadPageComponent implements OnInit {
   paymentActive: boolean = false;
   paymentProcessing: boolean = false;
   customerId: string;
-  paymentLoading: boolean = false;
+  paymentLoading: boolean = true;
   paymentIntent: any;
   clientSecret: string;
   rememberCard: boolean = false;
@@ -57,7 +62,8 @@ export class UploadPageComponent implements OnInit {
     public languageService: LanguageService,
     public settingsService: SettingsService,
     private uploadService: UploadService,
-    private authService: AuthService,
+    public authService: AuthService,
+    @Inject(LOCALE_ID) private locale: string,
   ) { }
 
   ngOnInit(): void {
@@ -81,7 +87,13 @@ export class UploadPageComponent implements OnInit {
 
     //Setting prices
     this.unitPrice = this.uploadService.price.unit_amount/100;
-    this.currency = this.uploadService.price.currency;
+    this.currency = this.uploadService.currency;
+
+    if (this.locale.split('-')[1] == 'US') {
+      this.zipType = 'US';
+    } else if (this.locale.split('-')[1] == 'CA') {
+      this.zipType = 'CA';
+    }
 
     this.uploadService.uploadProgressCalled.subscribe((progress) => {
       this.uploadLoaded = progress[0];
@@ -156,14 +168,35 @@ export class UploadPageComponent implements OnInit {
   */
 
   async setupPayment() {
-    this.clientSecret = await this.uploadService.createIntent(this.customerId, this.currency, this.uploadService.product.id, this.periods.periods);
+    this.clientSecret = await this.uploadService.createIntent(
+      this.customerId,
+      this.currency,
+      this.uploadService.product.id,
+      this.periods.periods,
+      this.zipType == 'none' ? null : this.zipCode.toUpperCase()
+    );
     this.stripe = await loadStripe(environment.stripeKey,  {
       betas: ['process_order_beta_1'],
       apiVersion: "2022-08-01; orders_beta=v4"
     });
     const elements = this.stripe!.elements({clientSecret: this.clientSecret});
     //this.cardElement = elements.create('card');
-    this.paymentElement = elements.create('payment');
+
+    let options = {};
+    if (this.zipType != 'none') {
+      options = {
+        defaultValues: {
+          billingDetails: {
+            address: {
+              country: this.locale.split('-')[1],
+              postal_code: this.zipCode.toUpperCase()
+            }
+          }
+        }
+      }
+    }
+    this.paymentElement = elements.create('payment', options);
+
     const card = document.getElementById('cardElement');
     
     this.paymentLoading = false;
@@ -195,17 +228,17 @@ export class UploadPageComponent implements OnInit {
       }*/
 
       const result = await this.stripe!.processOrder({
-        elements: elements, redirect: "if_required"
+        elements: elements,
+        redirect: "if_required"
       });
       
       if (result.error) {
-        console.log('Error while paying: ' + result.error.message);
+        console.error('Error while paying: ' + result.error.message);
         this.paymentElement.update({readOnly: false});
         this.paymentProcessing = false;
         this.paymentError = result.error.message!;
         this.paymentIntent = result.paymentIntent;
       } else {
-        console.log('Payment success!' + result.paymentIntent);
         this.paymentIntent = result.paymentIntent;
         this.startUpload();
         this.paymentProcessing = false;
@@ -232,12 +265,29 @@ export class UploadPageComponent implements OnInit {
         this.errorMessage = 'You need to fill in the title';
       } else if (this.description == null || this.description!.length == 0) {
         this.errorMessage = 'You need to fill in the description';
+      } else if (this.zipType != 'none' && (this.zipCode == null || this.zipCode!.length == 0)) {
+        this.errorMessage = 'You need to fill in the ZIP-code';
+      } else if (!this.validateZip(this.zipCode)) {
+        this.errorMessage = `You need to enter a valid ZIP-code`;
       } else {
         this.errorMessage = '';
         this.paymentActive = true;
         this.paymentLoading = true;
         await this.setupPayment();
       }
+    }
+  }
+
+  validateZip(zipCode: string): boolean {
+    const us = /^(\d{5}(-\d{4})?)$/;
+    const ca = /^[ABCEGHJ-NPRSTVXY][0-9][ABCEGHJ-NPRSTV-Z] [0-9][ABCEGHJ-NPRSTV-Z][0-9]$/;
+
+    if (this.zipType == 'US') {
+      return us.test(zipCode.toUpperCase());
+    } else if (this.zipType == 'CA') {
+      return ca.test(zipCode.toUpperCase());
+    } else {
+      return true;
     }
   }
 

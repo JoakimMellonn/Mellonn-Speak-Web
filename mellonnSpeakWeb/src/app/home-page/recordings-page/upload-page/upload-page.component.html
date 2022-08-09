@@ -24,6 +24,13 @@
             <select name="language" id="language" [(ngModel)]="languageSelect">
                 <option *ngFor="let code of languageService.languageCodeList" value="{{code}}" [selected]="settingsService.currentSettings.languageCode">{{languageService.getLanguage(code)}}</option>
             </select>
+            <hr style="margin-top: 15px;">
+
+            <div *ngIf="zipType != 'none' && !(this.periods.periods == 0 || this.authService.group == 'dev')">
+                <h4>What is your zip-code?</h4>
+                <input class="zipInput inputField" type="text" placeholder="ZIP" maxlength = "10" [(ngModel)]="zipCode">
+                <p class="tax">This is only used for tax calculation, we do not save this.</p>
+            </div>
         </div>
     </div>
     <div class="left" *ngIf="paymentActive">
@@ -47,7 +54,7 @@
                 <p class="otherMethodText" *ngIf="otherMethod && !otherCard" (click)="setupCardElement()">Use another card?</p>-->
 
                 <div id="cardElement"></div>
-                <mat-spinner class="paymentSpinner" [color]="'accent'" [diameter]="50" [strokeWidth]="5" *ngIf="paymentProcessing"></mat-spinner>
+                <mat-spinner class="paymentSpinner" [color]="'accent'" [diameter]="50" [strokeWidth]="5" *ngIf="paymentProcessing || paymentLoading"></mat-spinner>
 
                 <!--<div *ngIf="otherCard || paymentMethods.length == 0" style="margin-top: 15px;">
                     <input type="checkbox" [(ngModel)]="rememberCard" [ngModelOptions]="{standalone: true}"><a>Remember card for future purchases?</a>

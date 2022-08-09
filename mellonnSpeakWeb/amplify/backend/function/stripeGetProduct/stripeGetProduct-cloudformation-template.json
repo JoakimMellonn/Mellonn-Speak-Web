@@ -18,6 +18,12 @@
     },
     "secretsPathAmplifyAppId": {
       "Type": "String"
+    },
+    "product": {
+      "Type": "String"
+    },
+    "benefitProduct": {
+      "Type": "String"
     }
   },
   "Conditions": {
@@ -94,6 +100,12 @@
                   "stripeKey"
                 ]
               ]
+            },
+            "product": {
+              "Ref": "product"
+            },
+            "benefitProduct": {
+              "Ref": "benefitProduct"
             }
           }
         },

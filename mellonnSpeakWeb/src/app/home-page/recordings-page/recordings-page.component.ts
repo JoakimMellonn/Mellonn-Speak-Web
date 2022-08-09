@@ -60,7 +60,7 @@ export class RecordingsPageComponent implements OnInit, OnDestroy {
       });
       this.recordings = recordings;
     } catch (err) {
-      console.log('error getting recordings', err);
+      console.error('error getting recordings', err);
     }
   }
 

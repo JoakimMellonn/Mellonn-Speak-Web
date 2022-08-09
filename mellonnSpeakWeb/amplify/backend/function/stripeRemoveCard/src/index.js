@@ -27,7 +27,7 @@ exports.handler = async (event) => {
     const cardId = JSON.parse(event.body).cardId;
     
     try {
-        await stripe.paymentMethods.detach({cardId});
+        await stripe.paymentMethods.detach(cardId);
         return {
             statusCode: 200,
             headers: {

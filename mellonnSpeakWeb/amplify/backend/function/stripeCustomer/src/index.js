@@ -24,7 +24,7 @@ exports.handler = async (event) => {
     .promise();
 
     const stripe = require("stripe")(Parameters[0].Value);
-    const email = event.email;
+    const email = JSON.parse(event.body).email;
 
     let customerId;
 
@@ -58,6 +58,6 @@ exports.handler = async (event) => {
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Headers": "*"
         }, 
-        body: customerId,
+        body: JSON.stringify(customerId),
     };
 };

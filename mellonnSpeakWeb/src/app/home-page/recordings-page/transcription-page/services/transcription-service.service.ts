@@ -19,7 +19,7 @@ export class TranscriptionService {
         return recording;
       }
     } catch (err) {
-      console.log('Error getting recording: ' + err);
+      console.error('Error getting recording: ' + err);
       return 'null';
     }
   }
@@ -46,7 +46,7 @@ export class TranscriptionService {
 
       return returnTranscription;
     } catch (err) {
-      console.log('Error downloading file with key: ' + fileKey + ', error: ' + err);
+      console.error('Error downloading file with key: ' + fileKey + ', error: ' + err);
       return 'null';
     }
   }
@@ -56,10 +56,9 @@ export class TranscriptionService {
 
     try {
       const result = await Storage.put(fileKey, transcription);
-      console.log(result);
       return result;
     } catch (err) {
-      console.log('Error uploading file with key: ' + fileKey + ', error: ' + err);
+      console.error('Error uploading file with key: ' + fileKey + ', error: ' + err);
       return 'null';
     }
   }
@@ -191,13 +190,13 @@ export class TranscriptionService {
           await Storage.remove(versionKey, {level: 'private'});
           await DataStore.delete(version);
         } catch (e) {
-          console.log('Error while deleting versions: ' + e);
+          console.error('Error while deleting versions: ' + e);
         }
       }
       const originalKey = 'versions/' + recording.id + '/original.json';
       await Storage.remove(originalKey, {level: 'private'});
     } catch (e) {
-      console.log('Error while deleting original version: ' + e);
+      console.error('Error while deleting original version: ' + e);
     }
   
     //now we remove the audio and the transcription
@@ -207,7 +206,7 @@ export class TranscriptionService {
       await Storage.remove(recording.fileKey!, {level: 'private'});
       await DataStore.delete(recording);
     } catch (e) {
-      console.log('Error while deleting recording: ' + e);
+      console.error('Error while deleting recording: ' + e);
     }
   }
 }

@@ -22,7 +22,12 @@ exports.handler = async (event) => {
   })
   .promise();
 
-    const stripe = require("stripe")(Parameters[0].Value);
+    const stripe = require("stripe")(
+        Parameters[0].Value,
+        {
+            apiVersion: '2020-08-27; orders_beta=v4'
+        }
+    );
     const body = JSON.parse(event.body);
 
     const customerId = body.customerId;

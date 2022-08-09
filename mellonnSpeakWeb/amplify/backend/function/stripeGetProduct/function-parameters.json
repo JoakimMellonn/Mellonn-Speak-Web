@@ -1,6 +1,15 @@
 {
   "lambdaLayers": [],
-  "environmentVariableList": [],
+  "environmentVariableList": [
+    {
+      "cloudFormationParameterName": "product",
+      "environmentVariableName": "product"
+    },
+    {
+      "cloudFormationParameterName": "benefitProduct",
+      "environmentVariableName": "benefitProduct"
+    }
+  ],
   "secretNames": [
     "stripeKey"
   ]

@@ -72,8 +72,6 @@ export class LabelEditComponent implements OnInit, OnDestroy {
         this.labelService.unsavedInterviewerList.push(interviewer!);
       }
     }
-    console.log('Labels: ' + this.labelService.unsavedLabelList);
-    console.log('Interviewers: ' + this.labelService.unsavedInterviewerList);
   }
 
   async assignLabels() {
