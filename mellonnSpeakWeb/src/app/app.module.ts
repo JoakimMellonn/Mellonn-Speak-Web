@@ -22,7 +22,7 @@ import { SpeakerComponent } from './home-page/recordings-page/transcription-page
 import { InfoPanelComponent } from './home-page/recordings-page/transcription-page/info-panel/info-panel.component';
 import { VersionHistoryComponent } from './home-page/recordings-page/transcription-page/version-history/version-history.component';
 import { HttpClientModule } from '@angular/common/http';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { UploadPageComponent } from './home-page/recordings-page/upload-page/upload-page.component';
 import { DndDirective } from './home-page/recordings-page/drag-drop/dnd.directive';
 import { AdminPageComponent } from './home-page/recordings-page/admin-page/admin-page.component';

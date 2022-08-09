@@ -16,7 +16,7 @@
                             <p>{{userGroup}}</p>
                             <div *ngIf="authService.referGroup != null">
                                 <hr>
-                                <i class="fa-solid fa-user-group fa-lg"></i>
+                                <i class="fa-solid fa-users fa-lg"></i>
                                 <p>{{authService.referGroup}}</p>
                             </div>
                             <hr>
@@ -99,6 +99,7 @@
                             </div>
                             <hr class="cardHR">
                             <div *ngIf="!addCardActive">
+                                <mat-spinner style="margin-top: 15px;" [color]="'accent'" [diameter]="50" [strokeWidth]="5" *ngIf="paymentLoading"></mat-spinner>
                                 <div *ngFor="let method of paymentMethods">
                                     <input type="radio" name="card" value="{{method.id}}" [(ngModel)]="cardSelect" (ngModelChange)="onCardSelect()">
                                     <div style="display: inline; cursor: pointer;" (click)="onCardSelect(method.id)">

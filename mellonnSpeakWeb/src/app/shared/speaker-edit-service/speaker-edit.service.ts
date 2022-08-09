@@ -30,7 +30,6 @@ export class SpeakerEditService {
   }
 
   getNewSLList(oldList: Segment[], startTime: number, endTime: number, speaker: number): Segment[] {
-    console.log('Changing speakerLabel start: ' + startTime + ', end: ' + endTime + ', spk: ' + speaker);
     //Creating the variables
     let speakerLabel = 'spk_' + speaker;
     let newList: Segment[] = [];
@@ -136,7 +135,6 @@ export class SpeakerEditService {
         newSegment.speaker_label = speakerLabel;
         newSegment.end_time = endTime.toString();
         hasBeenThrough = true;
-        //console.log('Case 2, start: ' + newSegmentItems[newSegmentItems.length - 1].start_time + ', end: ' + newSegmentItems[newSegmentItems.length - 1].end_time + ', speaker: ' + newSegmentItems[newSegmentItems.length - 1].speaker_label);
       } else if (segmentStart >= startTime && endTime >= segmentEnd && !hasBeenThrough) {
         ///
         ///Case 3:

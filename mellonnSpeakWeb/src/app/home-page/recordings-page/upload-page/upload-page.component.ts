@@ -1,5 +1,6 @@
-import { Component, Inject, Input, LOCALE_ID, OnDestroy, OnInit } from '@angular/core';
-import { loadStripe, Stripe, StripeCardElement } from '@stripe/stripe-js';
+import { getLocaleCurrencyCode } from '@angular/common';
+import { Component, Inject, Input, LOCALE_ID, OnInit } from '@angular/core';
+import { loadStripe, Stripe, StripeCardElement, StripePaymentElement } from '@stripe/stripe-js';
 import { AuthService } from 'src/app/shared/auth-service/auth.service';
 import { LanguageService } from 'src/app/shared/language-service/language.service';
 import { SettingsService } from 'src/app/shared/settings-service/settings.service';
@@ -11,7 +12,7 @@ import { environment } from 'src/environments/environment';
   templateUrl: './upload-page.component.html',
   styleUrls: ['./upload-page.component.scss']
 })
-export class UploadPageComponent implements OnInit, OnDestroy {
+export class UploadPageComponent implements OnInit {
   @Input() file: File;
 
   player = new Audio();
@@ -26,27 +27,32 @@ export class UploadPageComponent implements OnInit, OnDestroy {
   languageSelect: string;
   errorMessage: string = '';
 
+  //Tax stuff
+  zipType: 'US' | 'CA' | 'none' = 'none';
+  zipCode: string;
+
   unitPrice: number = 49;
-  benefitPrice: number = 29;
   currency: string = 'dkk';
 
   stripe: Stripe | null;
-  cardElement: StripeCardElement;
+  paymentElement: StripePaymentElement;
   cardsLoading: boolean = true;
   paymentActive: boolean = false;
   paymentProcessing: boolean = false;
   customerId: string;
-  paymentMethods: any[];
-  defaultMethod: any;
-  paymentLoading: boolean = false;
+  paymentLoading: boolean = true;
   paymentIntent: any;
   clientSecret: string;
-  cardSelect: string;
-  otherMethod: boolean = false;
-  otherCard: boolean = false;
   rememberCard: boolean = false;
   paymentError: string = '';
-  monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+  /*cardElement: StripeCardElement;
+  cardSelect: string;
+  paymentMethods: any[];
+  defaultMethod: any;
+  otherMethod: boolean = false;
+  otherCard: boolean = false;
+  monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];*/
 
   uploadLoaded: number;
   uploadTotal: number;
@@ -56,8 +62,8 @@ export class UploadPageComponent implements OnInit, OnDestroy {
     public languageService: LanguageService,
     public settingsService: SettingsService,
     private uploadService: UploadService,
-    private authService: AuthService,
-    @Inject(LOCALE_ID) private locale: string
+    public authService: AuthService,
+    @Inject(LOCALE_ID) private locale: string,
   ) { }
 
   ngOnInit(): void {
@@ -69,27 +75,40 @@ export class UploadPageComponent implements OnInit, OnDestroy {
     this.player.onloadedmetadata = () => {
       if (!this.audioLoaded) {
         this.duration = this.player.duration;
+        if (this.duration > 9000) {
+          alert('The chosen audio file is too long, max length for an audio file is 2.5 hours (150 minutes).');
+          this.uploadService.returnToRecordings();
+        }
         this.periods = this.uploadService.getPeriods(this.duration);
-        //console.log('Total: ' + this.periods.total + ', periods: ' + this.periods.periods + ', freeLeft: ' + this.periods.freeLeft);
         if (this.periods.periods == 0) this.buttonText = 'Upload recording';
         this.audioLoaded = true;
       }
     }
-    //TODO: set currency and price automatically (not hardcoded...)
-    if (this.authService.group == 'benefit') this.unitPrice = this.benefitPrice;
+
+    //Setting prices
+    this.unitPrice = this.uploadService.price.unit_amount/100;
+    this.currency = this.uploadService.currency;
+
+    if (this.locale.split('-')[1] == 'US') {
+      this.zipType = 'US';
+    } else if (this.locale.split('-')[1] == 'CA') {
+      this.zipType = 'CA';
+    }
 
     this.uploadService.uploadProgressCalled.subscribe((progress) => {
-      //progress index 0 = loaded, index 1 = total
       this.uploadLoaded = progress[0];
       this.uploadTotal = progress[1];
     });
-    this.getCards();
+    this.getCustomer();
+    //this.getCards();
   }
 
-  ngOnDestroy(): void {
-      
+  async getCustomer() {
+    this.customerId = await this.uploadService.getCustomerId();
   }
 
+  //Get card stuff
+  /*
   async getCards() {
     this.cardsLoading = true;
     this.customerId = await this.uploadService.getCustomerId();
@@ -141,23 +160,59 @@ export class UploadPageComponent implements OnInit, OnDestroy {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
+  async onCardSelect(id?: string) {
+    if (id != undefined) {
+      this.cardSelect = id;
+    }
+  }
+  */
+
   async setupPayment() {
-    //this.clientSecret = await this.uploadService.createIntent(this.customerId, this.unitPrice * this.periods.periods * 100, this.currency);
-    this.stripe = await loadStripe(environment.stripeKey);
+    this.clientSecret = await this.uploadService.createIntent(
+      this.customerId,
+      this.currency,
+      this.uploadService.product.id,
+      this.periods.periods,
+      this.zipType == 'none' ? null : this.zipCode.toUpperCase()
+    );
+    this.stripe = await loadStripe(environment.stripeKey,  {
+      betas: ['process_order_beta_1'],
+      apiVersion: "2022-08-01; orders_beta=v4"
+    });
     const elements = this.stripe!.elements({clientSecret: this.clientSecret});
-    this.cardElement = elements.create('card');
+    //this.cardElement = elements.create('card');
+
+    let options = {};
+    if (this.zipType != 'none') {
+      options = {
+        defaultValues: {
+          billingDetails: {
+            address: {
+              country: this.locale.split('-')[1],
+              postal_code: this.zipCode.toUpperCase()
+            }
+          }
+        }
+      }
+    }
+    this.paymentElement = elements.create('payment', options);
+
     const card = document.getElementById('cardElement');
     
-    if (this.paymentMethods.length == 0) {
+    this.paymentLoading = false;
+    this.paymentElement.mount(card!);
+    
+    /*if (this.paymentMethods.length == 0) {
       this.cardElement.mount(card!);
-    }
+    }*/
 
     const form = document.getElementById('paymentForm');
     form!.addEventListener('submit', async (event) => {
       if (this.paymentProcessing) return;
+      this.paymentElement.update({readOnly: true});
       this.paymentProcessing = true;
-      let paymentMethod;
 
+      /*let paymentMethod;
       if (this.otherCard || this.paymentMethods.length == 0) {
         paymentMethod = {card: this.cardElement};
         if (this.rememberCard) {
@@ -170,30 +225,25 @@ export class UploadPageComponent implements OnInit, OnDestroy {
         paymentMethod = this.cardSelect;
       } else {
         paymentMethod = this.defaultMethod.id;
-      }
+      }*/
 
-      const result = await this.stripe!.confirmCardPayment(this.clientSecret, {
-        payment_method: paymentMethod,
+      const result = await this.stripe!.processOrder({
+        elements: elements,
+        redirect: "if_required"
       });
-
+      
       if (result.error) {
-        console.log('Error while paying: ' + result.error.message);
+        console.error('Error while paying: ' + result.error.message);
+        this.paymentElement.update({readOnly: false});
         this.paymentProcessing = false;
         this.paymentError = result.error.message!;
         this.paymentIntent = result.paymentIntent;
       } else {
-        console.log('Payment success!' + result.paymentIntent);
         this.paymentIntent = result.paymentIntent;
         this.startUpload();
         this.paymentProcessing = false;
       }
     });
-  }
-
-  setupCardElement() {
-    this.otherCard = true;
-    const card = document.getElementById('cardElement');
-    this.cardElement.mount(card!);
   }
 
   async continueClick() {
@@ -215,17 +265,29 @@ export class UploadPageComponent implements OnInit, OnDestroy {
         this.errorMessage = 'You need to fill in the title';
       } else if (this.description == null || this.description!.length == 0) {
         this.errorMessage = 'You need to fill in the description';
+      } else if (this.zipType != 'none' && (this.zipCode == null || this.zipCode!.length == 0)) {
+        this.errorMessage = 'You need to fill in the ZIP-code';
+      } else if (!this.validateZip(this.zipCode)) {
+        this.errorMessage = `You need to enter a valid ZIP-code`;
       } else {
         this.errorMessage = '';
         this.paymentActive = true;
+        this.paymentLoading = true;
         await this.setupPayment();
       }
     }
   }
 
-  async onCardSelect(id?: string) {
-    if (id != undefined) {
-      this.cardSelect = id;
+  validateZip(zipCode: string): boolean {
+    const us = /^(\d{5}(-\d{4})?)$/;
+    const ca = /^[ABCEGHJ-NPRSTVXY][0-9][ABCEGHJ-NPRSTV-Z] [0-9][ABCEGHJ-NPRSTV-Z][0-9]$/;
+
+    if (this.zipType == 'US') {
+      return us.test(zipCode.toUpperCase());
+    } else if (this.zipType == 'CA') {
+      return ca.test(zipCode.toUpperCase());
+    } else {
+      return true;
     }
   }
 

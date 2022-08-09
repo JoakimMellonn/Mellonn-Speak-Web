@@ -27,7 +27,6 @@ export class VersionHistoryComponent implements OnInit {
     this.subscription = DataStore.observe(Version).subscribe(rec => {
       this.getVersions();
     });
-    console.log(this.versions.length);
     this.loading = false;
   }
 
@@ -38,7 +37,7 @@ export class VersionHistoryComponent implements OnInit {
       });
       this.versions = versions;
     } catch (err) {
-      console.log('error getting recordings', err);
+      console.error('error getting recordings', err);
     }
   }
 
@@ -63,7 +62,7 @@ export class VersionHistoryComponent implements OnInit {
       const result = await response.json();
       transcription = result;
     } catch (err) {
-      console.log('Error downloading file with key: ' + key + ', error: ' + err);
+      console.error('Error downloading file with key: ' + key + ', error: ' + err);
     }
 
     const speakerWithWords: SpeakerWithWords[] = this.transService.processTranscription(transcription!);

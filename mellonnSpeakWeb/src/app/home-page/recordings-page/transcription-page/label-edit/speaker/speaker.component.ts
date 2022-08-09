@@ -48,7 +48,6 @@ export class SpeakerComponent implements OnInit {
         this.labelService.unsavedInterviewerList[this.speaker] = '';
       }
     }
-    console.log('Interviewers: ' + this.labelService.unsavedInterviewerList);
   }
 
   onTextChange() {

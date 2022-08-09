@@ -13,6 +13,7 @@ export class UploadService {
 
   product: any;
   price: any;
+  currency: any;
   hasProduct: boolean = false;
 
   private uploadProgress = new Subject<number[]>();
@@ -51,7 +52,7 @@ export class UploadService {
     return response;
   }
 
-  async createIntent(customerId: string, currency: string, product: string, quantity: number): Promise<string> {
+  async createIntent(customerId: string, currency: string, product: string, quantity: number, postalCode: string | null): Promise<string> {
     const params = {
       body: {
         "customerId": customerId,
@@ -59,7 +60,8 @@ export class UploadService {
         "product": product,
         "quantity": quantity,
         "name": `${this.authService.firstName} ${this.authService.lastName}`,
-        "country": this.locale.split('-')[1]
+        "country": this.locale.split('-')[1],
+        "postalCode": postalCode
       }
     }
 
@@ -114,10 +116,12 @@ export class UploadService {
 
       this.product = response.product;
       this.price = response.price;
+      this.currency = response.currency;
       this.hasProduct = true;
+
       return this.hasProduct;
     } catch (err) {
-      console.log(`Error while getting product: ${err}`);
+      console.error(`Error while getting product: ${err}`);
       this.hasProduct = false;
       return this.hasProduct;
     }
@@ -153,7 +157,7 @@ export class UploadService {
       );
       await this.authService.updateFreePeriods(periods.freeLeft);
     } catch (err) {
-      console.log('Error while uploading recording: ' + err);
+      console.error('Error while uploading recording: ' + err);
     }
   }
 

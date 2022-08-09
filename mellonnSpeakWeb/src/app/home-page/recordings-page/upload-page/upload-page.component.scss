@@ -12,7 +12,7 @@
 
     .segment {
         position: relative;
-        width: 80%;
+        width: 95%;
         left: 50%;
         transform: translate(-50%);
         background-color: #F8F8F8;
@@ -154,6 +154,17 @@
         margin-top: 10px;
         color: #FD594D;
         text-align: center;
+    }
+
+    .zipInput {
+        margin-top: 5px;
+        text-transform: uppercase;
+    }
+
+    .tax {
+        margin-top: 5px;
+        font-size: 0.65em;
+        opacity: 75%;
     }
 }
 

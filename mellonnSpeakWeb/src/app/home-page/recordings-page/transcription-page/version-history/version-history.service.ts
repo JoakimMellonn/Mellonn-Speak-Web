@@ -25,7 +25,7 @@ export class VersionHistoryService {
       var result = await DataStore.save(newVersion);
       //print('New version saved successfully');
     } catch (e) {
-      console.log('Failed updating version list: ' + e);
+      console.error('Failed updating version list: ' + e);
     }
   
     try {
@@ -42,7 +42,7 @@ export class VersionHistoryService {
       }
       return newVersion.id;
     } catch (e) {
-      console.log('Error saving new version: ' + e);
+      console.error('Error saving new version: ' + e);
     }
     return 'error';
   }
@@ -53,9 +53,8 @@ export class VersionHistoryService {
 
     try {
       const result = await Storage.put(key, transcription, {level: 'private'});
-      console.log('Upload result: ' + result);
     } catch (e) {
-      console.log('UploadFile Error: ' + e);
+      console.error('UploadFile Error: ' + e);
     }
   }
 
@@ -66,7 +65,7 @@ export class VersionHistoryService {
       const result = await Storage.remove(key, {level: 'private'});
       return true;
     } catch (e) {
-      console.log('Error while removing file: ' + e);
+      console.error('Error while removing file: ' + e);
       return false;
     }
   }

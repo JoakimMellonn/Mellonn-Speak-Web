@@ -38,8 +38,6 @@ export class LabelService {
       }
     }
 
-    console.log('Saved interviewers: ' + saveInterviewList);
-
     try {
       await DataStore.save(
         Recording.copyOf(recording, updated => {
