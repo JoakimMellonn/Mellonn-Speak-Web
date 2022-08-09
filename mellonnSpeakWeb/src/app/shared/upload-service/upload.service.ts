@@ -1,8 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, LOCALE_ID } from '@angular/core';
 import { AuthService } from '../auth-service/auth.service';
 import { API, DataStore, Storage } from 'aws-amplify';
 import { Recording } from 'src/models';
 import { Subject } from 'rxjs';
+import { getLocaleCurrencyCode } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -10,13 +11,20 @@ import { Subject } from 'rxjs';
 export class UploadService {
   uploadFile: File;
 
+  product: any;
+  price: any;
+  hasProduct: boolean = false;
+
   private uploadProgress = new Subject<number[]>();
   uploadProgressCalled = this.uploadProgress.asObservable();
 
   private uploadDone = new Subject<boolean>();
   uploadDoneCalled = this.uploadDone.asObservable();
 
-  constructor(private authService: AuthService) { }
+  constructor(
+    private authService: AuthService,
+    @Inject(LOCALE_ID) private locale: string,
+  ) { }
 
   getPeriods(duration: number): Periods {
     const total = Math.ceil((duration / 60) / 15);
@@ -43,13 +51,15 @@ export class UploadService {
     return response;
   }
 
-  async createIntent(customerId: string, amount: number, currency: string): Promise<string> {
+  async createIntent(customerId: string, currency: string, product: string, quantity: number): Promise<string> {
     const params = {
       body: {
         "customerId": customerId,
-        "amount": amount,
         "currency": currency,
-        "email": this.authService.email,
+        "product": product,
+        "quantity": quantity,
+        "name": `${this.authService.firstName} ${this.authService.lastName}`,
+        "country": this.locale.split('-')[1]
       }
     }
 
@@ -88,6 +98,29 @@ export class UploadService {
 
     const response = await API.put('stripe', '/removeCard', params);
     return response;
+  }
+
+  async getProduct(locale: string) {
+    const currency = getLocaleCurrencyCode(locale);
+    const params = {
+      body: {
+        "group": this.authService.group,
+        "currency": currency
+      }
+    }
+
+    try {
+      const response = await API.put('stripe', '/getProduct', params);
+
+      this.product = response.product;
+      this.price = response.price;
+      this.hasProduct = true;
+      return this.hasProduct;
+    } catch (err) {
+      console.log(`Error while getting product: ${err}`);
+      this.hasProduct = false;
+      return this.hasProduct;
+    }
   }
 
   async uploadRecording(file: File, title: string, desc: string, speakerCount: number, languageCode: string, periods: Periods) {

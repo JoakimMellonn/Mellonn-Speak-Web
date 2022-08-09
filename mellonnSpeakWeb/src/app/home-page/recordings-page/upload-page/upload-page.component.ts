@@ -142,7 +142,7 @@ export class UploadPageComponent implements OnInit, OnDestroy {
   }
 
   async setupPayment() {
-    this.clientSecret = await this.uploadService.createIntent(this.customerId, this.unitPrice * this.periods.periods * 100, this.currency);
+    //this.clientSecret = await this.uploadService.createIntent(this.customerId, this.unitPrice * this.periods.periods * 100, this.currency);
     this.stripe = await loadStripe(environment.stripeKey);
     const elements = this.stripe!.elements({clientSecret: this.clientSecret});
     this.cardElement = elements.create('card');
