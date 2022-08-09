@@ -1,6 +1,19 @@
 {
   "version": 1,
   "paths": {
+    "/intent": {
+      "name": "/intent",
+      "lambdaFunction": "stripePaymentIntent",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "read",
+          "update",
+          "delete"
+        ]
+      }
+    },
     "/setupIntent": {
       "name": "/setupIntent",
       "lambdaFunction": "stripeSetupIntent",
@@ -43,31 +56,6 @@
     "/removeCard": {
       "name": "/removeCard",
       "lambdaFunction": "stripeRemoveCard",
-      "permissions": {
-        "setting": "private",
-        "auth": [
-          "create",
-          "read",
-          "update",
-          "delete"
-        ]
-      }
-    },
-    "/getProduct": {
-      "name": "/getProduct",
-      "lambdaFunction": "stripeGetProduct",
-      "permissions": {
-        "setting": "private",
-        "auth": [
-          "create",
-          "read",
-          "update"
-        ]
-      }
-    },
-    "/intent": {
-      "name": "/intent",
-      "lambdaFunction": "stripePaymentIntent",
       "permissions": {
         "setting": "private",
         "auth": [

@@ -134,6 +134,14 @@
       "dependsOn": [
         {
           "category": "function",
+          "resourceName": "stripePaymentIntent",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
+        },
+        {
+          "category": "function",
           "resourceName": "stripeSetupIntent",
           "attributes": [
             "Name",
@@ -159,22 +167,6 @@
         {
           "category": "function",
           "resourceName": "stripeRemoveCard",
-          "attributes": [
-            "Name",
-            "Arn"
-          ]
-        },
-        {
-          "category": "function",
-          "resourceName": "stripeGetProduct",
-          "attributes": [
-            "Name",
-            "Arn"
-          ]
-        },
-        {
-          "category": "function",
-          "resourceName": "stripePaymentIntent",
           "attributes": [
             "Name",
             "Arn"
@@ -320,12 +312,6 @@
           ]
         }
       ]
-    },
-    "stripeGetProduct": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda",
-      "dependsOn": []
     }
   },
   "analytics": {

@@ -14,13 +14,13 @@ Parameters will be of the form { Name: 'secretName', Value: 'secretValue', ... }
 */
 exports.handler = async (event) => {
     const aws = require('aws-sdk');
-    
+
     const { Parameters } = await (new aws.SSM())
-  .getParameters({
-    Names: ["stripeKey"].map(secretName => process.env[secretName]),
-    WithDecryption: true,
-  })
-  .promise();
+    .getParameters({
+        Names: ["stripeKey"].map(secretName => process.env[secretName]),
+        WithDecryption: true,
+    })
+    .promise();
 
     const stripe = require("stripe")(Parameters[0].Value);
     const customerId = JSON.parse(event.body).customerId;
@@ -32,6 +32,8 @@ exports.handler = async (event) => {
             customer: customerId,
             type: 'card',
         });
+
+        console.log('Cards: ' + JSON.stringify(cards));
     } catch (err) {
         console.log(err);
         return {
@@ -44,7 +46,7 @@ exports.handler = async (event) => {
             body: JSON.stringify({
                 error: err.message,
             })
-        }
+        };
     }
     
     return {
