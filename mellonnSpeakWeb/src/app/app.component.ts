@@ -22,6 +22,7 @@ export class AppComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
+    console.log(`Locale: ${this.locale}`);
     this.authService.signInStateCalled.subscribe((res) => {
       if (res == 1) {
         this.signedIn = true;
