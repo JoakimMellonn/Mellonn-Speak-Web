@@ -89,7 +89,11 @@
           "deploymentBucketName": "amplify-mellonnspeakeu-prod-94145-deployment",
           "s3Key": "amplify-builds/stripeGetProduct-376f684e53486c556735-build.zip"
         },
-        "getIPLocation": {}
+        "getIPLocation": {
+          "secretsPathAmplifyAppId": "d3km7wqa9jf06b",
+          "deploymentBucketName": "amplify-mellonnspeakeu-prod-94145-deployment",
+          "s3Key": "amplify-builds/getIPLocation-754e48655250562f4876-build.zip"
+        }
       }
     }
   },
