@@ -19,7 +19,9 @@ export class RecordingsPageComponent implements OnInit, OnDestroy {
   subscription: any;
   offset: number;
 
-  currentMode: 'default' | 'upload' | 'admin' = 'default';
+  currentMode: 'default' | 'upload' | 'admin' | 'onboarding' = 'default';
+
+  currentOnboardingPage: number = 0;
 
   uploadFile: File;
 
@@ -44,6 +46,11 @@ export class RecordingsPageComponent implements OnInit, OnDestroy {
       this.currentMode = res;
     });
 
+    if (localStorage.getItem('isOnboarded') != 'true') {
+      this.currentMode = 'onboarding';
+      console.log('Not onboarded!');
+    }
+
     this.loading = false;
   }
 
@@ -51,6 +58,15 @@ export class RecordingsPageComponent implements OnInit, OnDestroy {
     if (!this.subscription) return;
     this.subscription.unsubscribe();
     this.recordings = [];
+  }
+
+  setOnboardingPage(page: number) {
+    this.currentOnboardingPage = page;
+  }
+
+  doneOnboarding() {
+    this.currentMode = 'default';
+    localStorage.setItem('isOnboarded', 'true');
   }
 
   async getRecordings() {
