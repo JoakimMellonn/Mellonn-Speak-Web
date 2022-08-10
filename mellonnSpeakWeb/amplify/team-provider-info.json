@@ -178,7 +178,9 @@
         "stripeGetProduct": {
           "deploymentBucketName": "amplify-mellonnspeakeu-staging-102306-deployment",
           "s3Key": "amplify-builds/stripeGetProduct-4d6335436941706d6c52-build.zip",
-          "secretsPathAmplifyAppId": "d3km7wqa9jf06b"
+          "secretsPathAmplifyAppId": "d3km7wqa9jf06b",
+          "product": "prod_LtZIbFmc9pe9VQ",
+          "benefitProduct": "prod_MCxCO7M4beTl5y"
         }
       }
     }
