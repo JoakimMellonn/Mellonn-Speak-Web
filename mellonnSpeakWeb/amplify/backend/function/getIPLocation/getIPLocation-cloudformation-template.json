@@ -1,6 +1,6 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "{\"createdOn\":\"Mac\",\"createdBy\":\"Amplify\",\"createdWith\":\"9.2.0\",\"stackType\":\"function-Lambda\",\"metadata\":{}}",
+  "Description": "{\"createdOn\":\"Mac\",\"createdBy\":\"Amplify\",\"createdWith\":\"9.2.1\",\"stackType\":\"function-Lambda\",\"metadata\":{}}",
   "Parameters": {
     "CloudWatchRule": {
       "Type": "String",
@@ -17,12 +17,6 @@
       "Type": "String"
     },
     "secretsPathAmplifyAppId": {
-      "Type": "String"
-    },
-    "product": {
-      "Type": "String"
-    },
-    "benefitProduct": {
       "Type": "String"
     }
   },
@@ -56,12 +50,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "stripeGetProduct",
+            "getIPLocation",
             {
               "Fn::Join": [
                 "",
                 [
-                  "stripeGetProduct",
+                  "getIPLocation",
                   "-",
                   {
                     "Ref": "env"
@@ -79,7 +73,7 @@
             "REGION": {
               "Ref": "AWS::Region"
             },
-            "stripeKey": {
+            "apiKey": {
               "Fn::Join": [
                 "",
                 [
@@ -93,19 +87,13 @@
                         "env": {
                           "Ref": "env"
                         },
-                        "functionName": "stripeGetProduct"
+                        "functionName": "getIPLocation"
                       }
                     ]
                   },
-                  "stripeKey"
+                  "apiKey"
                 ]
               ]
-            },
-            "product": {
-              "Ref": "product"
-            },
-            "benefitProduct": {
-              "Ref": "benefitProduct"
             }
           }
         },
@@ -126,12 +114,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "mellonnspeakeuLambdaRoleb4708e3d",
+            "mellonnspeakeuLambdaRole5276ee74",
             {
               "Fn::Join": [
                 "",
                 [
-                  "mellonnspeakeuLambdaRoleb4708e3d",
+                  "mellonnspeakeuLambdaRole5276ee74",
                   "-",
                   {
                     "Ref": "env"
@@ -243,7 +231,7 @@
                           "env": {
                             "Ref": "env"
                           },
-                          "functionName": "stripeGetProduct"
+                          "functionName": "getIPLocation"
                         }
                       ]
                     },
