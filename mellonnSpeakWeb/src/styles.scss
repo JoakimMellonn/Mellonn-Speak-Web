@@ -63,6 +63,8 @@ input, button {
     width: 100%;
     box-shadow: 0px 2px 5px #00000024;
     cursor: pointer;
+
+    transition: 0.2s;
 }
 
 .standardButton:hover {
@@ -88,6 +90,8 @@ input, button {
     box-shadow: 0px 2px 5px #00000024;
     box-sizing: border-box;
     cursor: text;
+
+    transition: 0.2s;
 }
 
 html, body { height: 100%; }

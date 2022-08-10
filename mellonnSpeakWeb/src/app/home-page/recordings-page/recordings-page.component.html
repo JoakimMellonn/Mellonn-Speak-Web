@@ -1,11 +1,69 @@
 <div class="pageContainer">
     <div class="center">
-        <div class="mainContent" *ngIf="!loading">
+
+        <!--Onboarding content-->
+        <div class="onboarding" *ngIf="currentMode == 'onboarding'">
+            <div class="box">
+                <div class="page" *ngIf="currentOnboardingPage == 0">
+                    <h1>Welcome to Mellonn Speak!</h1>
+                    <img src="/assets/svg/welcome.svg">
+
+                    <h2>Looks like you're new here.</h2>
+                    <p>And we're very happy to see you!</p>
+                    <div class="notNew">
+                        <p (click)="doneOnboarding()">I'm not new though...</p>
+                    </div>
+                    <p>Now let's go through some of Mellonn Speak's features.</p>
+                    <button class="standardButton" (click)="setOnboardingPage(1)">Let's go!</button>
+                </div>
+
+                <div class="page" *ngIf="currentOnboardingPage == 1">
+                    <h1>Uploading a recording</h1>
+                    <img src="/assets/svg/upload.svg">
+                    <p>When uploading a recording, you can choose up to 10 participants and 34 different languages/accents. Our AI will then do the transcribing for you!</p>
+                    <button class="standardButton" (click)="setOnboardingPage(2)">Next</button>
+                </div>
+                <div class="page" *ngIf="currentOnboardingPage == 2">
+                    <h1>Edit speaker labels</h1>
+                    <img src="/assets/svg/labelEdit.svg">
+                    <p>When the transcription is done, you can give the participants labels, so you know who said what!</p>
+                    <button class="standardButton" (click)="setOnboardingPage(3)">Next</button>
+                </div>
+                <div class="page" *ngIf="currentOnboardingPage == 3">
+                    <h1>Edit speakers</h1>
+                    <img src="/assets/svg/speakerEdit.svg">
+                    <p>If the AI didn't get it quite right, you can always change who's talking when, while listening.</p>
+                    <button class="standardButton" (click)="setOnboardingPage(4)">Next</button>
+                </div>
+                <div class="page" *ngIf="currentOnboardingPage == 4">
+                    <h1>Edit text</h1>
+                    <img src="/assets/svg/textEdit.svg">
+                    <p>Say what?! If it wasn't what was said in the recording, you can always change it!</p>
+                    <button class="standardButton" (click)="setOnboardingPage(5)">Next</button>
+                </div>
+                <div class="page" *ngIf="currentOnboardingPage == 5">
+                    <h1>Export transcription</h1>
+                    <img src="/assets/svg/speakerEdit.svg">
+                    <p>When you're all done, you can export the transcription as a Word-document (DOCX).</p>
+                    <button class="standardButton" (click)="setOnboardingPage(6)">Next</button>
+                </div>
+                <div class="page" *ngIf="currentOnboardingPage == 6">
+                    <h1>Help</h1>
+                    <img src="/assets/svg/speakerEdit.svg">
+                    <p>If you need help using one of Mellonn Speak's many tools, you can always press one of the many Help buttons throughout the app! If this doesn't answer your question, you can also report an issue and we will get back to you ASAP.</p>
+                    <button class="standardButton" (click)="doneOnboarding()">Take me to Mellonn Speak!</button>
+                </div>
+            </div>
+        </div>
+
+        <!--Actual page content-->
+        <div class="mainContent" *ngIf="!loading && currentMode != 'onboarding'">
             <div class="recordings" *ngIf="currentMode == 'default'">
                 <div class="titleBox">
                     <h1>
                         Here's your Recordings
                     </h1>
+
                 </div>
                 <div class="contentBox">
                     <p *ngIf="recordings.length == 0">You don't have any recordings</p>
