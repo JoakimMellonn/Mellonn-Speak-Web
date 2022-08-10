@@ -181,6 +181,11 @@
           "secretsPathAmplifyAppId": "d3km7wqa9jf06b",
           "product": "prod_LtZIbFmc9pe9VQ",
           "benefitProduct": "prod_MCxCO7M4beTl5y"
+        },
+        "getIPLocation": {
+          "secretsPathAmplifyAppId": "d3km7wqa9jf06b",
+          "deploymentBucketName": "amplify-mellonnspeakeu-staging-102306-deployment",
+          "s3Key": "amplify-builds/getIPLocation-754e48655250562f4876-build.zip"
         }
       }
     }

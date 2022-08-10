@@ -1,15 +1,54 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Storage } from 'aws-amplify';
+import { API, Storage } from 'aws-amplify';
 import { parse } from 'node-html-parser';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LanguageService {
+  ip: string;
+  countryCode: string = 'DK';
+  currency: string = 'DKK';
+  gotCountryCode: boolean = false;
+
   languageList: string[] = [];
   languageCodeList: string[] = [];
 
-  constructor() { }
+  constructor(
+    private http: HttpClient,
+  ) { }
+
+  getIPAdress() {
+    return this.http.get("http://api.ipify.org/?format=json");
+  }
+
+  async getCountryCode() {
+    if (!this.gotCountryCode) {
+      const code = localStorage.getItem('countryCode');
+      const cur = localStorage.getItem('currency');
+      if (code == null || cur == null) {
+        this.getIPAdress().subscribe(async (res: any) => {
+          this.ip = res.ip;
+  
+          const params = {
+            body: {
+              "ip": this.ip
+            }
+          };
+          const location = await API.put('location', '/ip', params);
+  
+          this.countryCode = location.location.country.code;
+          this.currency = location.currency.code;
+          localStorage.setItem('countryCode', this.countryCode);
+          localStorage.setItem('currency', this.currency);
+        });
+      } else {
+        this.countryCode = code;
+        this.currency = cur;
+      }
+    }
+  }
 
   async getLanguages() {
     try {

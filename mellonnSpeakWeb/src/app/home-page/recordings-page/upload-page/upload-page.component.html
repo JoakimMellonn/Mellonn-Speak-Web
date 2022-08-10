@@ -24,9 +24,9 @@
             <select name="language" id="language" [(ngModel)]="languageSelect">
                 <option *ngFor="let code of languageService.languageCodeList" value="{{code}}" [selected]="settingsService.currentSettings.languageCode">{{languageService.getLanguage(code)}}</option>
             </select>
-            <hr style="margin-top: 15px;">
 
             <div *ngIf="zipType != 'none' && !(this.periods.periods == 0 || this.authService.group == 'dev')">
+                <hr style="margin-top: 15px;">
                 <h4>What is your zip-code?</h4>
                 <input class="zipInput inputField" type="text" placeholder="ZIP" maxlength = "10" [(ngModel)]="zipCode">
                 <p class="tax">This is only used for tax calculation, we do not save this.</p>

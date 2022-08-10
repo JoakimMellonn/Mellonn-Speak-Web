@@ -1,9 +1,9 @@
-import { Inject, Injectable, LOCALE_ID } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { AuthService } from '../auth-service/auth.service';
 import { API, DataStore, Storage } from 'aws-amplify';
 import { Recording } from 'src/models';
 import { Subject } from 'rxjs';
-import { getLocaleCurrencyCode } from '@angular/common';
+import { LanguageService } from '../language-service/language.service';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +24,7 @@ export class UploadService {
 
   constructor(
     private authService: AuthService,
-    @Inject(LOCALE_ID) private locale: string,
+    private languageService: LanguageService
   ) { }
 
   getPeriods(duration: number): Periods {
@@ -60,7 +60,7 @@ export class UploadService {
         "product": product,
         "quantity": quantity,
         "name": `${this.authService.firstName} ${this.authService.lastName}`,
-        "country": this.locale.split('-')[1],
+        "country": this.languageService.countryCode,
         "postalCode": postalCode
       }
     }
@@ -102,8 +102,8 @@ export class UploadService {
     return response;
   }
 
-  async getProduct(locale: string) {
-    const currency = getLocaleCurrencyCode(locale);
+  async getProduct() {
+    const currency = this.languageService.currency;
     const params = {
       body: {
         "group": this.authService.group,

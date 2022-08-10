@@ -1,6 +1,5 @@
-import { getLocaleCurrencyCode } from '@angular/common';
-import { Component, Inject, Input, LOCALE_ID, OnInit } from '@angular/core';
-import { loadStripe, Stripe, StripeCardElement, StripePaymentElement } from '@stripe/stripe-js';
+import { Component, Input, OnInit } from '@angular/core';
+import { loadStripe, Stripe, StripePaymentElement } from '@stripe/stripe-js';
 import { AuthService } from 'src/app/shared/auth-service/auth.service';
 import { LanguageService } from 'src/app/shared/language-service/language.service';
 import { SettingsService } from 'src/app/shared/settings-service/settings.service';
@@ -63,7 +62,6 @@ export class UploadPageComponent implements OnInit {
     public settingsService: SettingsService,
     private uploadService: UploadService,
     public authService: AuthService,
-    @Inject(LOCALE_ID) private locale: string,
   ) { }
 
   ngOnInit(): void {
@@ -89,9 +87,9 @@ export class UploadPageComponent implements OnInit {
     this.unitPrice = this.uploadService.price.unit_amount/100;
     this.currency = this.uploadService.currency;
 
-    if (this.locale.split('-')[1] == 'US') {
+    if (this.languageService.countryCode == 'US') {
       this.zipType = 'US';
-    } else if (this.locale.split('-')[1] == 'CA') {
+    } else if (this.languageService.countryCode == 'CA') {
       this.zipType = 'CA';
     }
 
@@ -188,7 +186,7 @@ export class UploadPageComponent implements OnInit {
         defaultValues: {
           billingDetails: {
             address: {
-              country: this.locale.split('-')[1],
+              country: this.languageService.countryCode,
               postal_code: this.zipCode.toUpperCase()
             }
           }

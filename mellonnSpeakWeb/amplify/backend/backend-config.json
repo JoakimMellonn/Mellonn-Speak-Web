@@ -181,6 +181,20 @@
           ]
         }
       ]
+    },
+    "location": {
+      "service": "API Gateway",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [
+        {
+          "category": "function",
+          "resourceName": "getIPLocation",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
+        }
+      ]
     }
   },
   "storage": {
@@ -322,6 +336,12 @@
       ]
     },
     "stripeGetProduct": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": []
+    },
+    "getIPLocation": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda",
