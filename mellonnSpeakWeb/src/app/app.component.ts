@@ -23,6 +23,7 @@ export class AppComponent implements OnInit {
 
   async ngOnInit() {
     console.log(`Locale: ${this.locale}`);
+    console.log(`Locale function: ${this.getUsersLocale('en-IN')}`);
     this.authService.signInStateCalled.subscribe((res) => {
       if (res == 1) {
         this.signedIn = true;
@@ -46,5 +47,15 @@ export class AppComponent implements OnInit {
 
   async signOut() {
     await this.authService.signOut();
+  }
+
+  getUsersLocale(defaultValue: string): string {
+    if (typeof window === 'undefined' || typeof window.navigator === 'undefined') {
+      return defaultValue;
+    }
+    const wn = window.navigator as any;
+    let lang = wn.languages ? wn.languages[0] : defaultValue;
+    lang = lang || wn.language || wn.browserLanguage || wn.userLanguage;
+    return lang;
   }
 }
