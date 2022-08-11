@@ -131,12 +131,14 @@ export class PromotionService {
 
   async removePromotion(code: string): Promise<boolean> {
     const params = {
-      "action": "remove",
-      "code": code
+      body: {
+        "action": "remove",
+        "code": code
+      }
     };
   
     const response = await API.put('getPromo', '/addPromo', params);
-    if (response.statusCode == 200) {
+    if (response == `Successfully removed code: ${code}`) {
       return true;
     } else {
       return false;
@@ -246,12 +248,14 @@ export class Promotion {
   freePeriods: number;
   referrer: string;
   referGroup: string;
+  uses?: number;
 
-  constructor(code: string, type: string, freePeriods: number, referrer: string, referGroup: string) {
+  constructor(code: string, type: string, freePeriods: number, referrer: string, referGroup: string, uses?: number) {
     this.code = code,
     this.type = type,
     this.freePeriods = freePeriods,
     this.referrer = referrer,
-    this.referGroup = referGroup
+    this.referGroup = referGroup,
+    this.uses = uses
   }
 }

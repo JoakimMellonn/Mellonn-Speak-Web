@@ -59,7 +59,8 @@ export class StorageService {
           promo.type,
           promo.freePeriods,
           promo.referrer ?? '',
-          promo.referGroup ?? ''
+          promo.referGroup ?? '',
+          promo.uses ?? 69,
         ));
       }
       return returnList;

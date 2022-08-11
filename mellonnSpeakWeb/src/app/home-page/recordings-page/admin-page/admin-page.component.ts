@@ -155,6 +155,15 @@ export class AdminPageComponent implements OnInit {
 
   async removeUserClick(email: string) {
     const res = await this.promotionService.removeUserFromReferrer(this.authService.referrer, email, this.authService.referGroup);
+
+    let newList: string[] = [];
+    for (let em of this.groupList) {
+      if (em != email) {
+        newList.push(em);
+      }
+    }
+    this.groupList = newList;
+
     if (res) {
       alert('User removed from your group.');
     } else {
@@ -163,7 +172,16 @@ export class AdminPageComponent implements OnInit {
   }
 
   async removePromoClick(code: string) {
-    const res = await this.promotionService.removePromotion(this.promoCode);
+    const res = await this.promotionService.removePromotion(code);
+
+    let newList: Promotion[] = [];
+    for (let promo of this.promoList) {
+      if (promo.code != code) {
+        newList.push(promo);
+      }
+    }
+    this.promoList = newList;
+
     if (res) {
       alert('Promo has been removed.');
     } else {
