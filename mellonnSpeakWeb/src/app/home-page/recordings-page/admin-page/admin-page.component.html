@@ -1,5 +1,7 @@
 <div class="contentBox">
     <button class="standardButton" (click)="changeMode('addPromo')" style="margin: 0 0 25px 0;" *ngIf="authService.superDev && currentMode == 'groupAdmin'">Add/remove promotion</button>
+
+    <!--Add/remove promo code-->
     <div *ngIf="authService.superDev && currentMode == 'addPromo'">
         <p>Add/remove promo code</p>
         <select name="promoType" id="promoType" [(ngModel)]="promoType">
@@ -23,6 +25,8 @@
         <button class="standardButton" (click)="changeMode('promoList')">View all promo codes</button>
         <button class="standardButton" (click)="changeMode(defaultMode)" *ngIf="defaultMode != 'addPromo'">Cancel</button>
     </div>
+
+    <!--Group admin-->
     <div *ngIf="authService.groupAdmin && currentMode == 'groupAdmin'">
         <p>Add/remove user to {{authService.referGroup}}</p>
         <input type="text" class="inputField" placeholder="Email" [(ngModel)]="groupEmail">
@@ -34,6 +38,8 @@
         </div>
         <button class="standardButton" (click)="changeMode('groupList')">View all users in group</button>
     </div>
+
+    <!--Group list page-->
     <div *ngIf="currentMode == 'groupList'">
         <button class="standardButton" style="margin: 0 0 15px 0;" (click)="changeMode(defaultMode)">Close</button>
         <input type="text" class="inputField" style="margin-bottom: 15px;" placeholder="Search" [(ngModel)]="groupSearch">
@@ -42,6 +48,8 @@
             <i class="fa-solid fa-trash" (click)="removeUserClick(email)"></i>
         </div>
     </div>
+
+    <!--Promo list page-->
     <div *ngIf="currentMode == 'promoList'">
         <button class="standardButton" style="margin: 0 0 15px 0;" (click)="changeMode(defaultMode)">Close</button>
         <input type="text" class="inputField" style="margin-bottom: 15px;" placeholder="Search" [(ngModel)]="promoSearch">
@@ -50,7 +58,8 @@
             <a>
                 Code: {{promo.code}}<br>
                 Type: {{promo.type}}<br>
-                Periods: {{promo.freePeriods}}
+                Periods: {{promo.freePeriods}}<br>
+                Uses: {{promo.uses == 0 ? '∞' : promo.uses}}
             </a>
             <a *ngIf="promo.type == 'referrer'"><br>Referrer: {{promo.referrer}}</a><br>
             <a *ngIf="promo.type == 'referGroup'">
