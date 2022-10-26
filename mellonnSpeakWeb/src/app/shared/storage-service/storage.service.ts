@@ -73,10 +73,10 @@ export class StorageService {
   async createReferrer(referrer: string) {
     const key: string = `data/referrers/${referrer}.json`;
     const defaultReferrer = {
-      referrer: referrer,
-      purchases: 0,
-      periods: 0,
-      emails: []
+      "referrer": referrer.toString(),
+      "purchases": 0,
+      "periods": 0,
+      "emails": []
     }
 
     try {
