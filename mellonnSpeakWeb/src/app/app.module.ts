@@ -28,6 +28,7 @@ import { DndDirective } from './home-page/recordings-page/drag-drop/dnd.directiv
 import { AdminPageComponent } from './home-page/recordings-page/admin-page/admin-page.component';
 import { SearchPipe } from './home-page/recordings-page/admin-page/search-pipe/search.pipe';
 import { SearchPromoPipe } from './home-page/recordings-page/admin-page/searchPromo-pipe/search-promo.pipe';
+import { BackgroundComponent } from './background/background.component';
 
 Amplify.configure(awsconfig);
 
@@ -51,6 +52,7 @@ Amplify.configure(awsconfig);
     AdminPageComponent,
     SearchPipe,
     SearchPromoPipe,
+    BackgroundComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,3 +1,4 @@
+@use "../../variables" as v;
 
 .pageContainer {
     position: relative;
@@ -8,13 +9,26 @@
         top: 110px;
         left: 50%;
         transform: translate(-50%);
-        max-width: 500px;
+        max-width: 1000px;
         width: 80%;
 
         .loginBox {
-            background-color: #f8f8f8;
+            background-color: v.$white;
             box-shadow: 0px 2px 5px #00000024;
-            border-radius: 25px;
+            border-radius: 20px;
+
+            .contentBox {
+                display: flex;
+
+                .left {
+                    flex: 1;
+                }
+
+                .right {
+                    flex: 1;
+
+                }
+            }
         }
 
         .createAccount {

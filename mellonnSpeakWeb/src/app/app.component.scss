@@ -1,21 +1,12 @@
+@use "variables" as v;
+
 .header {
-    background-color: #FAB228;
+    background-color: v.$white;
     height: 70px;
-    box-shadow: 0px 2px 5px #00000024;
+    box-shadow: 0px 2px 5px v.$shadow;
     width: 100%;
     position: fixed;
     z-index: 10;
-
-    .icon {
-        position: absolute;
-        top: 50%;
-        left: 50px;
-        transform: translate(-50%, -50%);
-        cursor: pointer;
-        height: 40px;
-        border-radius: 10px;
-        display: inline-block;
-    }
 
     .logo {
         position: absolute;

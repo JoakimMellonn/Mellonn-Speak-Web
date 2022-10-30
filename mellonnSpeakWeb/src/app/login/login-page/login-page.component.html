@@ -6,8 +6,15 @@
                     Welcome to Mellonn Speak
                 </h1>
             </div>
-            <app-email-login *ngIf="!createUser"></app-email-login>
-            <app-create-user *ngIf="createUser"></app-create-user>
+            <div class="contentBox">
+                <div class="left">
+                    <app-email-login *ngIf="!createUser"></app-email-login>
+                    <app-create-user *ngIf="createUser"></app-create-user>
+                </div>
+                <div class="right">
+                    
+                </div>
+            </div>
         </div>
         <div class="createAccount" (click)="createUser = true" *ngIf="!createUser && !forgotPassword">
             <p>Are you new here?.. </p><a style="text-decoration: underline;">Create an account!</a>
