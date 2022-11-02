@@ -134,6 +134,7 @@ export class CreateUserComponent implements OnInit {
     } catch (err) {
       console.error('Error signing up: ' + err);
       this.serverMessage = String(err).split(': ')[1];
+      this.loading = false;
     }
 
     this.loading = false;
