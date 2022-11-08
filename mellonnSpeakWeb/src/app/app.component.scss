@@ -2,7 +2,7 @@
 
 .header {
     background-color: v.$white;
-    height: 70px;
+    height: 50px;
     box-shadow: 0px 2px 5px v.$shadow;
     width: 100%;
     position: fixed;
@@ -14,7 +14,7 @@
         left: 50%;
         transform: translate(-50%, -50%);
         cursor: pointer;
-        height: 30px;
+        height: 25px;
     }
 
     .profile {
@@ -24,8 +24,8 @@
         transform: translate(50%, -50%);
         cursor: pointer;
         display: inline-block;
-        height: 45px;
-        width: 45px;
+        height: 35px;
+        width: 35px;
         border-radius: 50%;
         box-shadow: 0px 2px 5px #00000024;
     }

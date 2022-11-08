@@ -1,3 +1,5 @@
+@use "../../variables" as v;
+
 .center {
     max-width: 850px;
 }
@@ -9,8 +11,8 @@
     width: 100px;
     height: 100px;
     border-radius: 50%;
-    background-color: #F8F8F8;
-    box-shadow: 0px 2px 5px #00000024;
+    background-color: v.$white;
+    box-shadow: 0px 2px 5px v.$shadow;
     margin-bottom: 25px;
 }
 
@@ -20,9 +22,9 @@ h1 {
 }
 
 .contentBox {
-    background-color: #F8F8F8;
-    border-radius: 25px;
-    box-shadow: 0px 2px 5px #00000024;
+    background-color: v.$white;
+    border-radius: v.$radius;
+    box-shadow: 0px 2px 20px v.$shadow;
     box-sizing: border-box;
     height: 100%;
     margin-bottom: 50px;
@@ -47,9 +49,9 @@ h1 {
             margin-bottom: 25px;
             left: 50%;
             transform: translate(-50%);
-            background-color: #F8F8F8;
-            border-radius: 25px;
-            box-shadow: 0px 2px 5px #00000024;
+            background-color: v.$white;
+            border-radius: v.$radius;
+            box-shadow: 0px 2px 5px v.$shadow;
             padding: 25px;
 
             p {
@@ -64,7 +66,7 @@ h1 {
 
             hr {
                 margin: 15px 5px;
-                border-top: 1px solid #0000005b;
+                border-top: 1px solid v.$divider;
                 border-radius: 0.5px;
             }
 
@@ -90,7 +92,7 @@ h1 {
                 position: relative;
                 left: 50%;
                 transform: translate(-50%);
-                color: #FAB228;
+                color: v.$orange;
             }
 
             .cardHR {
@@ -121,9 +123,9 @@ h1 {
             margin-bottom: 25px;
             left: 50%;
             transform: translate(-50%);
-            background-color: #F8F8F8;
-            border-radius: 25px;
-            box-shadow: 0px 2px 5px #00000024;
+            background-color: v.$white;
+            border-radius: v.$radius;
+            box-shadow: 0px 2px 5px v.$shadow;
 
             .child {
                 padding: 25px;
@@ -168,7 +170,7 @@ h1 {
 
         .dividedSegment {
             padding: 20px 25px;
-            border-radius: 25px;
+            border-radius: v.$radius;
         }
 
         #divided {
@@ -184,7 +186,7 @@ h1 {
         }
 
         .clickable:hover {
-            background-color: #efefef;
+            background-color: v.$whiteHover;
         }
     }
 }
@@ -206,21 +208,13 @@ h1 {
         transform: translate(-50%);
 
         button {
+            left: 0;
+            transform: translateX(0);
             flex: 1;
-            background-color: #A5C644;
-            border: 0;
-            border-radius: 25px;
-            height: 50px;
-            box-shadow: 0px 2px 5px #00000024;
-            cursor: pointer;
-            margin-left: 5px;
-        }
-
-        button:hover {
-            background-color: #9ACD3A;
         }
 
         #left {
+            flex: 0.8;
             background-color: transparent;
             margin-right: 5px;
             margin-left: 0;
@@ -241,7 +235,7 @@ h1 {
     position: relative;
     display: block;
     margin-top: 10px;
-    color: #FD594D;
+    color: v.$red;
     text-align: center;
 }
 

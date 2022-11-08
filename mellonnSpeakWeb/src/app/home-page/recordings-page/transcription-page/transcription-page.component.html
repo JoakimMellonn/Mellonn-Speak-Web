@@ -10,8 +10,8 @@
                         {{ recording.name }}
                     </h1>
                     <div class="dropdown">
-                        <input class="checkbox" type="checkbox" id="menu">
-                        <label for="menu"><i class="fa-solid fa-ellipsis-vertical fa-2xl icon"></i></label>
+                        <input class="checkbox" type="checkbox" id="menu" checked>
+                        <label for="menu"><i class="fa-solid fa-ellipsis-vertical fa-xl icon"></i></label>
                         <div class="dropdown-content">
                             <a (click)="labelEditOpen = true">Edit labels</a>
                             <a (click)="downloadDOCX()">Download as DOCX</a>
@@ -26,28 +26,11 @@
                     <div class="chatLine" *ngFor="let sww of speakerWithWords">
                         <div *ngIf="recording.interviewers?.includes(sww.speakerLabel)">
                             <app-user-chat-bubble [sww]="sww" [transcription]="transcription" [recording]="recording"></app-user-chat-bubble>
-                            <p class="userText">{{ getSpkLabel(sww.speakerLabel) }} (Speaker {{getSpkNum(sww.speakerLabel) + 1}}): {{getTimeFrame(sww.startTime, sww.endTime)}}</p>
+                            <p class="text" id="user">{{ getSpkLabel(sww.speakerLabel) }} (Speaker {{getSpkNum(sww.speakerLabel) + 1}}): {{getTimeFrame(sww.startTime, sww.endTime)}}</p>
                         </div>
                         <div *ngIf="!recording.interviewers?.includes(sww.speakerLabel)">
                             <app-chat-bubble [sww]="sww" [isUser]="true" [transcription]="transcription" [recording]="recording"></app-chat-bubble>
                             <p class="text">{{ getSpkLabel(sww.speakerLabel) }} (Speaker {{getSpkNum(sww.speakerLabel) + 1}}): {{getTimeFrame(sww.startTime, sww.endTime)}}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="sideColumn">
-                <div class="editTranscription">
-                    <div class="titleBox">
-                        <h1>
-                            Edit transcription
-                        </h1>
-                    </div>
-                    <div class="contentBox">
-                        <button class="standardButton" (click)="resetAudio()">
-                            Reset audio selection
-                        </button><br><br>
-                        <div *ngIf="!labelEditOpen">
-                            <app-speaker-chooser [recording]="recording" [speakerWithWords]="speakerWithWords" [transcription]="transcription" *ngIf="loading == false"></app-speaker-chooser>
                         </div>
                     </div>
                 </div>

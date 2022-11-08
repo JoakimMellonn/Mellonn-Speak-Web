@@ -32,8 +32,8 @@
                                 <input class="inputField" placeholder="Promo code" [(ngModel)]="promoCode" (keyup.enter)="redeemPromotion()">
                                 <p class="errorMessage" *ngIf="promoError != ''">{{promoError}}</p>
                                 <div class="buttonRow">
-                                    <button id="left" (click)="toggleRedeemPromo()">Cancel</button>
-                                    <button (click)="redeemPromotion()">Redeem</button>
+                                    <button class="standardButton" id="left" (click)="toggleRedeemPromo()">Cancel</button>
+                                    <button class="standardButton" (click)="redeemPromotion()">Redeem</button>
                                 </div>
                             </div>
                             <div class="discount" *ngIf="promoRedeemed">

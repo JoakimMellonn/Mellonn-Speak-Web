@@ -56,7 +56,7 @@ export class TranscriptionPageComponent implements OnInit {
         this.error;
       }
     });
-    if (this.recording.labels == [] || this.recording.labels == null || this.recording.labels == undefined || this.recording.labels.length != this.recording.speakerCount) {
+    if (this.recording.labels == null || this.recording.labels == undefined || this.recording.labels.length != this.recording.speakerCount) {
       this.labelEditOpen = true;
     }
     this.url = await this.audio.getAudioUrl(this.recording.fileKey ?? '');

@@ -6,7 +6,6 @@
 
     .loginCenter {
         position: absolute;
-        top: 110px;
         left: 50%;
         transform: translate(-50%);
         max-width: 1000px;
@@ -23,9 +22,6 @@
 
                 .left {
                     flex: 1;
-                    position: relative;
-                    top: 50%;
-                    transform: translate-Y(-50%);
                 }
 
                 .right {
@@ -47,5 +43,11 @@
         text-decoration: none;
         display: inline;
         font-size: 0.8em;
+    }
+}
+
+@media screen and (max-width: 850px) {
+    .right {
+        display: none;
     }
 }
