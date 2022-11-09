@@ -89,6 +89,16 @@ export class TranscriptionPageComponent implements OnInit {
       });
       this.versionHistoryOpen = false;
     });
+
+    //TODO: Fix this...
+    window.onclick = function(e: Event) {
+      const checkbox = document.querySelector(".checkbox") as HTMLInputElement | null;
+      const ele = <Element>e.target;
+      if (!ele.matches(".checkbox") && checkbox?.checked) {
+        checkbox.checked = false;
+      }
+    }
+
     this.loading = false;
   }
 

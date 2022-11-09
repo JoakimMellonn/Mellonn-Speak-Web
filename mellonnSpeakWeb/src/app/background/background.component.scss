@@ -1,17 +1,61 @@
 @use "../variables" as v;
 
-div {
+$bigSize: 900px;
+$smallSize: 650px;
+$topOffset: 55%;
+$leftOffset: 75%;
+$smallTop: 125px;
+$smallLeft: 300px;
+
+$bigSizeMobile: 900px;
+$smallSizeMobile: 650px;
+$topOffsetMobile: 55%;
+$leftOffsetMobile: 50%;
+$smallTopMobile: 125px;
+$smallLeftMobile: 300px;
+
+.background {
     position: fixed;
-    z-index: -1;
-    width: 100vw;
-    height: 100vh;
     background-color: v.$background;
+    width: 100%;
+    height: 100%;
+    z-index: -11;
 }
 
-svg {
-    position: relative;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
+.bigCircle {
+    position: fixed;
+    background-color: rgba(250, 176, 40, 0.64);
+    top: $topOffset;
+    left: $leftOffset;
+    width: $bigSize;
+    height: $bigSize;
+    border-radius: 50%;
+    z-index: -10;
+}
+
+.smallCircle {
+    position: fixed;
+    background-color: rgba(250, 176, 40, 0.44);
+    top: calc($topOffset + $smallTop);
+    left: calc($leftOffset - $smallLeft);
+    width: $smallSize;
+    height: $smallSize;
+    border-radius: 50%;
+    z-index: -10;
+}
+
+@media screen and (max-width: 700px) {
+    .bigCircle {
+        top: $topOffsetMobile;
+        left: $leftOffsetMobile;
+        width: $bigSizeMobile;
+        height: $bigSizeMobile;
+    }
+    
+    .smallCircle {
+        top: calc($topOffsetMobile + $smallTopMobile);
+        left: calc($leftOffsetMobile - $smallLeftMobile);
+        width: $smallSizeMobile;
+        height: $smallSizeMobile;
+    }
 }

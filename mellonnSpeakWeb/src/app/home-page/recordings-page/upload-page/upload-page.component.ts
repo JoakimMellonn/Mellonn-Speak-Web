@@ -83,6 +83,8 @@ export class UploadPageComponent implements OnInit {
       }
     }
 
+    if (this.authService.group == 'dev') this.buttonText = 'Upload recording';
+
     //Setting prices
     this.unitPrice = this.uploadService.price.unit_amount/100;
     this.currency = this.uploadService.currency;

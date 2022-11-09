@@ -39,7 +39,7 @@ input, button {
     width: 100%;
     background-color: v.$white;
     box-shadow: 0px 2px 5px v.$shadow;
-    clip-path: inset(0px 0px -15px 0px);
+    clip-path: inset(0px 0px auto 0px);
     border-radius: v.$radius v.$radius 0 0;
     padding: 15px 25px 15px 25px;
 

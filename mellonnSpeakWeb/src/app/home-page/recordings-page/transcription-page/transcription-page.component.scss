@@ -8,79 +8,74 @@
     height: 100%;
     display: flex;
 
-    .titleBox {
-        width: 100%;
+    h1 {
+        display: inline;
+    }
 
-        h1 {
-            display: inline;
+    .dropdown {
+        position: relative;
+        float: right;
+        width: 20px;
+        height: 50px;
+        padding-top: 14px;
+        cursor: pointer;
+
+        .icon {
+            position: absolute;
+            right: 5px;
+            width: 20px;
+            top: 10%;
+            height: 32px;
+            font-size: 1.7em;
+            cursor: pointer;
         }
 
-        .dropdown {
+        i::before {
             position: relative;
-            float: right;
-            width: 20px;
-            height: 50px;
-            padding-top: 14px;
+            top: 50%;
+            left: 30%;
+            transform: translateX(-50%);
+        }
+
+        .checkbox {
             cursor: pointer;
-    
-            .icon {
-                position: absolute;
-                right: 5px;
-                width: 20px;
-                top: 10%;
-                height: 32px;
-                font-size: 1.7em;
-                cursor: pointer;
-            }
-    
-            i::before {
-                position: relative;
-                top: 50%;
-                left: 30%;
-                transform: translateX(-50%);
-            }
-    
-            .checkbox {
-                display: none;
-                cursor: pointer;
-            }
-    
-            .dropdown-content {
-                display: none;
-                position: absolute;
-                min-width: 250px;
-                margin-top: 30px;
-                background-color: v.$white;
-                box-shadow: 0px 2px 10px v.$shadow;
-                border-radius: v.$radius;
-                right: 0;
-                height: 0px;
-                z-index: 1000;
-    
-                transition: height 0.2s;
-    
-                a {
-                    display: block;
-                    padding: 20px 25px;
-                }
-    
-                a:hover {
-                    background-color: v.$whiteHover;
-                }
-    
-                a:first-child {
-                    border-radius: v.$radius v.$radius 0 0;
-                }
-    
-                a:last-child {
-                    border-radius: 0 0 v.$radius v.$radius;
-                }
-            }
-    
-            .checkbox:checked ~ .dropdown-content {
-                height: auto;
+        }
+
+        .dropdown-content {
+            position: absolute;
+            min-width: 250px;
+            margin-top: 30px;
+            background-color: v.$whiteOpaque;
+            box-shadow: 0px 2px 10px v.$shadow;
+            border-radius: v.$radius;
+            right: 0;
+            max-height: 0px;
+            overflow: hidden;
+
+            transition: max-height 0.2s;
+
+            a {
                 display: block;
+                padding: 20px 25px;
+
+                transition: 0.2s;
             }
+
+            a:hover {
+                background-color: v.$whiteHover;
+            }
+
+            a:first-child {
+                border-radius: v.$radius v.$radius 0 0;
+            }
+
+            a:last-child {
+                border-radius: 0 0 v.$radius v.$radius;
+            }
+        }
+
+        .checkbox:checked ~ .dropdown-content {
+            max-height: 400px;
         }
     }
 
