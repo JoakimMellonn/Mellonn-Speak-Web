@@ -8,6 +8,8 @@ import { TranscriptionService, SpeakerWithWords } from './services/transcription
 import { SpeakerEditService } from 'src/app/shared/speaker-edit-service/speaker-edit.service';
 import { LabelService } from './label-edit/label.service';
 import { VersionHistoryService } from './version-history/version-history.service';
+import { ConversionService } from 'src/app/shared/conversion-service/conversion.service';
+
 
 
 @Component({
@@ -37,7 +39,8 @@ export class TranscriptionPageComponent implements OnInit, OnDestroy {
     private speakerEdit: SpeakerEditService,
     private labelService: LabelService,
     private versionHistory: VersionHistoryService,
-    private router: Router
+    private router: Router,
+    public conversion: ConversionService
   ) { }
 
   async ngOnInit() {
@@ -63,10 +66,16 @@ export class TranscriptionPageComponent implements OnInit, OnDestroy {
     this.audio.setAudioUrl(this.url);
     this.speakerWithWords = this.service.processTranscription(this.transcription);
 
+    /**
+     * Called when the user saves an edit.
+     */
     this.speakerEdit.speakerEditReloadCalled.subscribe((res) => {
       this.reloadTranscription(res);
     });
 
+    /**
+     * Called when the user saves the assign speaker labels.
+     */
     this.labelService.closeModalCalled.subscribe(async (res) => {
       await this.service.getRecording(this.id).then((value) => {
         if (value != 'null') {
@@ -79,6 +88,9 @@ export class TranscriptionPageComponent implements OnInit, OnDestroy {
       this.labelEditOpen = false;
     });
 
+    /**
+     * Called when the user recovers an older version of the transcription.
+     */
     this.versionHistory.recoverTransCalled.subscribe(async (res) => {
       await this.service.getTranscription(this.id).then((value) => {
         if (value != 'null') {
@@ -90,6 +102,10 @@ export class TranscriptionPageComponent implements OnInit, OnDestroy {
       this.versionHistoryOpen = false;
     });
 
+    /**
+     * Adds eventListener for clicks everywhere.
+     * These clicks are used to close/open dropdown menu and close modals.
+     */
     window.addEventListener("click", (e) => {
       const checkbox = document.querySelector(".checkbox") as HTMLInputElement | null;
       const ele = <Element>e.target;
@@ -117,40 +133,6 @@ export class TranscriptionPageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
       window.removeAllListeners!();
-  }
-
-  getSpkNum(speakerLabel: string): number {
-    const split = speakerLabel.split('_');
-    return +split[split.length - 1];
-  }
-
-  getSpkLabel(speakerLabel: string): string {
-    const num: number = this.getSpkNum(speakerLabel);
-    if (this.recording.labels != null) {
-      return this.recording.labels[num] ?? '';
-    } else {
-      return 'null';
-    }
-  }
-
-  getTimeFrame(start_time: number, end_time: number): string {
-    return this.getMinSec(start_time) + ' to ' + this.getMinSec(end_time);
-  }
-
-  getMinSec(secs: number): string {
-    let minDouble: number = secs / 60;
-    let minInt: number = Math.floor(minDouble);
-    let secDouble: number = secs - (minInt * 60);
-    let secInt: number = Math.floor(secDouble);
-
-    let minSec: string = minInt + 'm' +  secInt + 's';
-    let sec: string = secInt + 's';
-
-    if (minInt == 0) {
-      return sec;
-    } else {
-      return minSec;
-    }
   }
 
   downloadDOCX() {
