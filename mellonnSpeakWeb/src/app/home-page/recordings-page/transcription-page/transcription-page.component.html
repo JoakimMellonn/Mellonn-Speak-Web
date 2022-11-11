@@ -50,9 +50,9 @@
         <button class="standardButton" (click)="versionHistoryOpen = false">Close</button>
     </div>
 </div>
-<div class="modalBackground" *ngIf="infoOpen" (click)="infoOpen = false">
+<div class="modalBackground" *ngIf="infoOpen">
     <div class="modalWindow">
         <app-info-panel [recording]="recording"></app-info-panel>
-        <button class="standardButton">Close</button>
+        <button class="standardButton" (click)="infoOpen = false">Close</button>
     </div>
 </div>

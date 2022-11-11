@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DocxService } from 'src/app/shared/docx-service/docx.service';
 import { Recording } from 'src/models';
@@ -16,7 +16,7 @@ import { VersionHistoryService } from './version-history/version-history.service
   styleUrls: ['./transcription-page.component.scss']
 })
 
-export class TranscriptionPageComponent implements OnInit {
+export class TranscriptionPageComponent implements OnInit, OnDestroy {
   id: string;
   transcription: Transcription;
   recording: Recording;
@@ -90,10 +90,17 @@ export class TranscriptionPageComponent implements OnInit {
       this.versionHistoryOpen = false;
     });
 
-    window.onclick = function(e: Event) {
+    window.addEventListener("click", (e) => {
       const checkbox = document.querySelector(".checkbox") as HTMLInputElement | null;
       const ele = <Element>e.target;
       let changed: boolean = false;
+
+      //console.log(ele.classList.toString());
+
+      if (ele.classList.contains("modalBackground")) {
+        this.infoOpen = false;
+        this.versionHistoryOpen = false;
+      }
 
       if (checkbox?.checked) {
         checkbox.checked = false;
@@ -103,9 +110,13 @@ export class TranscriptionPageComponent implements OnInit {
       if (ele.classList.contains("icon") && !checkbox?.checked && !changed) {
         checkbox!.checked = true;
       }
-    }
+    });
 
     this.loading = false;
+  }
+
+  ngOnDestroy(): void {
+      window.removeAllListeners!();
   }
 
   getSpkNum(speakerLabel: string): number {
