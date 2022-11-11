@@ -42,6 +42,7 @@ input, button {
     clip-path: inset(0px 0px auto 0px);
     border-radius: v.$radius v.$radius 0 0;
     padding: 15px 25px 15px 25px;
+    z-index: 2;
 
     h1 {
         margin: 0;

@@ -90,12 +90,18 @@ export class TranscriptionPageComponent implements OnInit {
       this.versionHistoryOpen = false;
     });
 
-    //TODO: Fix this...
     window.onclick = function(e: Event) {
       const checkbox = document.querySelector(".checkbox") as HTMLInputElement | null;
       const ele = <Element>e.target;
-      if (!ele.matches(".checkbox") && checkbox?.checked) {
+      let changed: boolean = false;
+
+      if (checkbox?.checked) {
         checkbox.checked = false;
+        changed = true;
+      }
+
+      if (ele.classList.contains("icon") && !checkbox?.checked && !changed) {
+        checkbox!.checked = true;
       }
     }
 
