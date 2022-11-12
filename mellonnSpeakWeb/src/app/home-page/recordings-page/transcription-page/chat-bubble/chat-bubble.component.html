@@ -8,6 +8,7 @@
         (keydown.enter)="onEnter($event)"
         (focus)="onFocus()"
         (select)="onSelection($event)"
+        id="{{sww.startTime}}"
     >
     </textarea>
     <p *ngIf="changed == true">Press enter to save</p>

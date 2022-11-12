@@ -111,7 +111,7 @@ export class TranscriptionPageComponent implements OnInit, OnDestroy {
       const ele = <Element>e.target;
       let changed: boolean = false;
 
-      //console.log(ele.classList.toString());
+      //console.log(ele.id);
 
       if (ele.classList.contains("modalBackground")) {
         this.infoOpen = false;
@@ -132,7 +132,9 @@ export class TranscriptionPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-      window.removeAllListeners!();
+    this.resetAudio();
+    this.audio.destroy();
+    window.removeAllListeners!();
   }
 
   downloadDOCX() {
@@ -161,5 +163,9 @@ export class TranscriptionPageComponent implements OnInit, OnDestroy {
       await this.service.deleteTranscription(this.recording);
       this.router.navigate(['/']);
     }
+  }
+
+  openHelp() {
+    
   }
 }

@@ -14,6 +14,7 @@ export class AudioControlComponent implements OnInit, OnDestroy {
   chosenEnd: string;
   chosen: boolean;
   jumpSecs: number;
+  currentStart: number;
 
   constructor(private renderer: Renderer2, private audio: AudioService, private settings: SettingsService) { }
 
@@ -39,6 +40,30 @@ export class AudioControlComponent implements OnInit, OnDestroy {
       this.renderer.addClass(icon, 'fa-play');
       this.audio.player.currentTime = this.audio.currentStart;
     });
+
+    this.audio.player.addEventListener("playing", () => {
+      const icon = document.getElementById('playPause');
+      if (icon?.classList.contains("fa-play")) {
+        this.renderer.removeClass(icon, 'fa-play');
+        this.renderer.addClass(icon, 'fa-pause');
+      }
+    });
+
+    this.audio.player.addEventListener("pause", () => {
+      const icon = document.getElementById('playPause');
+      if (icon?.classList.contains("fa-pause")) {
+        this.renderer.removeClass(icon, 'fa-pause');
+        this.renderer.addClass(icon, 'fa-play');
+      }
+    })
+
+    window.addEventListener("dblclick", (e) => {
+      const ele = <Element>e.target;
+
+      if (this.chosen && +ele.id != this.currentStart) {
+        this.audio.resetState();
+      }
+    });
   }
 
   ngOnDestroy(): void {
@@ -46,14 +71,9 @@ export class AudioControlComponent implements OnInit, OnDestroy {
   }
 
   playPause() {
-    const icon = document.getElementById('playPause');
     if (this.audio.player.paused) {
-      this.renderer.removeClass(icon, 'fa-play');
-      this.renderer.addClass(icon, 'fa-pause');
       this.audio.play();
     } else {
-      this.renderer.removeClass(icon, 'fa-pause');
-      this.renderer.addClass(icon, 'fa-play');
       this.audio.pause();
     }
   }
@@ -75,6 +95,7 @@ export class AudioControlComponent implements OnInit, OnDestroy {
     const chosenBar = document.getElementById('chosenBar');
     this.renderer.setStyle(chosenBar, 'left', '0');
     this.renderer.setStyle(chosenBar, 'width', '100%');
+    this.currentStart = 0;
     this.chosen = false;
   }
 
@@ -82,6 +103,7 @@ export class AudioControlComponent implements OnInit, OnDestroy {
   setChosenBar(start: number, end: number) {
     const chosenBar = document.getElementById('chosenBar');
     const chosen = document.getElementById('chosen');
+    this.currentStart = start;
     this.chosenStart = this.formatSeconds(start);
     this.chosenEnd = this.formatSeconds(end);
     let chosenLeft = this.getPercent(start, this.audio.end) + (this.getPercent(end - start, this.audio.end) / 2);

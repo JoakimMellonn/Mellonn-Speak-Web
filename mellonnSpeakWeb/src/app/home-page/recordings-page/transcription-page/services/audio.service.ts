@@ -15,6 +15,9 @@ export class AudioService {
   loadedFirst: boolean = false;
   labelActive: boolean = false;
 
+  shouldStart: boolean = false;
+  shouldStartAt: number = 0;
+
   private audioControlSetChosen = new Subject<number[]>();
   audioControlSetChosenCalled = this.audioControlSetChosen.asObservable();
 
@@ -42,8 +45,12 @@ export class AudioService {
         this.end = this.player.duration;
         this.currentStart = 0;
         this.currentEnd = this.player.duration;
-        this.player.currentTime = 0;
+        this.player.currentTime = this.shouldStartAt;
         this.loadedFirst = true;
+        if (this.shouldStart) this.play();
+        
+        this.shouldStart = false;
+        this.shouldStartAt = 0;
       }
     }
 
@@ -57,7 +64,9 @@ export class AudioService {
     }
 
     this.player.onerror = (err) => {
-      console.error('Audio error: ' + err);
+      console.error('Audio error: ' + err.toString());
+      alert("An error happened while getting the audio, the page will reload...");
+      window.location.reload();
     }
   }
 
@@ -67,7 +76,9 @@ export class AudioService {
   }
 
   resetState() {
-    this.player.pause();
+    this.shouldStart = !this.player.paused;
+    this.pause();
+    this.shouldStartAt = this.player.currentTime + this.currentStart;
     this.player.src = this.playerUrl;
     this.loadedFirst = false;
     this.audioControlResetChosen.next(1);
@@ -75,7 +86,7 @@ export class AudioService {
 
   async getAudioUrl(key: string): Promise<string> {
     try {
-      const url = await Storage.get(key, {level: 'private', expires: 360});
+      const url = await Storage.get(key, {level: 'private', expires: 10800});
       return url;
     } catch (err) {
       console.error('Error while getting audio url: ' + err);
@@ -84,11 +95,18 @@ export class AudioService {
   }
 
   setStartEnd(start: number, end: number) {
+    const isPaused: boolean = this.player.paused;
+    const timeAtSelect: number = this.player.currentTime;
+    let currentTime: number = 0;
+
+    if (start <= timeAtSelect && timeAtSelect <= end) currentTime = timeAtSelect - start;
+
     const newUrl: string = this.playerUrl + '#t=' + start + ',' + end;
     this.player.src = newUrl;
-    this.player.currentTime = 0;
+    this.player.currentTime = currentTime;
     this.currentStart = start;
     this.currentEnd = end;
+    if (!isPaused) this.play();
     this.audioControlSetChosen.next([start, end]);
   }
 
