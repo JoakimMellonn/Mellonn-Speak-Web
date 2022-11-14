@@ -7,7 +7,7 @@
             <div class="transcription">
                 <div class="titleBox">
                     <h1>
-                        {{ recording.name }}
+                        {{ service.recording.name }}
                     </h1>
                     <div class="dropdown">
                         <input class="checkbox" type="checkbox" id="menu" disabled="disabled">
@@ -23,14 +23,14 @@
                     </div>
                 </div>
                 <div class="contentBox" *ngIf="!labelEditOpen && !versionHistoryOpen">
-                    <div class="chatLine" *ngFor="let sww of speakerWithWords">
-                        <div *ngIf="recording.interviewers?.includes(sww.speakerLabel)">
-                            <app-user-chat-bubble [sww]="sww" [transcription]="transcription" [recording]="recording"></app-user-chat-bubble>
-                            <p class="text" id="user">{{ conversion.getSpkLabel(sww.speakerLabel, recording) }} (Speaker {{conversion.getSpkNum(sww.speakerLabel) + 1}}): {{conversion.getTimeFrame(sww.startTime, sww.endTime)}}</p>
+                    <div class="chatLine" *ngFor="let sww of service.sww">
+                        <div *ngIf="service.recording.interviewers?.includes(sww.speakerLabel)">
+                            <app-user-chat-bubble [sww]="sww" [transcription]="service.transcription" [recording]="service.recording"></app-user-chat-bubble>
+                            <p class="text" id="user">{{ conversion.getSpkLabel(sww.speakerLabel, service.recording) }} (Speaker {{conversion.getSpkNum(sww.speakerLabel) + 1}}): {{conversion.getTimeFrame(sww.startTime, sww.endTime)}}</p>
                         </div>
-                        <div *ngIf="!recording.interviewers?.includes(sww.speakerLabel)">
-                            <app-chat-bubble [sww]="sww" [isUser]="true" [transcription]="transcription" [recording]="recording"></app-chat-bubble>
-                            <p class="text">{{ conversion.getSpkLabel(sww.speakerLabel, recording) }} (Speaker {{conversion.getSpkNum(sww.speakerLabel) + 1}}): {{conversion.getTimeFrame(sww.startTime, sww.endTime)}}</p>
+                        <div *ngIf="!service.recording.interviewers?.includes(sww.speakerLabel)">
+                            <app-chat-bubble [sww]="sww" [isUser]="true"></app-chat-bubble>
+                            <p class="text">{{ conversion.getSpkLabel(sww.speakerLabel, service.recording) }} (Speaker {{conversion.getSpkNum(sww.speakerLabel) + 1}}): {{conversion.getTimeFrame(sww.startTime, sww.endTime)}}</p>
                         </div>
                     </div>
                 </div>
@@ -41,18 +41,18 @@
 <app-audio-control *ngIf="loading == false"></app-audio-control>
 <div class="modalBackground" *ngIf="labelEditOpen && !loading">
     <div class="modalWindowLabel">
-        <app-label-edit [recording]="recording" [speakerWithWords]="speakerWithWords"></app-label-edit>
+        <app-label-edit [recording]="service.recording" [speakerWithWords]="service.sww"></app-label-edit>
     </div>
 </div>
 <div class="modalBackground" *ngIf="versionHistoryOpen && !loading">
     <div class="modalWindow">
-        <app-version-history [recording]="recording"></app-version-history>
+        <app-version-history [recording]="service.recording"></app-version-history>
         <button class="standardButton" (click)="versionHistoryOpen = false">Close</button>
     </div>
 </div>
 <div class="modalBackground" *ngIf="infoOpen">
     <div class="modalWindow">
-        <app-info-panel [recording]="recording"></app-info-panel>
+        <app-info-panel [recording]="service.recording"></app-info-panel>
         <button class="standardButton" (click)="infoOpen = false">Close</button>
     </div>
 </div>

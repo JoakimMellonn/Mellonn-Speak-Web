@@ -7,8 +7,16 @@ import { Transcription, Results, Item, Alternative, SpeakerLabels, Segment, Tran
   providedIn: 'root'
 })
 export class TranscriptionService {
+  recording: Recording;
+  transcription: Transcription;
+  sww: SpeakerWithWords[];
 
   constructor() { }
+
+  setTranscription(t: Transcription) {
+    this.transcription = t;
+    this.sww = this.processTranscription(t);
+  }
 
   async getRecording(id: string): Promise<Recording | 'null'> {
     try {
@@ -248,5 +256,15 @@ export class SpeakerWithWords {
     this.speakerLabel = speakerLabel;
     this.endTime = endTime;
     this.pronouncedWords = pronouncedWords;
+  }
+}
+
+export class Speaker {
+  label: string;
+  number: number;
+
+  constructor(label: string, number: number) {
+    this.label = label;
+    this.number = number;
   }
 }

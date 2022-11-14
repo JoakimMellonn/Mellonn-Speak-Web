@@ -1,9 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DocxService } from 'src/app/shared/docx-service/docx.service';
-import { Recording } from 'src/models';
 import { AudioService } from './services/audio.service';
-import { Transcription } from './transcription';
 import { TranscriptionService, SpeakerWithWords } from './services/transcription-service.service';
 import { SpeakerEditService } from 'src/app/shared/speaker-edit-service/speaker-edit.service';
 import { LabelService } from './label-edit/label.service';
@@ -20,9 +18,6 @@ import { ConversionService } from 'src/app/shared/conversion-service/conversion.
 
 export class TranscriptionPageComponent implements OnInit, OnDestroy {
   id: string;
-  transcription: Transcription;
-  recording: Recording;
-  speakerWithWords: SpeakerWithWords[];
   loading: boolean = true;
   error: boolean = false;
   url: string;
@@ -32,45 +27,44 @@ export class TranscriptionPageComponent implements OnInit, OnDestroy {
   infoOpen: boolean = false;
 
   constructor(
+    public service: TranscriptionService,
+    public conversion: ConversionService,
     private route: ActivatedRoute,
-    private service: TranscriptionService,
     private audio: AudioService,
     private docx: DocxService,
     private speakerEdit: SpeakerEditService,
     private labelService: LabelService,
     private versionHistory: VersionHistoryService,
     private router: Router,
-    public conversion: ConversionService
   ) { }
 
   async ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id') ?? '';
     await this.service.getTranscription(this.id).then((value) => {
       if (value != 'null') {
-        this.transcription = value;
+        this.service.setTranscription(value);
       } else {
         this.error = true;
       }
     });
     await this.service.getRecording(this.id).then((value) => {
       if (value != 'null') {
-        this.recording = value;
+        this.service.recording = value;
       } else {
         this.error;
       }
     });
-    if (this.recording.labels == null || this.recording.labels == undefined || this.recording.labels.length != this.recording.speakerCount) {
+    if (this.service.recording.labels == null || this.service.recording.labels == undefined || this.service.recording.labels.length != this.service.recording.speakerCount) {
       this.labelEditOpen = true;
     }
-    this.url = await this.audio.getAudioUrl(this.recording.fileKey ?? '');
+    this.url = await this.audio.getAudioUrl(this.service.recording.fileKey ?? '');
     this.audio.setAudioUrl(this.url);
-    this.speakerWithWords = this.service.processTranscription(this.transcription);
 
     /**
      * Called when the user saves an edit.
      */
     this.speakerEdit.speakerEditReloadCalled.subscribe((res) => {
-      this.reloadTranscription(res);
+      //this.reloadTranscription(res);
     });
 
     /**
@@ -79,7 +73,7 @@ export class TranscriptionPageComponent implements OnInit, OnDestroy {
     this.labelService.closeModalCalled.subscribe(async (res) => {
       await this.service.getRecording(this.id).then((value) => {
         if (value != 'null') {
-          this.recording = value;
+          this.service.recording = value;
           this.loading = false;
         } else {
           this.error;
@@ -92,13 +86,6 @@ export class TranscriptionPageComponent implements OnInit, OnDestroy {
      * Called when the user recovers an older version of the transcription.
      */
     this.versionHistory.recoverTransCalled.subscribe(async (res) => {
-      await this.service.getTranscription(this.id).then((value) => {
-        if (value != 'null') {
-          this.transcription = value;
-        } else {
-          this.error = true;
-        }
-      });
       this.versionHistoryOpen = false;
     });
 
@@ -138,7 +125,7 @@ export class TranscriptionPageComponent implements OnInit, OnDestroy {
   }
 
   downloadDOCX() {
-    this.docx.generateDOCX(this.speakerWithWords, this.recording);
+    this.docx.generateDOCX(this.service.sww, this.service.recording);
   }
 
   startAudio() {
@@ -153,14 +140,9 @@ export class TranscriptionPageComponent implements OnInit, OnDestroy {
     this.audio.resetState();
   }
 
-  reloadTranscription(trans: Transcription) {
-    this.transcription = trans;
-    this.speakerWithWords = this.service.processTranscription(trans);
-  }
-
   async deleteRecording() {
     if (confirm('Are you ABSOLUTELY sure you want to delete this recording? This can NOT be undone')) {
-      await this.service.deleteTranscription(this.recording);
+      await this.service.deleteTranscription(this.service.recording);
       this.router.navigate(['/']);
     }
   }

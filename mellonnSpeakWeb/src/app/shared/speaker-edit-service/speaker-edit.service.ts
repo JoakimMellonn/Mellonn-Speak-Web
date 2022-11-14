@@ -25,7 +25,6 @@ export class SpeakerEditService {
       endTime,
       speaker,
     );
-    const sws = this.getSpeakerSwitches(newTranscription);
     return newTranscription;
   }
 
@@ -106,7 +105,7 @@ export class SpeakerEditService {
         newSegment.speaker_label = speakerLabel;
         newSegment.end_time = endTime.toString();
         hasBeenThrough = true;
-      } else if (segmentStart <= endTime && endTime <= segmentEnd && !hasBeenThrough) {
+      } else if (segmentStart <= endTime && endTime <= segmentEnd && !hasBeenThrough && startTime < segmentStart) {
         ///
         ///Case 2:
         ///When the speaker assigning endTime is inside the current segment
@@ -125,9 +124,7 @@ export class SpeakerEditService {
         ///Going through every item in the list and adds them to the new list
         let newItemsList: Item2[] = this.goThroughSegmentItems(speakerLabel, startTime, endTime, segment.items);
 
-        newItemsList.forEach((element) => {
-          newSegmentItems.push(element);
-        });
+        newItemsList.forEach((element) => {newSegmentItems.push(element)});
         newChanged = true;
         newDone = true;
 
@@ -169,7 +166,7 @@ export class SpeakerEditService {
         let lastItems: Item2[] = this.goThroughSegmentItems(segment.speaker_label, endTime, segmentEnd, segment.items);
         if (lastItems.length > 0) {
           lastSegment = {
-            start_time: endTime.toString(),
+            start_time: (endTime + 0.01).toString(),
             speaker_label: segment.speaker_label,
             end_time: segment.end_time,
             items: lastItems,
@@ -179,9 +176,7 @@ export class SpeakerEditService {
 
         ///Going through every item in the list and adds them to the new list.
         let newItemsList: Item2[] = this.goThroughSegmentItems(speakerLabel, startTime, endTime, segment.items);
-        newItemsList.forEach((element) => {
-          newSegmentItems.push(element);
-        });
+        newItemsList.forEach((element) => {newSegmentItems.push(element)});
 
         if (beforeFirst) {
           multipleBeforeFirst = true;
@@ -238,34 +233,6 @@ export class SpeakerEditService {
     return newList;
   }
 
-  getSpeakerSwitches(transcription: Transcription): SpeakerSwitch[] {
-    let speakerLabels: Segment[] = transcription.results.speaker_labels.segments;
-    let speakerSwitchList: SpeakerSwitch[] = [];
-    let lastSpeaker: number = 0;
-    let lastEnd: number;
-    let speakerSwitch: SpeakerSwitch = new SpeakerSwitch(0, 0, 0);
-
-    for (let segment of speakerLabels) {
-      let currentSpeaker: number = +segment.speaker_label.split('_')[1];
-      let startTime: number = +segment.start_time;
-      let endTime: number = +segment.end_time;
-
-      if (currentSpeaker == lastSpeaker) {
-        lastSpeaker = currentSpeaker;
-        lastEnd = endTime
-      } else {
-        speakerSwitchList.push(speakerSwitch);
-        speakerSwitch = new SpeakerSwitch(
-          startTime,
-          endTime,
-          currentSpeaker,
-        );
-        lastSpeaker = currentSpeaker;
-      }
-    }
-    return speakerSwitchList;
-  }
-
   getStartEndFromSelection(sww: SpeakerWithWords, transcription: Transcription, selectStart: number, selectEnd: number): number[] {
     const allItems = transcription.results.items;
     let wordCharList: WordCharacters[] = [];
@@ -273,24 +240,35 @@ export class SpeakerEditService {
     let lastEnd: number = 0;
 
     for (let item of allItems) {
-      if (+item.start_time >= sww.startTime && +item.end_time <= sww.endTime) {
-        startEntered = true;
-        wordCharList.push(new WordCharacters(
-          +item.start_time,
-          +item.end_time,
-          item.alternatives[0].content.split(''),
-          item.type
-        ));
-        lastEnd = +item.end_time;
-      } else if (startEntered) {
-        wordCharList.push(new WordCharacters(
-          lastEnd + 0.01,
-          lastEnd + 0.02,
-          item.alternatives[0].content.split(''),
-          item.type
-        ));
+      if (item.type != 'punctuation') {
+        if (+item.start_time >= sww.startTime && +item.end_time <= sww.endTime) {
+          startEntered = true;
+          wordCharList.push(new WordCharacters(
+            +item.start_time,
+            +item.end_time,
+            item.alternatives[0].content.split(''),
+            item.type
+          ));
+          lastEnd = +item.end_time;
+        } else if (startEntered) {
+          wordCharList.push(new WordCharacters(
+            lastEnd + 0.01,
+            lastEnd + 0.02,
+            item.alternatives[0].content.split(''),
+            item.type
+          ));
+        }
+        if (+item.start_time > sww.endTime) break;
+      } else {
+        if (startEntered) {
+          wordCharList.push(new WordCharacters(
+            lastEnd + 0.01,
+            lastEnd + 0.02,
+            item.alternatives[0].content.split(''),
+            item.type
+          ));
+        }
       }
-      if (+item.start_time > sww.endTime) break;
     }
 
     let currentPlace: number = 0;

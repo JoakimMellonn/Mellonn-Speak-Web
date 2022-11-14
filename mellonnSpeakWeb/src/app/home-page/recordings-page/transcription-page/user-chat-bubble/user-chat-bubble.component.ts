@@ -2,8 +2,7 @@ import { AfterViewInit, Component, Input, OnInit, Renderer2 } from '@angular/cor
 import { TextEditService } from 'src/app/shared/text-edit-service/text-edit.service';
 import { AudioService } from '../services/audio.service';
 import { Transcription } from '../transcription';
-import { SpeakerWithWords, TranscriptionService } from '../services/transcription-service.service';
-import { Speaker } from '../speaker-chooser/speaker-chooser.component';
+import { Speaker, SpeakerWithWords, TranscriptionService } from '../services/transcription-service.service';
 import { SpeakerEditService } from 'src/app/shared/speaker-edit-service/speaker-edit.service';
 import { Recording } from 'src/models';
 import { VersionHistoryService } from '../version-history/version-history.service';
@@ -113,7 +112,7 @@ export class UserChatBubbleComponent implements AfterViewInit, OnInit {
   }
 
   async save() {
-    await this.textEdit.saveTranscription(this.transcription, this.recording.id, this.sww, this.text);
+    await this.textEdit.createNewTranscription(this.transcription, this.sww, this.text);
     this.versionService.uploadVersion(this.recording.id, this.transcription, 'Edited Text');
     this.audio.resetState();
     this.changed = false;
@@ -126,8 +125,9 @@ export class UserChatBubbleComponent implements AfterViewInit, OnInit {
   }
 
   async speakerSave() {
+    console.log(`Changing selection from ${this.selection[0]}, ${this.selection[1]} to speaker ${this.selectedSpeaker}`);
     const newTranscription = this.speakerEdit.getNewSpeakerLabels(this.transcription, this.selection[0], this.selection[1], this.selectedSpeaker);
-    const res = await this.transService.saveTranscription(newTranscription, this.recording.id);
+    await this.transService.saveTranscription(newTranscription, this.recording.id);
     this.audio.resetState();
     this.speakerEdit.reloadTranscription(newTranscription);
   }

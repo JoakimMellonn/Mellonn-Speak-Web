@@ -14,7 +14,6 @@ import { ChatBubbleComponent } from './home-page/recordings-page/transcription-p
 import { UserChatBubbleComponent } from './home-page/recordings-page/transcription-page/user-chat-bubble/user-chat-bubble.component';
 import { FormsModule } from '@angular/forms';
 import { AudioControlComponent } from './home-page/recordings-page/transcription-page/audio-control/audio-control.component';
-import { SpeakerChooserComponent } from './home-page/recordings-page/transcription-page/speaker-chooser/speaker-chooser.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ProfilePageComponent } from './home-page/profile-page/profile-page.component';
 import { LabelEditComponent } from './home-page/recordings-page/transcription-page/label-edit/label-edit.component';
@@ -41,7 +40,6 @@ Amplify.configure(awsconfig);
     ChatBubbleComponent,
     UserChatBubbleComponent,
     AudioControlComponent,
-    SpeakerChooserComponent,
     ProfilePageComponent,
     LabelEditComponent,
     SpeakerComponent,
