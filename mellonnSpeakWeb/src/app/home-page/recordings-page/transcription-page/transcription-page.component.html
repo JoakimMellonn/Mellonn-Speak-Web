@@ -25,7 +25,7 @@
                 <div class="contentBox" *ngIf="!labelEditOpen && !versionHistoryOpen">
                     <div class="chatLine" *ngFor="let sww of service.sww">
                         <div *ngIf="service.recording.interviewers?.includes(sww.speakerLabel)">
-                            <app-user-chat-bubble [sww]="sww" [transcription]="service.transcription" [recording]="service.recording"></app-user-chat-bubble>
+                            <app-user-chat-bubble [sww]="sww"></app-user-chat-bubble>
                             <p class="text" id="user">{{ conversion.getSpkLabel(sww.speakerLabel, service.recording) }} (Speaker {{conversion.getSpkNum(sww.speakerLabel) + 1}}): {{conversion.getTimeFrame(sww.startTime, sww.endTime)}}</p>
                         </div>
                         <div *ngIf="!service.recording.interviewers?.includes(sww.speakerLabel)">

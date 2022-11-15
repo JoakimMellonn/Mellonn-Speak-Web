@@ -4,7 +4,6 @@ import { AudioService } from '../services/audio.service';
 import { Transcription } from '../transcription';
 import { Speaker, SpeakerWithWords, TranscriptionService } from '../services/transcription-service.service';
 import { SpeakerEditService } from 'src/app/shared/speaker-edit-service/speaker-edit.service';
-import { Recording } from 'src/models';
 import { VersionHistoryService } from '../version-history/version-history.service';
 
 @Component({
@@ -36,6 +35,18 @@ export class ChatBubbleComponent implements AfterViewInit {
   ngOnInit(): void {
     this.text = this.sww.pronouncedWords;
     this.getSpeakers();
+
+    /**
+     * Keeps the text selected when a user selects another speaker
+     */
+    window.addEventListener("click", (e) => {
+      const ele = <Element>e.target;
+      if ((ele.id.includes("speaker") || ele.classList.contains("text"))&& this.selected) {
+        const textarea = <HTMLInputElement>document.getElementById(this.sww.startTime.toString());
+        textarea.focus();
+        textarea.setSelectionRange(this.lastSelection[0], this.lastSelection[1]);
+      }
+    });
   }
 
   ngAfterViewInit(): void {
@@ -112,6 +123,7 @@ export class ChatBubbleComponent implements AfterViewInit {
   async save() {
     let newTranscription: Transcription = this.transService.transcription;
     let versionText: string = '';
+    let both: boolean = this.changed && this.selected;
     if (this.changed) {
       newTranscription = await this.textSave(newTranscription);
       versionText = 'Edited Text';
@@ -120,7 +132,7 @@ export class ChatBubbleComponent implements AfterViewInit {
       newTranscription = await this.speakerSave(newTranscription);
       versionText = 'Edited Speaker';
     }
-    if (this.changed && this.selected) versionText = 'Edited Text and Speaker';
+    if (both) versionText = 'Edited Text and Speaker';
     this.transService.setTranscription(newTranscription);
     await this.versionService.uploadVersion(this.transService.recording.id, newTranscription!, versionText);
     await this.transService.saveTranscription(newTranscription, this.transService.recording.id);

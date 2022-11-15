@@ -283,7 +283,7 @@ export class SpeakerEditService {
       } else {
         currentPlace += word.characters.length;
       }
-      if (!startChosen && selectStart + 1 <= currentPlace) {
+      if (!startChosen && selectStart + 2 < currentPlace) {
         startIndex = i;
         startChosen = true;
       }
@@ -293,6 +293,16 @@ export class SpeakerEditService {
       }
       i++;
     }
+
+    // let selectedString: string = '';
+    // for (let item of allItems) {
+    //   if (wordCharList[startIndex!].startTime <= +item.start_time && +item.end_time <= wordCharList[endIndex!].endTime) {
+    //     selectedString += item.alternatives[0].content;
+    //   }
+    //   if (+item.end_time > wordCharList[endIndex!].endTime) break;
+    // }
+    // console.log(selectedString);
+
     return [wordCharList[startIndex!].startTime, wordCharList[endIndex!].endTime];
   }
 

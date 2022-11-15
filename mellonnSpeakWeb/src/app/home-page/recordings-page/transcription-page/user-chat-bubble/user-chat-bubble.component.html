@@ -1,4 +1,4 @@
-<div class="divBubble">
+<div class="divBubble" id="{{sww.endTime}}">
     <textarea 
         class="chatBubble" 
         type="text" 
@@ -8,30 +8,23 @@
         (keydown.enter)="onEnter($event)"
         (focus)="onFocus()"
         (select)="onSelection($event)"
+        id="{{sww.startTime}}"
     >
     </textarea>
     <p *ngIf="changed == true">Press enter to save</p>
-    <div class="saveCancelLine" *ngIf="changed == true">
-        <button class="cancelButton" (click)="cancel()">
-            Cancel
-        </button>
-        <button class="saveButton" (click)="save()">
-            Save
-        </button>
-    </div>
-    <div class="speakerChooser" *ngIf="selected == true">
-        <div *ngFor="let speaker of speakerList">
+    <div class="speakerChooser" *ngIf="selected" id="{{sww.endTime}}">
+        <div *ngFor="let speaker of speakerList" id="{{sww.endTime}}">
             <div id="speaker{{speaker.number}}" class="speaker" (click)="selectSpeaker(speaker.number)">
                 <div class="text">{{speaker.label}}</div>
             </div>
         </div>
-        <div class="saveCancelLine">
-            <button class="cancelButton" (click)="speakerCancel()">
-                Cancel
-            </button>
-            <button class="saveButton" (click)="speakerSave()">
-                Save
-            </button>
-        </div>
+    </div>
+    <div class="saveCancelLine" *ngIf="changed || selected" id="{{sww.endTime}}">
+        <button class="cancelButton" (click)="cancel()" id="{{sww.endTime}}">
+            Cancel
+        </button>
+        <button class="saveButton" (click)="save()" id="{{sww.endTime}}">
+            Save
+        </button>
     </div>
 </div>
