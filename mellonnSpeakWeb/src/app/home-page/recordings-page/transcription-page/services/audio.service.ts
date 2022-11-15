@@ -78,7 +78,7 @@ export class AudioService {
   resetState() {
     this.shouldStart = !this.player.paused;
     this.pause();
-    this.shouldStartAt = this.player.currentTime + this.currentStart;
+    this.shouldStartAt = this.player.currentTime;
     this.player.src = this.playerUrl;
     this.loadedFirst = false;
     this.audioControlResetChosen.next(1);
