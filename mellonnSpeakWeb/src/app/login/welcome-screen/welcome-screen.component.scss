@@ -1,0 +1,12 @@
+@use "../../variables" as v;
+
+.canvas {
+    border-radius: 0 0 v.$radius 0;
+    z-index: 0;
+
+    img {
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}

@@ -79,14 +79,16 @@
                 <p class="rightText">{{periods.total}}</p>
             </div>
             <hr>
-            <div class="orderLine" *ngIf="periods.total - periods.periods != 0">
+            <div class="orderLine" *ngIf="periods.total - periods.periods != 0 || authService.group == 'dev'">
                 <p class="leftText">Discount</p>
-                <p class="rightText">{{(periods.total - periods.periods) * unitPrice}} {{currency.toUpperCase()}}</p>
+                <p class="rightText" *ngIf="authService.group != 'dev'">{{(periods.total - periods.periods) * unitPrice}} {{currency.toUpperCase()}}</p>
+                <p class="rightText" *ngIf="authService.group == 'dev'">{{periods.total * unitPrice}} {{currency.toUpperCase()}}</p>
                 <hr>
             </div>
             <div class="orderLine">
                 <p class="leftText">Total</p>
-                <p class="rightText">{{periods.periods * unitPrice}} {{currency.toUpperCase()}}</p>
+                <p class="rightText" *ngIf="authService.group != 'dev'">{{periods.periods * unitPrice}} {{currency.toUpperCase()}}</p>
+                <p class="rightText" *ngIf="authService.group == 'dev'">0 {{currency.toUpperCase()}}</p>
             </div>
         </div>
     </div>

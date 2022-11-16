@@ -1,13 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DocxService } from 'src/app/shared/docx-service/docx.service';
-import { Recording } from 'src/models';
 import { AudioService } from './services/audio.service';
-import { Transcription } from './transcription';
 import { TranscriptionService, SpeakerWithWords } from './services/transcription-service.service';
 import { SpeakerEditService } from 'src/app/shared/speaker-edit-service/speaker-edit.service';
 import { LabelService } from './label-edit/label.service';
 import { VersionHistoryService } from './version-history/version-history.service';
+import { ConversionService } from 'src/app/shared/conversion-service/conversion.service';
+
 
 
 @Component({
@@ -16,11 +16,8 @@ import { VersionHistoryService } from './version-history/version-history.service
   styleUrls: ['./transcription-page.component.scss']
 })
 
-export class TranscriptionPageComponent implements OnInit {
+export class TranscriptionPageComponent implements OnInit, OnDestroy {
   id: string;
-  transcription: Transcription;
-  recording: Recording;
-  speakerWithWords: SpeakerWithWords[];
   loading: boolean = true;
   error: boolean = false;
   url: string;
@@ -30,47 +27,59 @@ export class TranscriptionPageComponent implements OnInit {
   infoOpen: boolean = false;
 
   constructor(
+    public service: TranscriptionService,
+    public conversion: ConversionService,
     private route: ActivatedRoute,
-    private service: TranscriptionService,
     private audio: AudioService,
     private docx: DocxService,
     private speakerEdit: SpeakerEditService,
     private labelService: LabelService,
     private versionHistory: VersionHistoryService,
-    private router: Router
+    private router: Router,
   ) { }
 
   async ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id') ?? '';
+    console.log(localStorage.getItem('guided'));
+
+    if (localStorage.getItem("guided") != 'true') {
+      this.service.setCurrentMode('guide');
+    }
+
     await this.service.getTranscription(this.id).then((value) => {
       if (value != 'null') {
-        this.transcription = value;
+        this.service.setTranscription(value);
       } else {
         this.error = true;
       }
     });
     await this.service.getRecording(this.id).then((value) => {
       if (value != 'null') {
-        this.recording = value;
+        this.service.recording = value;
       } else {
         this.error;
       }
     });
-    if (this.recording.labels == [] || this.recording.labels == null || this.recording.labels == undefined || this.recording.labels.length != this.recording.speakerCount) {
+    if (this.service.recording.labels == null || this.service.recording.labels == undefined || this.service.recording.labels.length != this.service.recording.speakerCount) {
       this.labelEditOpen = true;
     }
-    this.url = await this.audio.getAudioUrl(this.recording.fileKey ?? '');
+    this.url = await this.audio.getAudioUrl(this.service.recording.fileKey ?? '');
     this.audio.setAudioUrl(this.url);
-    this.speakerWithWords = this.service.processTranscription(this.transcription);
 
+    /**
+     * Called when the user saves an edit.
+     */
     this.speakerEdit.speakerEditReloadCalled.subscribe((res) => {
-      this.reloadTranscription(res);
+      //this.reloadTranscription(res);
     });
 
+    /**
+     * Called when the user saves the assign speaker labels.
+     */
     this.labelService.closeModalCalled.subscribe(async (res) => {
       await this.service.getRecording(this.id).then((value) => {
         if (value != 'null') {
-          this.recording = value;
+          this.service.recording = value;
           this.loading = false;
         } else {
           this.error;
@@ -79,55 +88,50 @@ export class TranscriptionPageComponent implements OnInit {
       this.labelEditOpen = false;
     });
 
+    /**
+     * Called when the user recovers an older version of the transcription.
+     */
     this.versionHistory.recoverTransCalled.subscribe(async (res) => {
-      await this.service.getTranscription(this.id).then((value) => {
-        if (value != 'null') {
-          this.transcription = value;
-        } else {
-          this.error = true;
-        }
-      });
       this.versionHistoryOpen = false;
     });
+
+    /**
+     * Adds eventListener for clicks everywhere.
+     * These clicks are used to close/open dropdown menu and close modals.
+     */
+    window.addEventListener("click", (e) => {
+      const checkbox = document.querySelector(".checkbox") as HTMLInputElement | null;
+      const ele = <Element>e.target;
+      let changed: boolean = false;
+
+      //console.log(ele.id);
+
+      if (ele.classList.contains("modalBackground")) {
+        this.infoOpen = false;
+        this.versionHistoryOpen = false;
+      }
+
+      if (checkbox?.checked) {
+        checkbox.checked = false;
+        changed = true;
+      }
+
+      if (ele.classList.contains("icon") && !checkbox?.checked && !changed) {
+        checkbox!.checked = true;
+      }
+    });
+
     this.loading = false;
   }
 
-  getSpkNum(speakerLabel: string): number {
-    const split = speakerLabel.split('_');
-    return +split[split.length - 1];
-  }
-
-  getSpkLabel(speakerLabel: string): string {
-    const num: number = this.getSpkNum(speakerLabel);
-    if (this.recording.labels != null) {
-      return this.recording.labels[num] ?? '';
-    } else {
-      return 'null';
-    }
-  }
-
-  getTimeFrame(start_time: number, end_time: number): string {
-    return this.getMinSec(start_time) + ' to ' + this.getMinSec(end_time);
-  }
-
-  getMinSec(secs: number): string {
-    let minDouble: number = secs / 60;
-    let minInt: number = Math.floor(minDouble);
-    let secDouble: number = secs - (minInt * 60);
-    let secInt: number = Math.floor(secDouble);
-
-    let minSec: string = minInt + 'm' +  secInt + 's';
-    let sec: string = secInt + 's';
-
-    if (minInt == 0) {
-      return sec;
-    } else {
-      return minSec;
-    }
+  ngOnDestroy(): void {
+    this.resetAudio();
+    this.audio.destroy();
+    window.removeAllListeners!();
   }
 
   downloadDOCX() {
-    this.docx.generateDOCX(this.speakerWithWords, this.recording);
+    this.docx.generateDOCX(this.service.sww, this.service.recording);
   }
 
   startAudio() {
@@ -142,15 +146,14 @@ export class TranscriptionPageComponent implements OnInit {
     this.audio.resetState();
   }
 
-  reloadTranscription(trans: Transcription) {
-    this.transcription = trans;
-    this.speakerWithWords = this.service.processTranscription(trans);
-  }
-
   async deleteRecording() {
     if (confirm('Are you ABSOLUTELY sure you want to delete this recording? This can NOT be undone')) {
-      await this.service.deleteTranscription(this.recording);
+      await this.service.deleteTranscription(this.service.recording);
       this.router.navigate(['/']);
     }
+  }
+
+  openHelp() {
+    
   }
 }

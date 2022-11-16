@@ -4,7 +4,7 @@ import { ShellComponent } from './shell/shell.component';
 import { LoginModule } from '../login/login.module';
 
 const components = [
-  ShellComponent
+  ShellComponent,
 ];
 
 const modules = [

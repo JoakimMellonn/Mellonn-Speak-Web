@@ -1,3 +1,5 @@
+@use "../../../variables" as v;
+
 .content {
     display: flex;
     flex-direction: row;
@@ -15,9 +17,9 @@
         width: 95%;
         left: 50%;
         transform: translate(-50%);
-        background-color: #F8F8F8;
-        border-radius: 25px;
-        box-shadow: 0px 2px 5px #00000024;
+        background-color: v.$white;
+        border-radius: v.$radius;
+        box-shadow: 0px 2px 20px v.$shadow;
         padding: 25px;
     }
 
@@ -26,9 +28,9 @@
         width: 80%;
         left: 50%;
         transform: translate(-50%);
-        background-color: #F8F8F8;
-        border-radius: 25px;
-        box-shadow: 0px 2px 5px #00000024;
+        background-color: v.$white;
+        border-radius: v.$radius;
+        box-shadow: 0px 2px 5px v.$shadow;
         padding: 25px;
 
         .orderLine{
@@ -145,14 +147,14 @@
         left: 50%;
         transform: translate(-50%);
         margin-top: 15px;
-        color: #FAB228;
+        color: v.$orange;
     }
 
     .errorMessage {
         position: relative;
         display: block;
         margin-top: 10px;
-        color: #FD594D;
+        color: v.$red;
         text-align: center;
     }
 

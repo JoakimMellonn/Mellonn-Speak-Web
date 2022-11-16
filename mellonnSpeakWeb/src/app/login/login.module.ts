@@ -4,6 +4,7 @@ import { LoginPageComponent } from './login-page/login-page.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { EmailLoginComponent } from './email-login/email-login.component';
 import { CreateUserComponent } from './create-user/create-user.component';
+import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
 
 
 
@@ -11,7 +12,8 @@ import { CreateUserComponent } from './create-user/create-user.component';
   declarations: [
     LoginPageComponent,
     EmailLoginComponent,
-    CreateUserComponent
+    CreateUserComponent,
+    WelcomeScreenComponent
   ],
   imports: [
     CommonModule,

@@ -134,6 +134,7 @@ export class CreateUserComponent implements OnInit {
     } catch (err) {
       console.error('Error signing up: ' + err);
       this.serverMessage = String(err).split(': ')[1];
+      this.loading = false;
     }
 
     this.loading = false;
@@ -144,8 +145,11 @@ export class CreateUserComponent implements OnInit {
   }
 
   async resendCode() {
+    this.verificationSent = false;
     try {
       await Auth.resendSignUp(this.em);
+      this.verificationSent = true;
+      alert('New code has been sent!');
     } catch (err) {
       console.error('Error while resending mail: ' + err);
       this.serverMessage = String(err).split(': ')[1];

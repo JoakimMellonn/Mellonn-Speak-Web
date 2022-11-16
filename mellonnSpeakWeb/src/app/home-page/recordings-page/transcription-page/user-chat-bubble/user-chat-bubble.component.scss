@@ -1,18 +1,19 @@
+@use "../../../../variables" as v;
+
 .divBubble {
     float: right;
     width: 60%;
 
     textarea {
         text-shadow: none;
-        
     }
 
     .chatBubble {
-        background-color: #A5C644;
+        background-color: v.$green;
         width: 100%;
         padding: 15px;
-        border-radius: 25px;
-        box-shadow: 0px 2px 5px #00000024;
+        border-radius: v.$radius;
+        box-shadow: 0px 2px 5px v.$shadow;
         min-height: 50px;
     }
 
@@ -21,7 +22,7 @@
         padding-top: 5px;
         font-family: 'Raleway', sans-serif;
         font-size: 0.8em;
-        color: #505050;
+        color: v.$text;
         margin: 0;
     }
 
@@ -31,42 +32,45 @@
         display: flex;
 
         .cancelButton {
-            height: 50px;
+            height: 45px;
             margin-right: auto;
             min-width: 100px;
             flex: 1;
             margin-right: 5px;
-            border-radius: 25px;
+            border-radius: 15px;
             background-color: transparent;
             border: none;
+            transition: 0.2s;
         }
 
         .saveButton {
-            height: 50px;
+            height: 45px;
             min-width: 100px;
             flex: 1;
             margin-left: 5px;
-            border-radius: 25px;
-            background-color: #A5C644;
+            border-radius: 15px;
+            background-color: v.$orange;
             border: none;
+            transition: 0.2s;
         }
 
         .saveButton:hover {
-            background-color: #9ACD3A;
+            background-color: v.$orangeHover;
         }
     }
 
     .speaker {
         display: block;
         box-sizing: border-box;
-        background-color: #F8F8F8;
-        box-shadow: 0px 2px 5px #00000024;
-        border-radius: 25px;
-        height: 50px;
+        background-color: v.$whiteOpaque;
+        box-shadow: 0px 2px 5px v.$shadow;
+        border-radius: 15px;
+        height: 45px;
         width: 100%;
         padding: 0 25px 0 25px;
         margin-bottom: 10px;
         cursor: pointer;
+        transition: 0.2s;
         
         .text {
             position: relative;
@@ -78,20 +82,22 @@
     }
     
     .speaker:hover {
-        background-color: #efefef;
+        background-color: v.$whiteOpaqueHover;
+        box-shadow: 0px 2px 2px v.$shadow;
     }
     
     .chosenSpeaker {
         display: block;
         box-sizing: border-box;
-        background-color: #FAB228;
-        box-shadow: 0px 2px 5px #00000024;
-        border-radius: 25px;
-        height: 50px;
+        background-color: v.$orange;
+        box-shadow: 0px 2px 5px v.$shadow;
+        border-radius: 15px;
+        height: 45px;
         width: 100%;
         padding: 0 25px 0 25px;
         margin-bottom: 10px;
         cursor: pointer;
+        transition: 0.2s;
         
         .text {
             position: relative;
@@ -103,7 +109,8 @@
     }
     
     .chosenSpeaker:hover {
-        background-color: #f3ab26;
+        background-color: v.$orangeHover;
+        box-shadow: 0px 2px 2px v.$shadow;
     }
 
     .speakerChooser {
