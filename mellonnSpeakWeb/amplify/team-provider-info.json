@@ -191,6 +191,10 @@
           "secretsPathAmplifyAppId": "d3km7wqa9jf06b",
           "deploymentBucketName": "amplify-mellonnspeakeu-staging-102306-deployment",
           "s3Key": "amplify-builds/getIPLocation-43576d43667675686a61-build.zip"
+        },
+        "exportDOCX": {
+          "deploymentBucketName": "amplify-mellonnspeakeu-staging-102306-deployment",
+          "s3Key": "amplify-builds/exportDOCX-444572426d454742566d-build.zip"
         }
       },
       "storage": {
