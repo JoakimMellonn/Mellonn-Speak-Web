@@ -11,13 +11,11 @@ export class TextEditService {
 
   constructor(private transService: TranscriptionService) { }
 
-  async saveTranscription(transcription: Transcription, id: string, sww: SpeakerWithWords, newText: string) {
+  async createNewTranscription(transcription: Transcription, sww: SpeakerWithWords, newText: string): Promise<Transcription> {
     const initialWords: Word[] = this.getWords(transcription, sww.startTime, sww.endTime);
-    const initialText: string = this.getInitialValue(initialWords);
     const newList: Word[] = this.createWordListFromString(initialWords, newText);
     const newTranscription: Transcription = this.wordListToTranscription(transcription, newList);
-
-    await this.transService.saveTranscription(newTranscription, id);
+    return newTranscription;
   }
 
   getNewTranscription(oldTranscription: Transcription, sww: SpeakerWithWords): Transcription {
@@ -275,7 +273,7 @@ export class TextEditService {
   newTranscription.results.items = newItems;
 
   return newTranscription;
-}
+  }
 }
 
 export class Word {

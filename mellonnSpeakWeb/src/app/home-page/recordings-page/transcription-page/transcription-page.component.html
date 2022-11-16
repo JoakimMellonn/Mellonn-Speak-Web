@@ -1,75 +1,62 @@
 <div class="pageContainer">
     <div class="center">
-        <div *ngIf="loading == true">
+        <div *ngIf="loading && service.currentMode == 'default'">
             Loading...
         </div>
-        <div class="mainContent" *ngIf="loading == false">
+        <div class="mainContent" *ngIf="!loading && service.currentMode == 'default'">
             <div class="transcription">
                 <div class="titleBox">
                     <h1>
-                        {{ recording.name }}
+                        {{ service.recording.name }}
                     </h1>
                     <div class="dropdown">
-                        <input class="checkbox" type="checkbox" id="menu">
-                        <label for="menu"><i class="fa-solid fa-ellipsis-vertical fa-2xl icon"></i></label>
+                        <input class="checkbox" type="checkbox" id="menu" disabled="disabled">
+                        <label for="menu"><i class="fa-solid fa-ellipsis-vertical fa-xl icon"></i></label>
                         <div class="dropdown-content">
                             <a (click)="labelEditOpen = true">Edit labels</a>
                             <a (click)="downloadDOCX()">Download as DOCX</a>
                             <a (click)="versionHistoryOpen = true">Version history</a>
                             <a (click)="infoOpen = true">Info</a>
                             <a (click)="deleteRecording()">Delete this recording</a>
-                            <a>Help</a>
+                            <a (click)="openHelp()">Help</a>
                         </div>
                     </div>
                 </div>
                 <div class="contentBox" *ngIf="!labelEditOpen && !versionHistoryOpen">
-                    <div class="chatLine" *ngFor="let sww of speakerWithWords">
-                        <div *ngIf="recording.interviewers?.includes(sww.speakerLabel)">
-                            <app-user-chat-bubble [sww]="sww" [transcription]="transcription" [recording]="recording"></app-user-chat-bubble>
-                            <p class="userText">{{ getSpkLabel(sww.speakerLabel) }} (Speaker {{getSpkNum(sww.speakerLabel) + 1}}): {{getTimeFrame(sww.startTime, sww.endTime)}}</p>
+                    <div class="chatLine" *ngFor="let sww of service.sww">
+                        <div *ngIf="service.recording.interviewers?.includes(sww.speakerLabel)">
+                            <app-user-chat-bubble [sww]="sww"></app-user-chat-bubble>
+                            <p class="text" id="user">{{ conversion.getSpkLabel(sww.speakerLabel, service.recording) }} (Speaker {{conversion.getSpkNum(sww.speakerLabel) + 1}}): {{conversion.getTimeFrame(sww.startTime, sww.endTime)}}</p>
                         </div>
-                        <div *ngIf="!recording.interviewers?.includes(sww.speakerLabel)">
-                            <app-chat-bubble [sww]="sww" [isUser]="true" [transcription]="transcription" [recording]="recording"></app-chat-bubble>
-                            <p class="text">{{ getSpkLabel(sww.speakerLabel) }} (Speaker {{getSpkNum(sww.speakerLabel) + 1}}): {{getTimeFrame(sww.startTime, sww.endTime)}}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="sideColumn">
-                <div class="editTranscription">
-                    <div class="titleBox">
-                        <h1>
-                            Edit transcription
-                        </h1>
-                    </div>
-                    <div class="contentBox">
-                        <button class="standardButton" (click)="resetAudio()">
-                            Reset audio selection
-                        </button><br><br>
-                        <div *ngIf="!labelEditOpen">
-                            <app-speaker-chooser [recording]="recording" [speakerWithWords]="speakerWithWords" [transcription]="transcription" *ngIf="loading == false"></app-speaker-chooser>
+                        <div *ngIf="!service.recording.interviewers?.includes(sww.speakerLabel)">
+                            <app-chat-bubble [sww]="sww" [isUser]="true"></app-chat-bubble>
+                            <p class="text">{{ conversion.getSpkLabel(sww.speakerLabel, service.recording) }} (Speaker {{conversion.getSpkNum(sww.speakerLabel) + 1}}): {{conversion.getTimeFrame(sww.startTime, sww.endTime)}}</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <div *ngIf="service.currentMode == 'guide'">
+            <app-guide></app-guide>
+        </div>
     </div>
 </div>
-<app-audio-control *ngIf="loading == false"></app-audio-control>
-<div class="modalBackground" *ngIf="labelEditOpen && !loading">
+<app-audio-control *ngIf="!loading && service.currentMode == 'default'"></app-audio-control>
+
+<div class="modalBackground" *ngIf="labelEditOpen && !loading && service.currentMode == 'default'">
     <div class="modalWindowLabel">
-        <app-label-edit [recording]="recording" [speakerWithWords]="speakerWithWords"></app-label-edit>
+        <app-label-edit [recording]="service.recording" [speakerWithWords]="service.sww"></app-label-edit>
     </div>
 </div>
-<div class="modalBackground" *ngIf="versionHistoryOpen && !loading">
+<div class="modalBackground" *ngIf="versionHistoryOpen && !loading && service.currentMode == 'default'">
     <div class="modalWindow">
-        <app-version-history [recording]="recording"></app-version-history>
+        <app-version-history [recording]="service.recording"></app-version-history>
         <button class="standardButton" (click)="versionHistoryOpen = false">Close</button>
     </div>
 </div>
-<div class="modalBackground" *ngIf="infoOpen" (click)="infoOpen = false">
+<div class="modalBackground" *ngIf="infoOpen && service.currentMode == 'default'">
     <div class="modalWindow">
-        <app-info-panel [recording]="recording"></app-info-panel>
-        <button class="standardButton">Close</button>
+        <app-info-panel [recording]="service.recording"></app-info-panel>
+        <button class="standardButton" (click)="infoOpen = false">Close</button>
     </div>
 </div>

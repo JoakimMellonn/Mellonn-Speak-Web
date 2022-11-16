@@ -7,8 +7,21 @@ import { Transcription, Results, Item, Alternative, SpeakerLabels, Segment, Tran
   providedIn: 'root'
 })
 export class TranscriptionService {
+  currentMode: 'default' | 'guide' = 'default';
+  recording: Recording;
+  transcription: Transcription;
+  sww: SpeakerWithWords[];
 
   constructor() { }
+
+  setTranscription(t: Transcription) {
+    this.transcription = t;
+    this.sww = this.processTranscription(t);
+  }
+
+  setCurrentMode(value: 'default' | 'guide') {
+    this.currentMode = value;
+  }
 
   async getRecording(id: string): Promise<Recording | 'null'> {
     try {
@@ -167,14 +180,16 @@ export class TranscriptionService {
         joinedWords = joinedWords.replace(' ', '');
       }
       
-      swCombined.push(
-        new SpeakerWithWords(
-          speakerSegment.startTime,
-          speakerSegment.speakerLabel,
-          speakerSegment.endTime,
-          joinedWords,
-        ),
-      );
+      if (joinedWords.length > 0) {
+        swCombined.push(
+          new SpeakerWithWords(
+            speakerSegment.startTime,
+            speakerSegment.speakerLabel,
+            speakerSegment.endTime,
+            joinedWords,
+          ),
+        );
+      }
     }
     return swCombined;
   }
@@ -248,5 +263,15 @@ export class SpeakerWithWords {
     this.speakerLabel = speakerLabel;
     this.endTime = endTime;
     this.pronouncedWords = pronouncedWords;
+  }
+}
+
+export class Speaker {
+  label: string;
+  number: number;
+
+  constructor(label: string, number: number) {
+    this.label = label;
+    this.number = number;
   }
 }

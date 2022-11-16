@@ -14,7 +14,6 @@ import { ChatBubbleComponent } from './home-page/recordings-page/transcription-p
 import { UserChatBubbleComponent } from './home-page/recordings-page/transcription-page/user-chat-bubble/user-chat-bubble.component';
 import { FormsModule } from '@angular/forms';
 import { AudioControlComponent } from './home-page/recordings-page/transcription-page/audio-control/audio-control.component';
-import { SpeakerChooserComponent } from './home-page/recordings-page/transcription-page/speaker-chooser/speaker-chooser.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ProfilePageComponent } from './home-page/profile-page/profile-page.component';
 import { LabelEditComponent } from './home-page/recordings-page/transcription-page/label-edit/label-edit.component';
@@ -28,6 +27,8 @@ import { DndDirective } from './home-page/recordings-page/drag-drop/dnd.directiv
 import { AdminPageComponent } from './home-page/recordings-page/admin-page/admin-page.component';
 import { SearchPipe } from './home-page/recordings-page/admin-page/search-pipe/search.pipe';
 import { SearchPromoPipe } from './home-page/recordings-page/admin-page/searchPromo-pipe/search-promo.pipe';
+import { BackgroundComponent } from './background/background.component';
+import { GuideComponent } from './home-page/recordings-page/transcription-page/guide/guide.component';
 
 Amplify.configure(awsconfig);
 
@@ -40,7 +41,6 @@ Amplify.configure(awsconfig);
     ChatBubbleComponent,
     UserChatBubbleComponent,
     AudioControlComponent,
-    SpeakerChooserComponent,
     ProfilePageComponent,
     LabelEditComponent,
     SpeakerComponent,
@@ -51,6 +51,8 @@ Amplify.configure(awsconfig);
     AdminPageComponent,
     SearchPipe,
     SearchPromoPipe,
+    BackgroundComponent,
+    GuideComponent,
   ],
   imports: [
     BrowserModule,

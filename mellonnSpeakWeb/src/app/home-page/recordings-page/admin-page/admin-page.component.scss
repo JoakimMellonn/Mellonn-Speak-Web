@@ -1,3 +1,5 @@
+@use "../../../variables" as v;
+
 .contentBox {
     padding: 25px;
 
@@ -14,34 +16,22 @@
         display: flex;
         flex-direction: row;
         left: 50%;
-        margin-top: 15px;
         transform: translate(-50%);
         width: 80%;
 
-        button {
-            flex: 1;
-            background-color: #A5C644;
-            border: 0;
-            border-radius: 25px;
-            height: 50px;
-            box-shadow: 0px 2px 5px #00000024;
-            font-size: 0.9em;
-            cursor: pointer;
-            margin-left: 5px;
-        }
-
-        button:hover {
-            background-color: #9ACD3A;
+        .standardButton {
+            left: 0;
+            transform: translateX(0);
         }
 
         #remove {
-            background-color: #FD594D;
+            background-color: v.$red;
             margin-right: 5px;
             margin-left: 0;
         }
 
         #remove:hover {
-            background-color: #FF675C;
+            background-color: v.$redHover;
         }
     }
 
@@ -53,9 +43,9 @@
     }
 
     .groupElement {
-        background-color: #F8F8F8;
-        border-radius: 25px;
-        box-shadow: 0px 2px 5px #00000024;
+        background-color: v.$white;
+        border-radius: v.$radius;
+        box-shadow: 0px 2px 5px v.$shadow;
         width: 100%;
         margin-top: 15px;
         padding: 15px 25px 15px 25px;
@@ -78,7 +68,7 @@
     position: relative;
     display: block;
     margin-top: 10px;
-    color: #FD594D;
+    color: v.$red;
     text-align: center;
 }
 
@@ -86,7 +76,7 @@
     position: relative;
     display: block;
     margin-top: 10px;
-    color: #A5C644;
+    color: v.$green;
     text-align: center;
 }
 

@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SpeakerChooserComponent } from './speaker-chooser.component';
+import { GuideComponent } from './guide.component';
 
-describe('SpeakerChooserComponent', () => {
-  let component: SpeakerChooserComponent;
-  let fixture: ComponentFixture<SpeakerChooserComponent>;
+describe('GuideComponent', () => {
+  let component: GuideComponent;
+  let fixture: ComponentFixture<GuideComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SpeakerChooserComponent ]
+      declarations: [ GuideComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SpeakerChooserComponent);
+    fixture = TestBed.createComponent(GuideComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

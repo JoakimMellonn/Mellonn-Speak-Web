@@ -1,10 +1,12 @@
+@use "../../../../variables" as v;
+
 .audioBar {
     width: 100%;
-    background-color: #F8F8F8;
-    box-shadow: 0px -2px 5px #00000024;
+    background-color: v.$whiteOpaque;
+    box-shadow: 0px -2px 5px v.$shadow;
     position: fixed;
     bottom: 0;
-    border-radius: 25px 25px 0 0;
+    border-radius: v.$radius v.$radius 0 0;
     padding: 10px 25px 5px 25px;
 
     .chosenBlock {

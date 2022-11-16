@@ -3,10 +3,6 @@
     padding: 25px 25px 50px 25px;
     position: relative;
 
-    .inputField:focus {
-        background-color: #cacaca;
-    }
-
     .termsBlock {
         display: block;
         text-align: center;
@@ -96,7 +92,7 @@
         }
 
         #left {
-            flex: 0.7;
+            flex: 0.55;
             margin-right: 5px;
             background-color: transparent;
             box-shadow: none;

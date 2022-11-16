@@ -22,7 +22,7 @@ export class UploadPageComponent implements OnInit {
 
   title: string;
   description: string;
-  speakerSelect: number = 2;
+  speakerSelect: string = "2";
   languageSelect: string;
   errorMessage: string = '';
 
@@ -82,6 +82,8 @@ export class UploadPageComponent implements OnInit {
         this.audioLoaded = true;
       }
     }
+
+    if (this.authService.group == 'dev') this.buttonText = 'Upload recording';
 
     //Setting prices
     this.unitPrice = this.uploadService.price.unit_amount/100;
@@ -291,7 +293,7 @@ export class UploadPageComponent implements OnInit {
 
   async startUpload() {
     this.isUploading = true;
-    await this.uploadService.uploadRecording(this.file, this.title, this.description, this.speakerSelect, this.languageSelect, this.periods);
+    await this.uploadService.uploadRecording(this.file, this.title, this.description, +this.speakerSelect, this.languageSelect, this.periods);
     alert('Recording has been uploaded and will be transcribed! Estimated time for completion: ' + this.estimatedTime(this.periods.total) + '. \nThis is only an estimate, it can take up to 2 hours. If it takes longer, please report an issue on the profile page.');
     this.isUploading = false;
     this.uploadService.returnToRecordings();
