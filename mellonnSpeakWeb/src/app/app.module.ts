@@ -28,6 +28,7 @@ import { AdminPageComponent } from './home-page/recordings-page/admin-page/admin
 import { SearchPipe } from './home-page/recordings-page/admin-page/search-pipe/search.pipe';
 import { SearchPromoPipe } from './home-page/recordings-page/admin-page/searchPromo-pipe/search-promo.pipe';
 import { BackgroundComponent } from './background/background.component';
+import { GuideComponent } from './home-page/recordings-page/transcription-page/guide/guide.component';
 
 Amplify.configure(awsconfig);
 
@@ -51,6 +52,7 @@ Amplify.configure(awsconfig);
     SearchPipe,
     SearchPromoPipe,
     BackgroundComponent,
+    GuideComponent,
   ],
   imports: [
     BrowserModule,

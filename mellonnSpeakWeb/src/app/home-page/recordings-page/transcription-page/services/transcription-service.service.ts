@@ -7,6 +7,7 @@ import { Transcription, Results, Item, Alternative, SpeakerLabels, Segment, Tran
   providedIn: 'root'
 })
 export class TranscriptionService {
+  currentMode: 'default' | 'guide' = 'default';
   recording: Recording;
   transcription: Transcription;
   sww: SpeakerWithWords[];
@@ -16,6 +17,10 @@ export class TranscriptionService {
   setTranscription(t: Transcription) {
     this.transcription = t;
     this.sww = this.processTranscription(t);
+  }
+
+  setCurrentMode(value: 'default' | 'guide') {
+    this.currentMode = value;
   }
 
   async getRecording(id: string): Promise<Recording | 'null'> {
@@ -175,14 +180,16 @@ export class TranscriptionService {
         joinedWords = joinedWords.replace(' ', '');
       }
       
-      swCombined.push(
-        new SpeakerWithWords(
-          speakerSegment.startTime,
-          speakerSegment.speakerLabel,
-          speakerSegment.endTime,
-          joinedWords,
-        ),
-      );
+      if (joinedWords.length > 0) {
+        swCombined.push(
+          new SpeakerWithWords(
+            speakerSegment.startTime,
+            speakerSegment.speakerLabel,
+            speakerSegment.endTime,
+            joinedWords,
+          ),
+        );
+      }
     }
     return swCombined;
   }

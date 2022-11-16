@@ -1,0 +1,59 @@
+<div class="guide">
+    <div class="box">
+        <div class="page" *ngIf="currentPage == 0">
+            <h1>Thank you for using Mellonn Speak!</h1>
+            <img src="/assets/svg/welcome.svg">
+
+            <h2>Looks like you're new to this page.</h2>
+            <p>Let's get you acquainted with editing your transcription!</p>
+            <div class="notNew">
+                <p (click)="done()">I'm not new though...</p>
+            </div>
+            <button class="standardButton" (click)="setPage(1)">Teach me!</button>
+        </div>
+
+        <div class="page" *ngIf="currentPage == 1">
+            <h1>Editing what's being said</h1>
+            <video src="https://mellonn-website.s3.eu-central-1.amazonaws.com/videos/webGuides/textGuide.webm" autoplay muted loop></video>
+            <p>Say what?! If it wasn't what was said in the recording, you can always change it!</p>
+            <p>This is done easily by clicking the bubble and changing the text. When done, you can press enter or the save button.</p>
+            <button class="standardButton" (click)="setPage(2)">Next</button>
+        </div>
+        <div class="page" *ngIf="currentPage == 2">
+            <h1>Editing who says what</h1>
+            <video src="https://mellonn-website.s3.eu-central-1.amazonaws.com/videos/webGuides/speakerGuide.webm" autoplay muted loop></video>
+            <p>If the AI didn't get it quite right, you can always change who's talking when and saying what.</p>
+            <p>This is done by selecting the text you want to change, and selecting the appropriate speaker.</p>
+            <button class="standardButton" (click)="setPage(3)">Next</button>
+        </div>
+        <div class="page" *ngIf="currentPage == 3">
+            <h1>Controlling the audio</h1>
+            <video src="https://mellonn-website.s3.eu-central-1.amazonaws.com/videos/webGuides/audioGuide.webm" autoplay muted loop></video>
+            <p>You can always control the audio, with the media controls in the bottom of the screen.</p>
+            <p>When pressing a bubble, the given part of the audio is selected in the progress bar. Double anywhere outside of the bubble, to reset this selection.</p>
+            <button class="standardButton" (click)="setPage(4)">Next</button>
+        </div>
+        <div class="page" *ngIf="currentPage == 4">
+            <h1>Changing the labels</h1>
+            <video src="https://mellonn-website.s3.eu-central-1.amazonaws.com/videos/webGuides/labelGuide.webm" autoplay muted loop></video>
+            <p>At any time you can give the participants labels, so you know who said what!</p>
+            <p>Defining who's an interviewer or interviewee, changes who gets the green bubbles. You can use the play/shuffle buttons, to be sure who's who.</p>
+            <button class="standardButton" (click)="setPage(5)">Next</button>
+        </div>
+        <div class="page" *ngIf="currentPage == 5">
+            <h1>Go back to older versions</h1>
+            <video src="https://mellonn-website.s3.eu-central-1.amazonaws.com/videos/webGuides/versionGuide.webm" autoplay muted loop></video>
+            <p>Something happened that shouldn't happen, and you need to go back in time?</p>
+            <p>Going back in time I can't help with, but going back in versions I can! Just go into the version history via the three dot menu, and the choose the version you wanna go back to! The top version is the default version (the one created by the AI), just under there is the newer versions, starting with the current one.</p>
+            <button class="standardButton" (click)="setPage(6)">Next</button>
+        </div>
+        <div class="page" *ngIf="currentPage == 6">
+            <h1>Export transcription</h1>
+            <video src="https://mellonn-website.s3.eu-central-1.amazonaws.com/videos/webGuides/downloadGuide.webm" autoplay muted loop></video>
+            <p>When you're all done, you can export the transcription as a Word-document (DOCX).</p>
+            <p>This is done in the three dot menu, and then "Download as DOCX".</p>
+            <p>You're all done learning now, have fun and save some time!</p>
+            <button class="standardButton" (click)="done()">Let me edit!</button>
+        </div>
+    </div>
+</div>

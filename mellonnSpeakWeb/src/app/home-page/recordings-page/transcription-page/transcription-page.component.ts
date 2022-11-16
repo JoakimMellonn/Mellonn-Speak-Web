@@ -40,6 +40,12 @@ export class TranscriptionPageComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id') ?? '';
+    console.log(localStorage.getItem('guided'));
+
+    if (localStorage.getItem("guided") != 'true') {
+      this.service.setCurrentMode('guide');
+    }
+
     await this.service.getTranscription(this.id).then((value) => {
       if (value != 'null') {
         this.service.setTranscription(value);

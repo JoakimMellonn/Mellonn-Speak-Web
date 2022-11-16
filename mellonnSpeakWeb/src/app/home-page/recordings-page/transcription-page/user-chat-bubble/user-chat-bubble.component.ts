@@ -4,7 +4,6 @@ import { AudioService } from '../services/audio.service';
 import { Transcription } from '../transcription';
 import { Speaker, SpeakerWithWords, TranscriptionService } from '../services/transcription-service.service';
 import { SpeakerEditService } from 'src/app/shared/speaker-edit-service/speaker-edit.service';
-import { Recording } from 'src/models';
 import { VersionHistoryService } from '../version-history/version-history.service';
 
 @Component({
@@ -47,6 +46,13 @@ export class UserChatBubbleComponent implements AfterViewInit, OnInit {
         textarea.setSelectionRange(this.lastSelection[0], this.lastSelection[1]);
       }
     });
+
+    window.addEventListener("dblclick", (e) => {
+      const ele = <Element>e.target;
+      if ((!ele.id.includes("speaker") || !ele.classList.contains("text")) && this.selected) {
+        this.cancel();
+      }
+    });
   }
 
   ngAfterViewInit(): void {
@@ -56,10 +62,10 @@ export class UserChatBubbleComponent implements AfterViewInit, OnInit {
   onEnter(event: Event) {
     event.preventDefault();
     let textArea = document.getElementById('bubble');
-    textArea?.blur();
     if (this.text != this.sww.pronouncedWords) {
       this.save();
     }
+    textArea?.blur();
   }
 
   setStartHeight() {
@@ -90,6 +96,7 @@ export class UserChatBubbleComponent implements AfterViewInit, OnInit {
       this.lastSelection = [start, end];
       this.selection = this.speakerEdit.getStartEndFromSelection(this.sww, this.transService.transcription, start, end);
       this.selected = true;
+      console.log(this.selection);
       await new Promise(r => setTimeout(r, 10));
       this.selectSpeaker(+this.sww.speakerLabel.split('_')[1]);
     }
@@ -140,9 +147,14 @@ export class UserChatBubbleComponent implements AfterViewInit, OnInit {
 
   async cancel() {
     this.text = this.sww.pronouncedWords;
+    this.audio.resetState();
     this.changed = false;
     this.selected = false;
     await new Promise(r => setTimeout(r, 10));
+    const textarea = <HTMLInputElement>document.getElementById(this.sww.startTime.toString());
+    textarea.focus();
+    textarea.setSelectionRange(0, 0);
+    textarea.blur();
     this.lastSelection = [0, 0];
   }
 

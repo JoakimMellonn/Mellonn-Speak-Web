@@ -1,0 +1,71 @@
+@use "../../../../variables" as v;
+
+.guide {
+    .box {
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: v.$white;
+        border-radius: v.$radius;
+        box-shadow: 0px 2px 20px v.$shadow;
+        padding: 25px;
+        max-width: 700px;
+
+        h1 {
+            font-family: Arial, sans-serif;
+            margin: 0;
+        }
+
+        .page {
+            text-align: center;
+
+            img {
+                margin-top: 25px;
+                max-height: 250px;
+                width: 100%;
+            }
+
+            video {
+                margin-top: 25px;
+                max-height: 350px;
+                width: 100%;
+            }
+
+            h2 {
+                font-family: Arial, sans-serif;
+                font-size: 1.4em;
+                text-shadow: none;
+
+            }
+
+            p {
+                font-family: Arial, sans-serif;
+                font-size: 1.1em;
+                font-weight: 400;
+                text-shadow: none;
+                margin-top: 20px;
+            }
+
+            .notNew {
+                margin: 10px 0 25px 0;
+                text-decoration: underline;
+                
+                p {
+                    font-weight: 700;
+                    cursor: pointer;
+                }
+            }
+
+            .standardButton {
+                max-width: 250px;
+                left: 0;
+                transform: translateX(0);
+                margin: 20px 0;
+            }
+
+            .standardButton:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+}

@@ -41,10 +41,17 @@ export class ChatBubbleComponent implements AfterViewInit {
      */
     window.addEventListener("click", (e) => {
       const ele = <Element>e.target;
-      if ((ele.id.includes("speaker") || ele.classList.contains("text"))&& this.selected) {
+      if ((ele.id.includes("speaker") || ele.classList.contains("text")) && this.selected) {
         const textarea = <HTMLInputElement>document.getElementById(this.sww.startTime.toString());
         textarea.focus();
         textarea.setSelectionRange(this.lastSelection[0], this.lastSelection[1]);
+      }
+    });
+
+    window.addEventListener("dblclick", (e) => {
+      const ele = <Element>e.target;
+      if ((!ele.id.includes("speaker") || !ele.classList.contains("text")) && this.selected) {
+        this.cancel();
       }
     });
   }
@@ -140,9 +147,14 @@ export class ChatBubbleComponent implements AfterViewInit {
 
   async cancel() {
     this.text = this.sww.pronouncedWords;
+    this.audio.resetState();
     this.changed = false;
     this.selected = false;
     await new Promise(r => setTimeout(r, 10));
+    const textarea = <HTMLInputElement>document.getElementById(this.sww.startTime.toString());
+    textarea.focus();
+    textarea.setSelectionRange(0, 0);
+    textarea.blur();
     this.lastSelection = [0, 0];
   }
 

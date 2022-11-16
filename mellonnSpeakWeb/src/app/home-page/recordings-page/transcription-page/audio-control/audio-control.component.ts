@@ -68,7 +68,7 @@ export class AudioControlComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.audio.player.removeAllListeners!();
-    window.removeAllListeners!();
+    window.removeAllListeners!("dblclick");
     this.audio.destroy();
   }
 

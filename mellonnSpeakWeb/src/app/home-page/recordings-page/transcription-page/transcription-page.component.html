@@ -1,9 +1,9 @@
 <div class="pageContainer">
     <div class="center">
-        <div *ngIf="loading == true">
+        <div *ngIf="loading && service.currentMode == 'default'">
             Loading...
         </div>
-        <div class="mainContent" *ngIf="loading == false">
+        <div class="mainContent" *ngIf="!loading && service.currentMode == 'default'">
             <div class="transcription">
                 <div class="titleBox">
                     <h1>
@@ -36,21 +36,25 @@
                 </div>
             </div>
         </div>
+        <div *ngIf="service.currentMode == 'guide'">
+            <app-guide></app-guide>
+        </div>
     </div>
 </div>
-<app-audio-control *ngIf="loading == false"></app-audio-control>
-<div class="modalBackground" *ngIf="labelEditOpen && !loading">
+<app-audio-control *ngIf="!loading && service.currentMode == 'default'"></app-audio-control>
+
+<div class="modalBackground" *ngIf="labelEditOpen && !loading && service.currentMode == 'default'">
     <div class="modalWindowLabel">
         <app-label-edit [recording]="service.recording" [speakerWithWords]="service.sww"></app-label-edit>
     </div>
 </div>
-<div class="modalBackground" *ngIf="versionHistoryOpen && !loading">
+<div class="modalBackground" *ngIf="versionHistoryOpen && !loading && service.currentMode == 'default'">
     <div class="modalWindow">
         <app-version-history [recording]="service.recording"></app-version-history>
         <button class="standardButton" (click)="versionHistoryOpen = false">Close</button>
     </div>
 </div>
-<div class="modalBackground" *ngIf="infoOpen">
+<div class="modalBackground" *ngIf="infoOpen && service.currentMode == 'default'">
     <div class="modalWindow">
         <app-info-panel [recording]="service.recording"></app-info-panel>
         <button class="standardButton" (click)="infoOpen = false">Close</button>
