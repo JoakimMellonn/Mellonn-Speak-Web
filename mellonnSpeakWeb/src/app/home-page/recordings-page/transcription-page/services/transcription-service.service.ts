@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import Amplify, { DataStore, Storage } from 'aws-amplify';
+import { Amplify, DataStore, Storage } from 'aws-amplify';
 import { Recording, Version } from 'src/models';
 import { Transcription, Segment, Item } from '../transcription';
 
@@ -197,7 +197,7 @@ export class TranscriptionService {
   async deleteTranscription(recording: Recording) {
     //first we remove all versions
     try {
-      const versions: Version[] = await DataStore.query(Version, version => version.recordingID("eq", recording.id));
+      const versions: Version[] = await DataStore.query(Version, version => version.recordingID.eq(this.recording.id));
   
       for (let version of versions) {
         try {

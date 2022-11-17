@@ -163,7 +163,7 @@ export class StorageService {
     try {
       const result = await Storage.list('', {level: 'private'});
   
-      result.forEach(async (item) => {
+      result.results.forEach(async (item) => {
         await Storage.remove(item.key!, {level: 'private'});
       })
     } catch (err) {

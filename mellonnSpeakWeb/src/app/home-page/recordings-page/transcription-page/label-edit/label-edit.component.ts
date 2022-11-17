@@ -45,7 +45,7 @@ export class LabelEditComponent implements OnInit, OnDestroy {
     const labels = this.recording.labels;
     const interviewers = this.recording.interviewers;
 
-    if (labels == [] || labels == undefined || labels == null) {
+    if (labels?.length == 0 || labels == undefined || labels == null) {
       for (let i = 0; i < this.recording.speakerCount; i++) {
         this.labelService.unsavedLabelList.push('Speaker ' + (i + 1));
         this.speakerLabels.push(new SpeakerLabel(
@@ -65,7 +65,7 @@ export class LabelEditComponent implements OnInit, OnDestroy {
       }
     }
 
-    if (interviewers == [] || interviewers == undefined || interviewers == null) {
+    if (interviewers?.length == 0 || interviewers == undefined || interviewers == null) {
       this.labelService.unsavedInterviewerList.push('spk_0');
     } else {
       for (let interviewer of interviewers!) {

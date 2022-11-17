@@ -29,12 +29,12 @@ export class VersionHistoryService {
     }
   
     try {
-      const versions = await DataStore.query(Version, version => version.recordingID("eq", recordingID), {
+      const versions = await DataStore.query(Version, version => version.recordingID.eq(recordingID), {
         sort: (s) => s.date(SortDirection.ASCENDING),
       });
   
       if (versions.length > 10) {
-        const deleteVersion = await DataStore.query(Version, version => version.id("eq", versions[0].id));
+        const deleteVersion = await DataStore.query(Version, version => version.id.eq(versions[0].id));
         deleteVersion.forEach((vers) => {
           DataStore.delete(vers);
           this.removeOldVersion(recordingID, vers.id);
