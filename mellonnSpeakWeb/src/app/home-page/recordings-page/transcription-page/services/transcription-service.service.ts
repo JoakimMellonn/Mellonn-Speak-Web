@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import Amplify, { DataStore, Storage } from 'aws-amplify';
 import { Recording, Version } from 'src/models';
-import { Transcription, Results, Item, Alternative, SpeakerLabels, Segment, Transcript } from '../transcription';
+import { Transcription, Segment, Item } from '../transcription';
 
 @Injectable({
   providedIn: 'root'

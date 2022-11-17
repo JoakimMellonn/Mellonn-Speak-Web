@@ -126,5 +126,8 @@
       }
     }
   },
-  "defaultProject": "mellonnSpeakWeb"
+  "defaultProject": "mellonnSpeakWeb",
+  "cli": {
+    "analytics": false
+  }
 }

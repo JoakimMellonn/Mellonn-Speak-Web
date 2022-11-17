@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { saveAs } from 'file-saver';
 import { Subject } from 'rxjs';
 import { SpeakerWithWords } from 'src/app/home-page/recordings-page/transcription-page/services/transcription-service.service';
-import { Item, Item2, Segment, Transcription } from '../../home-page/recordings-page/transcription-page/transcription';
+import { Transcription, Segment, Item2 } from 'src/app/home-page/recordings-page/transcription-page/transcription';
 
 @Injectable({
   providedIn: 'root'

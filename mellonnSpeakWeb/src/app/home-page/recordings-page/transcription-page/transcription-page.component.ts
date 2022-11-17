@@ -15,7 +15,6 @@ import { ConversionService } from 'src/app/shared/conversion-service/conversion.
   templateUrl: './transcription-page.component.html',
   styleUrls: ['./transcription-page.component.scss']
 })
-
 export class TranscriptionPageComponent implements OnInit, OnDestroy {
   id: string;
   loading: boolean = true;
