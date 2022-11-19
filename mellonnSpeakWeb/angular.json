@@ -50,7 +50,8 @@
               "@aws-sdk/eventstream-serde-browser", "@aws-sdk/middleware-location-constraint", "uuid",
               "@aws-sdk/credential-provider-cognito-identity", "@aws-sdk/eventstream-serde-config-resolver",
               "ulid", "zen-push", "lodash", "@aws-amplify/core", "url", "@aws-crypto/crc32", "isomorphic-unfetch",
-              "crypto-js/lib-typedarrays", "crypto-js/hmac-sha256", "crypto", "camelcase-keys"
+              "crypto-js/lib-typedarrays", "crypto-js/hmac-sha256", "crypto", "camelcase-keys", "paho-mqtt", "cookie", "docx",
+              "node-html-parser"
             ]
           },
           "configurations": {

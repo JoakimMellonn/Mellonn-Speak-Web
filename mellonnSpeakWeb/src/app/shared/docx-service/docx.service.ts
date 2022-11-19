@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { SpeakerWithWords } from 'src/app/home-page/recordings-page/transcription-page/services/transcription-service.service';
 import { Recording } from 'src/models';
 import { Document, Packer, Paragraph, TextRun, HeadingLevel } from "docx";
-import { saveAs } from 'file-saver';
 import { ConversionService } from '../conversion-service/conversion.service';
+import { FileSaverService } from 'ngx-filesaver';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +11,8 @@ import { ConversionService } from '../conversion-service/conversion.service';
 export class DocxService {
 
   constructor(
-    private conversion: ConversionService
+    private conversion: ConversionService,
+    private fileSaver: FileSaverService,
   ) { }
 
   async generateDOCX(sww: SpeakerWithWords[], recording: Recording) {
@@ -48,7 +49,7 @@ export class DocxService {
     });
 
     Packer.toBlob(doc).then((blob) => {
-      saveAs(blob, recording.name + '.docx');
+      this.fileSaver.save(blob, recording.name + '.docx');
     });
   }
 
