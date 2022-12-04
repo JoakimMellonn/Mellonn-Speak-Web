@@ -2,6 +2,11 @@
     "name": "Mellonn Speak",
     "short_name": "Speak",
     "prefer_related_applications": false,
+    "theme_color": "#ffffff",
+    "background_color": "#ffffff",
+    "start_url": "/",
+    "display": "standalone",
+    "orientation": "portrait",
     "icons": [
         {
             "src": "assets/pwa/android-chrome-192x192.png",
@@ -19,11 +24,5 @@
             "type": "image/png",
             "purpose": "maskable any"
         }
-    ],
-    "theme_color": "#ffffff",
-    "background_color": "#ffffff",
-    "start_url": "/",
-
-    "display": "standalone",
-    "orientation": "portrait"
+    ]
 }
