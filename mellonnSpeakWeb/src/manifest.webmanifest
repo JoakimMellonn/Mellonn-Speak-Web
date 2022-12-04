@@ -1,6 +1,7 @@
 {
     "name": "Mellonn Speak",
     "short_name": "Speak",
+    "prefer_related_applications": false,
     "icons": [
         {
             "src": "assets/pwa/android-chrome-192x192.png",
