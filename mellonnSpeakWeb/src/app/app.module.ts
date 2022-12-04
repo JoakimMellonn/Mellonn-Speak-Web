@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -29,6 +29,7 @@ import { SearchPipe } from './home-page/recordings-page/admin-page/search-pipe/s
 import { SearchPromoPipe } from './home-page/recordings-page/admin-page/searchPromo-pipe/search-promo.pipe';
 import { BackgroundComponent } from './background/background.component';
 import { GuideComponent } from './home-page/recordings-page/transcription-page/guide/guide.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 Amplify.configure(awsconfig);
 
@@ -62,7 +63,13 @@ Amplify.configure(awsconfig);
     BrowserAnimationsModule,
     HttpClientModule,
     MatProgressSpinnerModule,
-    HttpClientModule
+    HttpClientModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      // Register the ServiceWorker as soon as the application is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000'
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]

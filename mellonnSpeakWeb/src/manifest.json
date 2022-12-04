@@ -1,0 +1,28 @@
+{
+    "name": "Mellonn Speak",
+    "short_name": "Speak",
+    "icons": [
+        {
+            "src": "assets/pwa/android-chrome-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "asset/pwa/android-chrome-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        },
+        {
+            "src": "asset/pwa/pwa-icon-144x144.png",
+            "sizes": "144x144",
+            "type": "image/png",
+            "purpose": "maskable any"
+        }
+    ],
+    "theme_color": "#ffffff",
+    "background_color": "#ffffff",
+    "start_url": "/",
+
+    "display": "standalone",
+    "orientation": "portrait"
+}
