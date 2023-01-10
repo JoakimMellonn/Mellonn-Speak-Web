@@ -28,7 +28,10 @@ export class UploadService {
   private uploadDone = new Subject<boolean>();
   uploadDoneCalled = this.uploadDone.asObservable();
 
-  ffmpeg = createFFmpeg({ log: true });
+  ffmpeg = createFFmpeg({
+    corePath: "./node_modules/@ffmpeg/core/dist/ffmpeg-core.js",
+    log: true,
+  });
 
   constructor(
     private authService: AuthService,
