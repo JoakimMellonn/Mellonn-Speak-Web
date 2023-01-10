@@ -77,6 +77,7 @@ export class UploadPageComponent implements OnInit {
           alert('The chosen audio file is too long, max length for an audio file is 2.5 hours (150 minutes).');
           this.uploadService.returnToRecordings();
         }
+        this.uploadService.initFfmpeg(); //Doesn't work in localhost
         this.periods = this.uploadService.getPeriods(this.duration);
         if (this.periods.periods == 0) this.buttonText = 'Upload recording';
         this.audioLoaded = true;

@@ -4,6 +4,9 @@ import { API, DataStore, Storage } from 'aws-amplify';
 import { Recording } from 'src/models';
 import { Subject } from 'rxjs';
 import { LanguageService } from '../language-service/language.service';
+import { createFFmpeg } from '@ffmpeg/ffmpeg';
+
+const supportedExtensions = ['amr', 'flac', 'mp3', 'mp4', 'ogg', 'webm', 'wav'];
 
 @Injectable({
   providedIn: 'root'
@@ -16,16 +19,26 @@ export class UploadService {
   currency: any;
   hasProduct: boolean = false;
 
+  private uploadText = new Subject<string>();
+  uploadTextCalled = this.uploadText.asObservable();
+
   private uploadProgress = new Subject<number[]>();
   uploadProgressCalled = this.uploadProgress.asObservable();
 
   private uploadDone = new Subject<boolean>();
   uploadDoneCalled = this.uploadDone.asObservable();
 
+  ffmpeg = createFFmpeg({ log: true });
+
   constructor(
     private authService: AuthService,
     private languageService: LanguageService
-  ) { }
+  ) {}
+
+  async initFfmpeg() {
+    await this.ffmpeg.load();
+    console.log('FFMPEG initialized: ' + this.ffmpeg.isLoaded());
+  }
 
   getPeriods(duration: number): Periods {
     const total = Math.ceil((duration / 60) / 15);
@@ -138,7 +151,16 @@ export class UploadService {
       languageCode: languageCode
     });
 
-    const fileType = file.name.split('.')[file.name.split('.').length - 1];
+    let uploadFile = file;
+    let fileType = file.name.split('.')[file.name.split('.').length - 1];
+
+    if (!supportedExtensions.includes(fileType.toLowerCase())) {
+      this.uploadText.next('Converting audio...');
+      uploadFile = await this.convertToWAV(file, recording.id);
+      fileType = 'wav';
+    }
+
+    this.uploadText.next('Uploading recording...');
     const key = 'recordings/' + recording.id + '.' + fileType;
     
     const newRecording = Recording.copyOf(recording, copy => {
@@ -161,7 +183,33 @@ export class UploadService {
     }
   }
 
+  async convertToWAV(inputFile: File, id: string): Promise<File> {
+    const inputString: string = `${id}.${inputFile.name.split('.')[inputFile.name.split('.').length - 1]}`;
+    const outputString: string = `${id}.wav`;
+
+    try {
+      this.ffmpeg.FS('writeFile', inputString, new Uint8Array((await inputFile.arrayBuffer())));
+      
+      this.ffmpeg.setProgress(({ ratio }) => {
+        this.uploadProgress.next([ratio, 1]);
+      });
+      await this.ffmpeg.run('-i', inputString, '-c:a', 'pcm_s16le', '-ac', '1', '-ar', '16000', outputString);
+
+      const blob = new Blob([this.ffmpeg.FS('readFile', outputString)], { type: 'audio/wav' });
+      const outputFile = new File([blob], inputFile.name, { lastModified: inputFile.lastModified, type: 'audio/wav' });
+
+      this.ffmpeg.FS('unlink', inputString);
+      this.ffmpeg.FS('unlink', outputString);
+
+      return outputFile;
+    } catch (e) {
+      console.error(e);
+      return new File([Buffer.from(`${e}`, 'utf-8')], 'error.txt');
+    }
+  }
+
   returnToRecordings() {
+    this.ffmpeg.exit();
     this.uploadDone.next(true);
   }
 }
