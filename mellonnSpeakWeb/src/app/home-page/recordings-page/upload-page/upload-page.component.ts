@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { loadStripe, Stripe, StripePaymentElement } from '@stripe/stripe-js';
+import * as FileSaver from 'file-saver';
+import { FileSaverService } from 'ngx-filesaver';
 import { AuthService } from 'src/app/shared/auth-service/auth.service';
 import { LanguageService } from 'src/app/shared/language-service/language.service';
 import { SettingsService } from 'src/app/shared/settings-service/settings.service';
@@ -62,6 +64,7 @@ export class UploadPageComponent implements OnInit {
     public settingsService: SettingsService,
     private uploadService: UploadService,
     public authService: AuthService,
+    private fileSaver: FileSaverService
   ) { }
 
   ngOnInit(): void {
@@ -77,8 +80,9 @@ export class UploadPageComponent implements OnInit {
           alert('The chosen audio file is too long, max length for an audio file is 2.5 hours (150 minutes).');
           this.uploadService.returnToRecordings();
         }
-        this.uploadService.initFfmpeg(); //Doesn't work in localhost
         this.periods = this.uploadService.getPeriods(this.duration);
+        this.testConvert();
+        
         if (this.periods.periods == 0) this.buttonText = 'Upload recording';
         this.audioLoaded = true;
       }
@@ -102,6 +106,12 @@ export class UploadPageComponent implements OnInit {
     });
     this.getCustomer();
     //this.getCards();
+  }
+
+  async testConvert() {
+    console.log('Testing convert...');
+    const newFile = await this.uploadService.convertToWAV(this.file, 'temporaryId');
+    this.fileSaver.save(newFile, newFile.name);
   }
 
   async getCustomer() {

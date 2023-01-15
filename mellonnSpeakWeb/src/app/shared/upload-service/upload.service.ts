@@ -4,7 +4,6 @@ import { API, DataStore, Storage } from 'aws-amplify';
 import { Recording } from 'src/models';
 import { Subject } from 'rxjs';
 import { LanguageService } from '../language-service/language.service';
-import { createFFmpeg } from '@ffmpeg/ffmpeg';
 
 const supportedExtensions = ['amr', 'flac', 'mp3', 'mp4', 'ogg', 'webm', 'wav'];
 
@@ -28,20 +27,10 @@ export class UploadService {
   private uploadDone = new Subject<boolean>();
   uploadDoneCalled = this.uploadDone.asObservable();
 
-  ffmpeg = createFFmpeg({
-    corePath: "./node_modules/@ffmpeg/core/dist/ffmpeg-core.js",
-    log: true,
-  });
-
   constructor(
     private authService: AuthService,
-    private languageService: LanguageService
+    private languageService: LanguageService,
   ) {}
-
-  async initFfmpeg() {
-    await this.ffmpeg.load();
-    console.log('FFMPEG initialized: ' + this.ffmpeg.isLoaded());
-  }
 
   getPeriods(duration: number): Periods {
     const total = Math.ceil((duration / 60) / 15);
@@ -158,18 +147,18 @@ export class UploadService {
     let fileType = file.name.split('.')[file.name.split('.').length - 1];
 
     if (!supportedExtensions.includes(fileType.toLowerCase())) {
-      this.uploadText.next('Converting audio...');
+      //this.uploadText.next('Converting audio...');
       uploadFile = await this.convertToWAV(file, recording.id);
       fileType = 'wav';
     }
 
     this.uploadText.next('Uploading recording...');
     const key = 'recordings/' + recording.id + '.' + fileType;
-    
+
     const newRecording = Recording.copyOf(recording, copy => {
       copy.fileKey = key
     });
-    
+
     try {
       const datastoreResult = await DataStore.save(newRecording);
       const storageResult = await Storage.put(key, file,
@@ -191,18 +180,30 @@ export class UploadService {
     const outputString: string = `${id}.wav`;
 
     try {
-      this.ffmpeg.FS('writeFile', inputString, new Uint8Array((await inputFile.arrayBuffer())));
-      
-      this.ffmpeg.setProgress(({ ratio }) => {
-        this.uploadProgress.next([ratio, 1]);
+      const inputKey: string = `convert/input/${inputString}`;
+      await Storage.put(inputKey, inputFile, {
+        level: 'public'
       });
-      await this.ffmpeg.run('-i', inputString, '-c:a', 'pcm_s16le', '-ac', '1', '-ar', '16000', outputString);
 
-      const blob = new Blob([this.ffmpeg.FS('readFile', outputString)], { type: 'audio/wav' });
-      const outputFile = new File([blob], inputFile.name, { lastModified: inputFile.lastModified, type: 'audio/wav' });
+      const params = {
+        body: {
+          "inputString": inputString,
+          "outputString": outputString,
+          "inputKey": inputKey
+        }
+      };
 
-      this.ffmpeg.FS('unlink', inputString);
-      this.ffmpeg.FS('unlink', outputString);
+      const response = await API.put('convert', '/wav', params);
+      console.log(response);
+
+      const result = await Storage.get(`convert/output/${outputString}`, {
+        level: 'public',
+        download: true
+      });
+
+      if (!(result.Body instanceof Blob)) throw 'Result is not a Blob';
+
+      const outputFile = new File([result.Body], inputFile.name, { lastModified: inputFile.lastModified, type: 'audio/wav' });
 
       return outputFile;
     } catch (e) {
@@ -212,7 +213,6 @@ export class UploadService {
   }
 
   returnToRecordings() {
-    this.ffmpeg.exit();
     this.uploadDone.next(true);
   }
 }
