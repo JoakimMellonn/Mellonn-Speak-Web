@@ -5,6 +5,8 @@ import { Recording } from 'src/models';
 import { Subject } from 'rxjs';
 import { LanguageService } from '../language-service/language.service';
 
+const supportedExtensions = ['amr', 'flac', 'mp3', 'mp4', 'ogg', 'webm', 'wav'];
+
 @Injectable({
   providedIn: 'root'
 })
@@ -16,6 +18,9 @@ export class UploadService {
   currency: any;
   hasProduct: boolean = false;
 
+  private uploadText = new Subject<string>();
+  uploadTextCalled = this.uploadText.asObservable();
+
   private uploadProgress = new Subject<number[]>();
   uploadProgressCalled = this.uploadProgress.asObservable();
 
@@ -24,8 +29,8 @@ export class UploadService {
 
   constructor(
     private authService: AuthService,
-    private languageService: LanguageService
-  ) { }
+    private languageService: LanguageService,
+  ) {}
 
   getPeriods(duration: number): Periods {
     const total = Math.ceil((duration / 60) / 15);
@@ -138,16 +143,24 @@ export class UploadService {
       languageCode: languageCode
     });
 
-    const fileType = file.name.split('.')[file.name.split('.').length - 1];
+    let uploadFile = file;
+    let fileType = file.name.split('.')[file.name.split('.').length - 1];
+
+    if (!supportedExtensions.includes(fileType.toLowerCase())) {
+      uploadFile = await this.convertToWAV(file, recording.id);
+      fileType = 'wav';
+    }
+
+    this.uploadText.next('Uploading recording...');
     const key = 'recordings/' + recording.id + '.' + fileType;
-    
+
     const newRecording = Recording.copyOf(recording, copy => {
       copy.fileKey = key
     });
-    
+
     try {
       const datastoreResult = await DataStore.save(newRecording);
-      const storageResult = await Storage.put(key, file,
+      const storageResult = await Storage.put(key, uploadFile,
         {
           level: 'private',
           progressCallback: (progress) => {
@@ -158,6 +171,43 @@ export class UploadService {
       await this.authService.updateFreePeriods(periods.freeLeft);
     } catch (err) {
       console.error('Error while uploading recording: ' + err);
+    }
+  }
+
+  async convertToWAV(inputFile: File, id: string): Promise<File> {
+    const inputString: string = `${id}.${inputFile.name.split('.')[inputFile.name.split('.').length - 1]}`;
+    const outputString: string = `${id}.wav`;
+
+    try {
+      const inputKey: string = `convert/input/${inputString}`;
+      await Storage.put(inputKey, inputFile, {
+        level: 'public'
+      });
+
+      const params = {
+        body: {
+          "inputString": inputString,
+          "outputString": outputString,
+          "inputKey": inputKey
+        }
+      };
+
+      const response = await API.put('convert', '/wav', params);
+      console.log(response);
+
+      const result = await Storage.get(`convert/output/${outputString}`, {
+        level: 'public',
+        download: true
+      });
+
+      if (!(result.Body instanceof Blob)) throw 'Result is not a Blob';
+
+      const outputFile = new File([result.Body], `${inputFile.name.split('.')[0]}.wav`, { lastModified: inputFile.lastModified, type: 'audio/wav' });
+
+      return outputFile;
+    } catch (e) {
+      console.error(e);
+      return new File([Buffer.from(`${e}`, 'utf-8')], 'error.txt');
     }
   }
 
