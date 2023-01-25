@@ -147,7 +147,6 @@ export class UploadService {
     let fileType = file.name.split('.')[file.name.split('.').length - 1];
 
     if (!supportedExtensions.includes(fileType.toLowerCase())) {
-      //this.uploadText.next('Converting audio...');
       uploadFile = await this.convertToWAV(file, recording.id);
       fileType = 'wav';
     }
@@ -161,7 +160,7 @@ export class UploadService {
 
     try {
       const datastoreResult = await DataStore.save(newRecording);
-      const storageResult = await Storage.put(key, file,
+      const storageResult = await Storage.put(key, uploadFile,
         {
           level: 'private',
           progressCallback: (progress) => {
@@ -203,7 +202,7 @@ export class UploadService {
 
       if (!(result.Body instanceof Blob)) throw 'Result is not a Blob';
 
-      const outputFile = new File([result.Body], inputFile.name, { lastModified: inputFile.lastModified, type: 'audio/wav' });
+      const outputFile = new File([result.Body], `${inputFile.name.split('.')[0]}.wav`, { lastModified: inputFile.lastModified, type: 'audio/wav' });
 
       return outputFile;
     } catch (e) {

@@ -4,63 +4,84 @@
 	STORAGE_MELLONNSPEAKS3EU_BUCKETNAME
 Amplify Params - DO NOT EDIT */
 
-NODE_OPTIONS='--experimental-wasm-threads --experimental-wasm-bulk-memory';
-
-const ff = require('@ffmpeg/ffmpeg');
+const ffmpeg = require('fluent-ffmpeg');
+const fs = require('fs');
+var path = require('path');
 var AWSS3 = require('aws-sdk/clients/s3');
 var s3 = new AWSS3();
 
+/**
+ * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
+*/
 exports.handler = async (event) => {
     console.log(`EVENT: ${JSON.stringify(event)}`);
     const e = JSON.parse(event.body);
     const inputString = e.inputString;
     const outputString = e.outputString;
     const inputKey = e.inputKey;
-    let outputFile;
+
+    let tempDir;
+    if (process.env.DEV && process.env.DEV === 'Yes') {
+        tempDir = path.join(__dirname, `../../tmp/`);
+    } else {
+        tempDir = '/tmp/';
+    }
 
     let statusCode = 500;
     let returnBody = JSON.stringify('Nothing happened');
 
-    var getParams = {
+    var getExeParams = {
+        Bucket: process.env.STORAGE_MELLONNSPEAKS3EU_BUCKETNAME,
+        Key: 'public/convert/exe/ffmpeg',
+    }
+
+    var getAudioParams = {
         Bucket: process.env.STORAGE_MELLONNSPEAKS3EU_BUCKETNAME,
         Key: 'public/' + inputKey,
     };
-    
-    const ffmpeg = ff.createFFmpeg({
-        log: true,
-    });
-
-    await ffmpeg.load();
-
-    //Load failed...
-    if (!ffmpeg.isLoaded()) {
-        console.log(`Operation failed while loading ffmpeg`);
-        returnBody = "Operation failed while loading ffmpeg";
-    }
 
     try {
-        const data = (await s3.getObject(getParams).promise()).Body;
-        console.log(data);
-
-        ffmpeg.FS('writeFile', inputString, data);
-        await ffmpeg.run('-i', inputString, '-c:a', 'pcm_s16le', '-ac', '1', '-ar', '16000', outputString);
-        outputFile = ffmpeg.FS('readFile', outputString);
-
-        var putParams = {
-            Bucket: process.env.STORAGE_MELLONNSPEAKS3EU_BUCKETNAME,
-            Key: 'public/convert/output/' + outputString,
-            Body: outputFile,
-            ContentType: 'audio/wav'
-        };
-        await s3.putObject(putParams).promise();
-
-        statusCode = 200;
-        returnBody = JSON.stringify("Success");
+        const data = (await s3.getObject(getAudioParams).promise()).Body;
+        const inputPath = tempDir + inputString;
+        fs.writeFileSync(inputPath, data);
+        
+        ffmpeg.setFfmpegPath('/opt/bin/ffmpeg');
+        
+        await new Promise((resolve, reject) => {
+            ffmpeg(inputPath)
+                .audioCodec('pcm_s16le')
+                .audioChannels(1)
+                .audioFrequency(16000)
+                .save(tempDir + 'output.wav')
+                .on('end', () => {
+                    resolve('Success!');
+                })
+                .on('error', (error) => {
+                    reject('Something happened: ' + error);
+                });
+        }).catch((e) => {
+            console.log('Something went wrong while converting file: ' + e);
+            if (e != 'Something happened: Error: spawn /tmp/ffmpeg EACCES') {
+                returnBody = JSON.stringify("Something went wrong while converting file: " + e);
+                return;
+            }
+        }).then(async () => {
+            const buffer = fs.readFileSync(tempDir + 'output.wav');
+            var putParams = {
+                Bucket: process.env.STORAGE_MELLONNSPEAKS3EU_BUCKETNAME,
+                Key: 'public/convert/output/' + outputString,
+                Body: buffer
+            };
+            await s3.putObject(putParams).promise();
+            statusCode = 200;
+            returnBody = JSON.stringify('Yay!');
+        });
+        
     } catch (e) {
         console.log('Something went wrong: ' + e);
-        returnBody = JSON.stringify("Something went wrong");
+        returnBody = JSON.stringify("Something went wrong: " + e);
     }
-
+    
     return {
         statusCode: statusCode,
         headers: {
@@ -70,5 +91,4 @@ exports.handler = async (event) => {
         },
         body: returnBody
     };
-
 }

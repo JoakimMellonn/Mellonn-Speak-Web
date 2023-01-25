@@ -17,12 +17,14 @@ exports.handler = async (event) => {
     let outputKey = 'public/finishedJobs/' + fileID + '.json';
     
     const dynamoParams = {
-        TableName : 'Recording-hcqyho5atjcwbkgjc3hcepv66e-staging',
+        TableName: process.env.DB,
         Key: {
             id: fileID,
         },
     };
     const data = await getItem(dynamoParams);
+
+    console.log(data);
     
     const speakerCount = data.Item.speakerCount;
     const languageCode = data.Item.languageCode;

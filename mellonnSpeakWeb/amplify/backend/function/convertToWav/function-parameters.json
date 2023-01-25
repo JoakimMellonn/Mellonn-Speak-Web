@@ -1,5 +1,4 @@
 {
-  "lambdaLayers": [],
   "permissions": {
     "storage": {
       "mellonnSpeakS3EU": [
@@ -9,5 +8,6 @@
         "delete"
       ]
     }
-  }
+  },
+  "lambdaLayers": []
 }

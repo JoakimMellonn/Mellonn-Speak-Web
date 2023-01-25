@@ -117,7 +117,8 @@
       "function": {
         "MellonnSpeakEUFunction": {
           "deploymentBucketName": "amplify-mellonnspeakeu-staging-102306-deployment",
-          "s3Key": "amplify-builds/MellonnSpeakEUFunction-337166364d63796e3137-build.zip"
+          "s3Key": "amplify-builds/MellonnSpeakEUFunction-6c526a4c676b6551726b-build.zip",
+          "db": "Recording-hcqyho5atjcwbkgjc3hcepv66e-staging"
         },
         "transcriptionDoneFunction": {
           "deploymentBucketName": "amplify-mellonnspeakeu-staging-102306-deployment",
@@ -133,7 +134,7 @@
         },
         "addRemBenefit": {
           "deploymentBucketName": "amplify-mellonnspeakeu-staging-102306-deployment",
-          "s3Key": "amplify-builds/addRemBenefit-57582b6344563964554d-build.zip"
+          "s3Key": "amplify-builds/addRemBenefit-496c584175386963414a-build.zip"
         },
         "giveFeedback": {
           "deploymentBucketName": "amplify-mellonnspeakeu-staging-102306-deployment",
@@ -166,7 +167,7 @@
         },
         "recordingsExpiryChecker": {
           "deploymentBucketName": "amplify-mellonnspeakeu-staging-102306-deployment",
-          "s3Key": "amplify-builds/recordingsExpiryChecker-426e392b5064594d524b-build.zip"
+          "s3Key": "amplify-builds/recordingsExpiryChecker-7152527a5a392b655536-build.zip"
         },
         "getPromotion": {
           "deploymentBucketName": "amplify-mellonnspeakeu-staging-102306-deployment",
@@ -182,7 +183,7 @@
         },
         "stripeGetProduct": {
           "deploymentBucketName": "amplify-mellonnspeakeu-staging-102306-deployment",
-          "s3Key": "amplify-builds/stripeGetProduct-376f684e53486c556735-build.zip",
+          "s3Key": "amplify-builds/stripeGetProduct-7033325a6e7436574477-build.zip",
           "secretsPathAmplifyAppId": "d3km7wqa9jf06b",
           "product": "prod_LtZIbFmc9pe9VQ",
           "benefitProduct": "prod_MCxCO7M4beTl5y"
@@ -198,7 +199,7 @@
         },
         "convertToWav": {
           "deploymentBucketName": "amplify-mellonnspeakeu-staging-102306-deployment",
-          "s3Key": "amplify-builds/convertToWav-38547557384a774a5862-build.zip"
+          "s3Key": "amplify-builds/convertToWav-4c645a45677158493169-build.zip"
         }
       },
       "storage": {

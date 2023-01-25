@@ -56,14 +56,6 @@
             "Arn"
           ],
           "category": "function",
-          "resourceName": "getPromo"
-        },
-        {
-          "attributes": [
-            "Name",
-            "Arn"
-          ],
-          "category": "function",
           "resourceName": "addPromo"
         },
         {
@@ -253,6 +245,15 @@
     },
     "addRemBenefit": {
       "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "BucketName"
+          ],
+          "category": "storage",
+          "resourceName": "mellonnSpeakS3EU"
+        }
+      ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
@@ -315,11 +316,6 @@
     "getIPLocation": {
       "build": true,
       "dependsOn": [],
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
-    },
-    "getPromo": {
-      "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
@@ -414,6 +410,14 @@
     }
   },
   "parameters": {
+    "AMPLIFY_function_MellonnSpeakEUFunction_db": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "MellonnSpeakEUFunction"
+        }
+      ]
+    },
     "AMPLIFY_function_MellonnSpeakEUFunction_deploymentBucketName": {
       "usedBy": [
         {
@@ -793,6 +797,7 @@
   },
   "storage": {
     "mellonnSpeakS3EU": {
+      "dependsOn": [],
       "providerPlugin": "awscloudformation",
       "service": "S3"
     }

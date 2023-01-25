@@ -81,7 +81,6 @@ export class UploadPageComponent implements OnInit {
           this.uploadService.returnToRecordings();
         }
         this.periods = this.uploadService.getPeriods(this.duration);
-        this.testConvert();
         
         if (this.periods.periods == 0) this.buttonText = 'Upload recording';
         this.audioLoaded = true;

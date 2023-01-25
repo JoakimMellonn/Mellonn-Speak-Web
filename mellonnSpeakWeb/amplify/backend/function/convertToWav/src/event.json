@@ -1,5 +1,3 @@
 {
-  "key1": "value1",
-  "key2": "value2",
-  "key3": "value3"
+  "body": "{\"inputString\":\"temporaryId.m4a\",\"outputString\":\"temporaryId.wav\",\"inputKey\":\"convert/input/temporaryId.m4a\"}"
 }
