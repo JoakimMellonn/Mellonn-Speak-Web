@@ -64,7 +64,6 @@ export class UploadService {
         "currency": currency,
         "product": product,
         "quantity": quantity,
-        "name": `${this.authService.firstName} ${this.authService.lastName}`,
         "country": this.languageService.countryCode,
         "postalCode": postalCode
       }

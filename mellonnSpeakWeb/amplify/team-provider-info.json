@@ -171,7 +171,7 @@
         },
         "stripePaymentIntent": {
           "deploymentBucketName": "amplify-mellonnspeakeu-staging-102306-deployment",
-          "s3Key": "amplify-builds/stripePaymentIntent-466c536c373541396b74-build.zip",
+          "s3Key": "amplify-builds/stripePaymentIntent-71313138556c55727033-build.zip",
           "secretsPathAmplifyAppId": "d3km7wqa9jf06b"
         },
         "stripeSetupIntent": {
@@ -224,6 +224,11 @@
         "convertToWav": {
           "deploymentBucketName": "amplify-mellonnspeakeu-staging-102306-deployment",
           "s3Key": "amplify-builds/convertToWav-4c645a45677158493169-build.zip"
+        },
+        "stripePaymentSucceeded": {
+          "secretsPathAmplifyAppId": "d3km7wqa9jf06b",
+          "deploymentBucketName": "amplify-mellonnspeakeu-staging-102306-deployment",
+          "s3Key": "amplify-builds/stripePaymentSucceeded-632b6461677071365871-build.zip"
         }
       },
       "storage": {

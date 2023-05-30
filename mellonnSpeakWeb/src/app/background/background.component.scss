@@ -24,7 +24,8 @@ $smallLeftMobile: 300px;
 
 .bigCircle {
     position: fixed;
-    background-color: rgba(250, 176, 40, 0.64);
+    background-color: v.$orange;
+    opacity: 0.64;
     top: $topOffset;
     left: $leftOffset;
     width: $bigSize;
@@ -35,7 +36,8 @@ $smallLeftMobile: 300px;
 
 .smallCircle {
     position: fixed;
-    background-color: rgba(250, 176, 40, 0.44);
+    background-color: v.$orange;
+    opacity: 0.44;
     top: calc($topOffset + $smallTop);
     left: calc($leftOffset - $smallLeft);
     width: $smallSize;

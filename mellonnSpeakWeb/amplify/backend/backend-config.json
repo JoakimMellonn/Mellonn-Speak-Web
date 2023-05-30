@@ -185,6 +185,14 @@
           ],
           "category": "function",
           "resourceName": "stripePaymentIntent"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "stripePaymentSucceeded"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -379,6 +387,12 @@
     },
     "stripePaymentIntent": {
       "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "stripePaymentSucceeded": {
+      "build": true,
+      "dependsOn": [],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
@@ -727,6 +741,30 @@
         {
           "category": "function",
           "resourceName": "stripePaymentIntent"
+        }
+      ]
+    },
+    "AMPLIFY_function_stripePaymentSucceeded_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "stripePaymentSucceeded"
+        }
+      ]
+    },
+    "AMPLIFY_function_stripePaymentSucceeded_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "stripePaymentSucceeded"
+        }
+      ]
+    },
+    "AMPLIFY_function_stripePaymentSucceeded_secretsPathAmplifyAppId": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "stripePaymentSucceeded"
         }
       ]
     },

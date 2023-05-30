@@ -178,6 +178,10 @@ export class UploadPageComponent implements OnInit {
   */
 
   async setupPayment() {
+    while (this.customerId == null || this.customerId == undefined || this.customerId.length <= 0) {
+        console.log("Waiting for customer id...");
+        await new Promise(res => setTimeout(res, 100));
+    }
     this.clientSecret = await this.uploadService.createIntent(
       this.customerId,
       this.currency,
@@ -237,7 +241,7 @@ export class UploadPageComponent implements OnInit {
         paymentMethod = this.defaultMethod.id;
       }*/
 
-      const result = await this.stripe!.processOrder({
+      const result = await this.stripe!.confirmPayment({
         elements: elements,
         redirect: "if_required"
       });
