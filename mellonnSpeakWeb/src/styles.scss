@@ -22,6 +22,10 @@ input, button {
     cursor: pointer;
 }
 
+.mat-mdc-progress-spinner.mat-accent {
+  --mdc-circular-progress-active-indicator-color: #FF966C;
+}
+
 .pageContainer {
     position: relative;
     top: 70px;

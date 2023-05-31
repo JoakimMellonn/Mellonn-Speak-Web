@@ -34,6 +34,7 @@ export class RecordingsPageComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.offset = (new Date().getTimezoneOffset());
+    await this.authService.getUserInfo();
     await this.getRecordings();
     this.subscription = DataStore.observe(Recording).subscribe(rec => {
       this.getRecordings();
@@ -46,9 +47,8 @@ export class RecordingsPageComponent implements OnInit, OnDestroy {
       this.currentMode = res;
     });
 
-    if (localStorage.getItem('isOnboarded') != 'true') {
+    if (!this.authService.isOnboarded) {
       this.currentMode = 'onboarding';
-      console.log('Not onboarded!');
     }
 
     this.loading = false;
@@ -66,7 +66,7 @@ export class RecordingsPageComponent implements OnInit, OnDestroy {
 
   doneOnboarding() {
     this.currentMode = 'default';
-    localStorage.setItem('isOnboarded', 'true');
+    this.authService.setOnboarded();
   }
 
   async getRecordings() {
@@ -91,7 +91,7 @@ export class RecordingsPageComponent implements OnInit, OnDestroy {
   onUploadChange(event: Event) {
     const target = event.target as HTMLInputElement;
     const files = target.files as FileList;
-    
+
     if (files.length == 1) {
       if (files[0].name.toLowerCase().match(/\.(wav|flac|m4p|m4a|m4b|mmf|aac|mp3|mp4|MP4)$/i)) {
         this.onFileDropped(files[0]);

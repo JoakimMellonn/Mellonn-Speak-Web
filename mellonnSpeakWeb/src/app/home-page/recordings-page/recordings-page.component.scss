@@ -47,7 +47,7 @@
             .notNew {
                 margin: 10px 0 25px 0;
                 text-decoration: underline;
-                
+
                 p {
                     font-weight: 700;
                     cursor: pointer;
@@ -73,7 +73,7 @@
 
     .contentBox {
         padding: 25px;
-        
+
         p {
             text-align: center;
         }
@@ -108,10 +108,9 @@
 
             .spinner {
                 position: relative;
-                display: inline;
+                display: inline-block;
                 margin-left: 10px;
-                top: -3px;
-                color: #FAB228;
+                top: 3px;
             }
 
             .date {
@@ -238,14 +237,14 @@
 
             .mainContent {
                 flex-direction: column;
-        
+
                 .recordings {
                     position: relative;
                     left: 50%;
                     transform: translate(-50%);
                     margin-bottom: 50px;
                 }
-        
+
                 .sideColumn {
                     position: relative;
                     left: 50%;

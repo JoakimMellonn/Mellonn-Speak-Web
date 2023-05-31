@@ -38,7 +38,7 @@ export class AudioControlComponent implements OnInit, OnDestroy {
       const icon = document.getElementById('playPause');
       this.renderer.removeClass(icon, 'fa-pause');
       this.renderer.addClass(icon, 'fa-play');
-      this.audio.player.currentTime = this.audio.currentStart;
+      this.audio.player.pause();
     });
 
     this.audio.player.addEventListener("playing", () => {
@@ -74,6 +74,7 @@ export class AudioControlComponent implements OnInit, OnDestroy {
 
   playPause() {
     if (this.audio.player.paused) {
+      if (this.currentTime == this.chosenEnd) this.audio.player.currentTime = this.currentStart;
       this.audio.play();
     } else {
       this.audio.pause();
@@ -150,7 +151,7 @@ export class AudioControlComponent implements OnInit, OnDestroy {
     const percent = (event.clientX - bar!.getBoundingClientRect().left) / bar!.offsetWidth;
     this.updateProgressState(this.audio.currentEnd * percent + (this.audio.currentStart * (1 - percent)));
   }
-  
+
   //Called on the mouseup event
   stopDrag(event: MouseEvent) {
     window.removeAllListeners!('mousemove');

@@ -81,7 +81,7 @@ export class UploadPageComponent implements OnInit {
           this.uploadService.returnToRecordings();
         }
         this.periods = this.uploadService.getPeriods(this.duration);
-        
+
         if (this.periods.periods == 0) this.buttonText = 'Upload recording';
         this.audioLoaded = true;
       }
@@ -212,10 +212,10 @@ export class UploadPageComponent implements OnInit {
     this.paymentElement = elements.create('payment', options);
 
     const card = document.getElementById('cardElement');
-    
+
     this.paymentLoading = false;
     this.paymentElement.mount(card!);
-    
+
     /*if (this.paymentMethods.length == 0) {
       this.cardElement.mount(card!);
     }*/
@@ -245,7 +245,7 @@ export class UploadPageComponent implements OnInit {
         elements: elements,
         redirect: "if_required"
       });
-      
+
       if (result.error) {
         console.error('Error while paying: ' + result.error.message);
         this.paymentElement.update({readOnly: false});
@@ -262,7 +262,7 @@ export class UploadPageComponent implements OnInit {
 
   async continueClick() {
     if (this.periods.periods == 0 || this.authService.group == 'dev') {
-      if (this.title == null || this.title!.length == 0 && this.description == null || this.description!.length == 0) {
+      if ((this.title == null || this.title == undefined || this.title!.length == 0) && (this.description == null || this.description == undefined || this.description!.length == 0)) {
         this.errorMessage = 'You need to fill in the title and description';
       } else if (this.title == null || this.title!.length == 0) {
         this.errorMessage = 'You need to fill in the title';
@@ -273,13 +273,13 @@ export class UploadPageComponent implements OnInit {
         await this.startUpload();
       }
     } else {
-      if (this.title == null || this.title!.length == 0 && this.description == null || this.description!.length == 0) {
+      if ((this.title == null || this.title == undefined || this.title!.length == 0) && (this.description == null || this.description == undefined || this.description!.length == 0)) {
         this.errorMessage = 'You need to fill in the title and description';
-      } else if (this.title == null || this.title!.length == 0) {
+      } else if (this.title == null || this.title == undefined || this.title!.length == 0) {
         this.errorMessage = 'You need to fill in the title';
-      } else if (this.description == null || this.description!.length == 0) {
+      } else if (this.description == null || this.description == undefined || this.description!.length == 0) {
         this.errorMessage = 'You need to fill in the description';
-      } else if (this.zipType != 'none' && (this.zipCode == null || this.zipCode!.length == 0)) {
+      } else if (this.zipType != 'none' && (this.zipCode == null || this.zipCode == undefined || this.zipCode!.length == 0)) {
         this.errorMessage = 'You need to fill in the ZIP-code';
       } else if (!this.validateZip(this.zipCode)) {
         this.errorMessage = `You need to enter a valid ZIP-code`;

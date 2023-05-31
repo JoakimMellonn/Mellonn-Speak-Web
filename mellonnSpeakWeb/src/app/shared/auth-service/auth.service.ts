@@ -16,6 +16,7 @@ export class AuthService {
   referrer: string;
   referGroup: string;
   groupAdmin: boolean = false;
+  isOnboarded: boolean = false;
 
   freePeriods: number = 0;
 
@@ -88,6 +89,7 @@ export class AuthService {
     }
     if (attributes['custom:groupAdmin'] == 'true') this.groupAdmin = true;
     if (attributes['custom:superdev'] == 'true') this.superDev = true;
+    if (attributes['custom:onboardedWeb'] == 'true') this.isOnboarded = true;
 
     this.freePeriods = await this.getFreePeriods();
   }
@@ -95,7 +97,7 @@ export class AuthService {
   async checkBenefit(email: string): Promise<boolean> {
     const key = 'data/benefitUsers.json';
     let returnElement: boolean = false;
-  
+
     try {
       const url = await Storage.get(key);
 
@@ -106,7 +108,7 @@ export class AuthService {
         },
       });
       const result = await response.json();
-  
+
       for (let benefitEmail of result.emails) {
         if (benefitEmail == email) {
           returnElement = true;
@@ -200,6 +202,17 @@ export class AuthService {
       } else {
         return 'error';
       }
+    }
+  }
+
+  async setOnboarded() {
+    try {
+      const user = await Auth.currentAuthenticatedUser();
+      await Auth.updateUserAttributes(user, {
+        'custom:onboardedWeb': 'true',
+      });
+    } catch (err) {
+      console.error(`Error getting onboarding status: ${err}`);
     }
   }
 }
