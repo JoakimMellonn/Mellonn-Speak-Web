@@ -3,7 +3,7 @@
         <div class="mainContent">
             <div class="contentBox" *ngIf="!loading">
                 <div class="titleBox">
-                    <img src="/assets/images/emptyProfile.png" class="profilePic">
+                  <img src="{{authService.userAvatar}}" class="profilePic">
                     <h1>Hi {{authService.firstName}} {{authService.lastName}}!</h1>
                 </div>
                 <div class="content">

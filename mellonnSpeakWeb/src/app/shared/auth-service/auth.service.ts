@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { createAvatar } from '@dicebear/core';
+import { initials } from '@dicebear/collection';
 import { Auth, DataStore, Storage } from 'aws-amplify';
 import { Subject } from 'rxjs';
 import { StorageService } from '../storage-service/storage.service';
@@ -17,6 +19,7 @@ export class AuthService {
   referGroup: string;
   groupAdmin: boolean = false;
   isOnboarded: boolean = false;
+  userAvatar: string;
 
   freePeriods: number = 0;
 
@@ -90,6 +93,11 @@ export class AuthService {
     if (attributes['custom:groupAdmin'] == 'true') this.groupAdmin = true;
     if (attributes['custom:superdev'] == 'true') this.superDev = true;
     if (attributes['custom:onboardedWeb'] == 'true') this.isOnboarded = true;
+    if (attributes['custom:avatarURI'] == undefined) {
+      await this.createAvatar();
+    } else {
+      this.userAvatar = attributes['custom:avatarURI'];
+    }
 
     this.freePeriods = await this.getFreePeriods();
   }
@@ -213,6 +221,26 @@ export class AuthService {
       });
     } catch (err) {
       console.error(`Error getting onboarding status: ${err}`);
+    }
+  }
+
+  async createAvatar() {
+    const avatar = createAvatar(initials, {
+      seed: `${this.firstName} ${this.lastName}`,
+      radius: 50,
+      backgroundColor: ['FF966C', 'B4E599', '6cd5ff', 'df6cff', 'ff6c7d', 'ff796c', 'ff966c', 'ffb36c', 'ffd16c', 'd2e599', 'c3e599', 'b4e599', 'a5e599', '99e59c'],
+      textColor: ['262626'],
+      fontWeight: 500,
+    });
+    this.userAvatar = await avatar.toDataUri();
+
+    try {
+      const user = await Auth.currentAuthenticatedUser();
+      await Auth.updateUserAttributes(user, {
+        'custom:avatarURI': this.userAvatar,
+      });
+    } catch (err) {
+      console.error(`Error creating the user avatar: ${err}`);
     }
   }
 }

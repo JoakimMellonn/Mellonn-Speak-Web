@@ -14,7 +14,7 @@ export class AppComponent implements OnInit {
   signedIn: boolean = false;
 
   constructor(
-    private authService: AuthService,
+    public authService: AuthService,
     private language: LanguageService,
     private settingsService: SettingsService,
     private uploadService: UploadService,
@@ -41,7 +41,7 @@ export class AppComponent implements OnInit {
       }
     } else {
       this.authService.signOut();
-    }    
+    }
   }
 
   async signOut() {

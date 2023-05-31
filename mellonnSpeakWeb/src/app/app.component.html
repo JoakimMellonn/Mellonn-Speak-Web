@@ -1,6 +1,7 @@
 <div class="header">
     <img src="/assets/images/logoLightMode.png" alt="logo" class="logo" routerLink="/">
-    <img src="/assets/images/emptyProfile.png" class="profile" routerLink="/profile" *ngIf="signedIn">
+    <img src="{{authService.userAvatar}}" class="profile" routerLink="/profile" *ngIf="signedIn">
+    <!-- <svg src="{{authService.userAvatar}}" class="profile" routerLink="/profile" *ngIf="signedIn"></svg> -->
 </div>
 <router-outlet></router-outlet>
 <app-background></app-background>
