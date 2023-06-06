@@ -67,7 +67,8 @@ export class UploadPageComponent implements OnInit {
     private fileSaver: FileSaverService
   ) { }
 
-  ngOnInit(): void {
+  async ngOnInit() {
+    await this.languageService.getLanguages();
     this.languageSelect = this.settingsService.currentSettings.languageCode;
     const fileUrl = URL.createObjectURL(this.file);
     this.player.src = fileUrl;

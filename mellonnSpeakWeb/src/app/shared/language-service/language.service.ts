@@ -30,14 +30,14 @@ export class LanguageService {
       if (code == null || cur == null) {
         this.getIPAdress().subscribe(async (res: any) => {
           this.ip = res.ip;
-  
+
           const params = {
             body: {
               "ip": this.ip
             }
           };
           const location = await API.put('location', '/ip', params);
-  
+
           this.countryCode = location.location.country.code;
           this.currency = location.currency.code;
           localStorage.setItem('countryCode', this.countryCode);
@@ -81,9 +81,11 @@ export class LanguageService {
           }
         }
         i++;
+        if (this.languageCodeList.length == 0) await new Promise(resolve => setTimeout(resolve, 150));
       }
       if (i >= 5) throw 'timeout';
     } catch (err) {
+      console.error(err);
       try {
         const url = await Storage.get('data/languages.json');
         const response = await fetch(url, {

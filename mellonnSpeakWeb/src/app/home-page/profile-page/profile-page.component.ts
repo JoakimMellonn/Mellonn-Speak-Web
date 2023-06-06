@@ -58,6 +58,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.settings = await this.settingsService.getSettings();
+    await this.languageService.getLanguages();
     this.getPaymentMethods();
     this.languageSelect = this.settings.languageCode;
     this.jumpSelect = this.settings.jumpSeconds;

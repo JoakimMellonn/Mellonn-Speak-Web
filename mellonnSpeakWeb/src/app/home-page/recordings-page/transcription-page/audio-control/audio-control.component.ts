@@ -15,6 +15,7 @@ export class AudioControlComponent implements OnInit, OnDestroy {
   chosen: boolean;
   jumpSecs: number;
   currentStart: number;
+  loadedFirst: boolean = false;
 
   constructor(private renderer: Renderer2, private audio: AudioService, private settings: SettingsService) { }
 
@@ -64,6 +65,19 @@ export class AudioControlComponent implements OnInit, OnDestroy {
         this.audio.resetState();
       }
     });
+
+    // this.audio.player.onloadedmetadata = () => {
+    //   if (!this.loadedFirst) {
+    //     this.endTime = this.formatSeconds(this.audio.player.duration);
+    //     this.currentTime = this.formatSeconds(this.audio.player.currentTime);
+    //     this.loadedFirst = true;
+    //   }
+    // }
+    if (!this.loadedFirst) {
+      this.endTime = this.formatSeconds(this.audio.player.duration);
+      this.currentTime = this.formatSeconds(this.audio.player.currentTime);
+      this.loadedFirst = true;
+    }
   }
 
   ngOnDestroy(): void {

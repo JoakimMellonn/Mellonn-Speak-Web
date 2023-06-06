@@ -48,7 +48,7 @@ export class AudioService {
         this.player.currentTime = this.shouldStartAt;
         this.loadedFirst = true;
         if (this.shouldStart) this.play();
-        
+
         this.shouldStart = false;
         this.shouldStartAt = 0;
       }
