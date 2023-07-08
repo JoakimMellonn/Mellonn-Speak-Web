@@ -4,12 +4,13 @@ import { Auth } from 'aws-amplify';
 import { AnalyticsService } from 'src/app/shared/analytics-service/analytics.service';
 import { AuthService } from 'src/app/shared/auth-service/auth.service';
 import { LanguageService } from 'src/app/shared/language-service/language.service';
+import { PromotionDbService } from 'src/app/shared/promotion-db-service/promotion-db.service';
 import { PromotionService, Promotion } from 'src/app/shared/promotion-service/promotion.service';
 import { SettingsService } from 'src/app/shared/settings-service/settings.service';
 import { StorageService } from 'src/app/shared/storage-service/storage.service';
 import { UploadService } from 'src/app/shared/upload-service/upload.service';
 import { environment } from 'src/environments/environment';
-import { Settings } from 'src/models';
+import { PromotionType, Settings } from 'src/models';
 
 @Component({
   selector: 'app-profile-page',
@@ -48,7 +49,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   constructor(
     public authService: AuthService,
     public languageService: LanguageService,
-    private promotionService: PromotionService,
+    private promotionService: PromotionDbService,
     private renderer: Renderer2,
     private settingsService: SettingsService,
     private storageService: StorageService,
@@ -134,15 +135,16 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
 
   async redeemPromotion() {
     if (this.promoCode.split('').length != 0) {
-      const promotion = await this.promotionService.getPromotion(this.promoCode, this.authService.email, this.authService.freePeriods);
-      if (promotion.type == 'noExist') {
+      const promotion = await this.promotionService.getPromotion(this.promoCode, this.authService.freePeriods);
+      console.log(promotion)
+      if (promotion == "no exist") {
         this.promoError = "This code doesn't exist, make sure you've written it correctly.";
-      } else if (promotion.type == 'used') {
+      } else if (promotion == 'used') {
         this.promoError = "You have already used this code.";
-      } else if (promotion.type == 'error' || promotion.type == undefined) {
+      } else if (typeof promotion == "string") {
         this.promoError = "Something went wrong while redeeming the code, please try again later."
       } else {
-        this.discountMessage = this.discountString(promotion);
+        this.discountMessage = this.promotionService.discountString(promotion);
         this.promoRedeemed = true;
       }
     } else {
@@ -177,18 +179,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       await this.storageService.removeUserFiles();
       await Auth.deleteUser();
       this.authService.signOut();
-    }
-  }
-
-  discountString(promotion: Promotion): string {
-    if (promotion.type == 'benefit' && promotion.freePeriods > 0) {
-      return 'Benefit user (-40% on all purchases) and ' + promotion.freePeriods + ' free credit(s)';
-    } else if (promotion.type == 'benefit' && promotion.freePeriods == 0) {
-      return 'Benefit user (-40% on all purchases)';
-    } else if (promotion.type == 'dev') {
-      return 'Developer user (everything is free)';
-    } else {
-      return promotion.freePeriods + ' free credits';
     }
   }
 

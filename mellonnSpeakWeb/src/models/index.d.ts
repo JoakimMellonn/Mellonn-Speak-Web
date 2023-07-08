@@ -2,6 +2,22 @@ import { ModelInit, MutableModel } from "@aws-amplify/datastore";
 // @ts-ignore
 import { LazyLoading, LazyLoadingDisabled, AsyncCollection } from "@aws-amplify/datastore";
 
+export enum PromotionType {
+  REFERRER = "REFERRER",
+  REFERGROUP = "REFERGROUP",
+  BENEFIT = "BENEFIT",
+  DEV = "DEV",
+  PERIODS = "PERIODS"
+}
+
+type ReferrerMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+}
+
+type PromotionMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+}
+
 type SettingsMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 }
@@ -12,6 +28,68 @@ type VersionMetaData = {
 
 type RecordingMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
+}
+
+type EagerReferrer = {
+  readonly id: string;
+  readonly name: string;
+  readonly members: number;
+  readonly purchases: number;
+  readonly seconds: number;
+  readonly promotions?: Promotion[] | null;
+  readonly discount: number;
+  readonly isGroup: boolean;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyReferrer = {
+  readonly id: string;
+  readonly name: string;
+  readonly members: number;
+  readonly purchases: number;
+  readonly seconds: number;
+  readonly promotions: AsyncCollection<Promotion>;
+  readonly discount: number;
+  readonly isGroup: boolean;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type Referrer = LazyLoading extends LazyLoadingDisabled ? EagerReferrer : LazyReferrer
+
+export declare const Referrer: (new (init: ModelInit<Referrer, ReferrerMetaData>) => Referrer) & {
+  copyOf(source: Referrer, mutator: (draft: MutableModel<Referrer, ReferrerMetaData>) => MutableModel<Referrer, ReferrerMetaData> | void): Referrer;
+}
+
+type EagerPromotion = {
+  readonly id: string;
+  readonly type: PromotionType | keyof typeof PromotionType;
+  readonly code: string;
+  readonly date: string;
+  readonly freePeriods: number;
+  readonly uses: number;
+  readonly referrerID?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyPromotion = {
+  readonly id: string;
+  readonly type: PromotionType | keyof typeof PromotionType;
+  readonly code: string;
+  readonly date: string;
+  readonly freePeriods: number;
+  readonly uses: number;
+  readonly referrerID?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type Promotion = LazyLoading extends LazyLoadingDisabled ? EagerPromotion : LazyPromotion
+
+export declare const Promotion: (new (init: ModelInit<Promotion, PromotionMetaData>) => Promotion) & {
+  copyOf(source: Promotion, mutator: (draft: MutableModel<Promotion, PromotionMetaData>) => MutableModel<Promotion, PromotionMetaData> | void): Promotion;
 }
 
 type EagerSettings = {

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { API, DataStore, Storage } from 'aws-amplify';
+import { DataStore, Storage } from 'aws-amplify';
 import { Recording } from 'src/models';
 import { Promotion } from '../promotion-service/promotion.service';
 import { Periods } from '../upload-service/upload.service';
@@ -102,7 +102,7 @@ export class StorageService {
 
   async removeReferrer(referrer: string) {
     const key: string = `data/referrers/${referrer}.json`;
-    
+
     try {
       await Storage.remove(key);
       return true;
@@ -158,11 +158,11 @@ export class StorageService {
     } catch (err) {
       console.error('Error when deleting datastore elements for user: ' + err);
     }
-  
+
     //Removing all private files associated with the user
     try {
       const result = await Storage.list('', {level: 'private'});
-  
+
       result.results.forEach(async (item) => {
         await Storage.remove(item.key!, {level: 'private'});
       })

@@ -4,6 +4,7 @@ import { API, DataStore, Storage } from 'aws-amplify';
 import { Recording } from 'src/models';
 import { Subject } from 'rxjs';
 import { LanguageService } from '../language-service/language.service';
+import { PromotionDbService } from '../promotion-db-service/promotion-db.service';
 
 const supportedExtensions = ['amr', 'flac', 'mp3', 'mp4', 'ogg', 'webm', 'wav'];
 
@@ -30,6 +31,7 @@ export class UploadService {
   constructor(
     private authService: AuthService,
     private languageService: LanguageService,
+    private promotionService: PromotionDbService,
   ) {}
 
   getPeriods(duration: number): Periods {
@@ -44,7 +46,7 @@ export class UploadService {
       periods = 0;
       freeLeft = freePeriods - total;
     }
-    return new Periods(total, periods, freeLeft);
+    return new Periods(total, periods, freeLeft, duration);
   }
 
   async getCustomerId(): Promise<string> {
@@ -158,8 +160,10 @@ export class UploadService {
     });
 
     try {
-      const datastoreResult = await DataStore.save(newRecording);
-      const storageResult = await Storage.put(key, uploadFile,
+      console.log(newRecording);
+      await DataStore.save(newRecording);
+      console.log("Saved recording")
+      await Storage.put(key, uploadFile,
         {
           level: 'private',
           progressCallback: (progress) => {
@@ -167,7 +171,11 @@ export class UploadService {
           },
         }
       );
+      console.log("Uploaded recording")
       await this.authService.updateFreePeriods(periods.freeLeft);
+      console.log("Updated free periods")
+      await this.promotionService.registerPurchase(periods.duration);
+      console.log("Registered purchase")
     } catch (err) {
       console.error('Error while uploading recording: ' + err);
     }
@@ -219,10 +227,12 @@ export class Periods {
   total: number;
   periods: number;
   freeLeft: number;
+  duration: number;
 
-  constructor(total: number, periods: number, freeLeft: number) {
+  constructor(total: number, periods: number, freeLeft: number, duration: number) {
     this.total = total;
     this.periods = periods;
     this.freeLeft = freeLeft;
+    this.duration = duration;
   }
 }

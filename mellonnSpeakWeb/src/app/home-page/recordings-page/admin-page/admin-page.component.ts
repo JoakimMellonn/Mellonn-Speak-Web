@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/shared/auth-service/auth.service';
+import { PromotionDbService } from 'src/app/shared/promotion-db-service/promotion-db.service';
 import { Promotion, PromotionService } from 'src/app/shared/promotion-service/promotion.service';
 import { StorageService } from 'src/app/shared/storage-service/storage.service';
 
@@ -18,7 +19,6 @@ export class AdminPageComponent implements OnInit {
   promoUses: number;
   promoPeriods: number;
   promoReferrer: string;
-  promoReferGroup: string;
   promoSuccess: string = '';
   promoError: string = '';
 
@@ -34,7 +34,7 @@ export class AdminPageComponent implements OnInit {
   groupRemoveLoading: boolean = true;
 
   constructor(
-    private promotionService: PromotionService,
+    private promotionService: PromotionDbService,
     public authService: AuthService,
     public storageService: StorageService
   ) { }
@@ -80,12 +80,11 @@ export class AdminPageComponent implements OnInit {
     if (this.validatePromo()) {
       this.isLoading = true;
       const res = await this.promotionService.addPromotion(
-        this.promoType,
+        this.promotionService.getPromoType(this.promoType),
         this.promoCode,
-        this.promoUses.toString(),
-        this.promoPeriods.toString(),
+        this.promoUses,
+        this.promoPeriods,
         this.promoReferrer,
-        this.promoReferGroup
       );
       this.isLoading = false;
       if (res) {
@@ -115,61 +114,61 @@ export class AdminPageComponent implements OnInit {
     }
   }
 
-  async addUserToGroup() {
-    this.groupSuccess = '';
-    this.groupError = '';
-    if (this.validateEmail(this.groupEmail)) {
-      this.isLoading = true;
-      const res = await this.promotionService.addUserToReferrer(this.authService.referrer, this.groupEmail, this.authService.referGroup);
-      this.isLoading = false;
-      if (res) {
-        this.groupSuccess = 'The user was successfully added';
-      } else {
-        this.groupSuccess = '';
-        this.groupError = 'Something went wrong while adding the user';
-      }
-    } else {
-      this.groupSuccess = '';
-      this.groupError = 'The entered email is not valid';
-    }
-  }
+  // async addUserToGroup() {
+  //   this.groupSuccess = '';
+  //   this.groupError = '';
+  //   if (this.validateEmail(this.groupEmail)) {
+  //     this.isLoading = true;
+  //     const res = await this.promotionService.addUserToReferrer(this.authService.referrer);
+  //     this.isLoading = false;
+  //     if (res) {
+  //       this.groupSuccess = 'The user was successfully added';
+  //     } else {
+  //       this.groupSuccess = '';
+  //       this.groupError = 'Something went wrong while adding the user';
+  //     }
+  //   } else {
+  //     this.groupSuccess = '';
+  //     this.groupError = 'The entered email is not valid';
+  //   }
+  // }
+  //
+  // async removeUserFromGroup(email: string) {
+  //   this.groupSuccess = '';
+  //   this.groupError = '';
+  //   if (this.validateEmail(email)) {
+  //     this.isLoading = true;
+  //     const res = await this.promotionService.removeUserFromReferrer(this.authService.referrer, email, this.authService.referGroup);
+  //     this.isLoading = false;
+  //     if (res) {
+  //       this.groupSuccess = 'The user was successfully removed';
+  //     } else {
+  //       this.groupSuccess = '';
+  //       this.groupError = 'Something went wrong while removing the user';
+  //     }
+  //   } else {
+  //     this.groupSuccess = '';
+  //     this.groupError = 'The entered email is not valid';
+  //   }
+  // }
 
-  async removeUserFromGroup(email: string) {
-    this.groupSuccess = '';
-    this.groupError = '';
-    if (this.validateEmail(email)) {
-      this.isLoading = true;
-      const res = await this.promotionService.removeUserFromReferrer(this.authService.referrer, email, this.authService.referGroup);
-      this.isLoading = false;
-      if (res) {
-        this.groupSuccess = 'The user was successfully removed';
-      } else {
-        this.groupSuccess = '';
-        this.groupError = 'Something went wrong while removing the user';
-      }
-    } else {
-      this.groupSuccess = '';
-      this.groupError = 'The entered email is not valid';
-    }
-  }
-
-  async removeUserClick(email: string) {
-    const res = await this.promotionService.removeUserFromReferrer(this.authService.referrer, email, this.authService.referGroup);
-
-    let newList: string[] = [];
-    for (let em of this.groupList) {
-      if (em != email) {
-        newList.push(em);
-      }
-    }
-    this.groupList = newList;
-
-    if (res) {
-      alert('User removed from your group.');
-    } else {
-      alert('Something went wrong when removing user from your group.');
-    }
-  }
+  // async removeUserClick(email: string) {
+  //   const res = await this.promotionService.removeUserFromReferrer(this.authService.referrer, email, this.authService.referGroup);
+  //
+  //   let newList: string[] = [];
+  //   for (let em of this.groupList) {
+  //     if (em != email) {
+  //       newList.push(em);
+  //     }
+  //   }
+  //   this.groupList = newList;
+  //
+  //   if (res) {
+  //     alert('User removed from your group.');
+  //   } else {
+  //     alert('Something went wrong when removing user from your group.');
+  //   }
+  // }
 
   async removePromoClick(code: string) {
     const res = await this.promotionService.removePromotion(code);
@@ -200,10 +199,8 @@ export class AdminPageComponent implements OnInit {
     if (!(this.promoPeriods > 0)) this.promoPeriods = 0;
     if (this.promoType == 'referrer' || this.promoType == 'referGroup') {
       if (this.promoReferrer == null || this.promoReferrer == undefined || this.promoReferrer.length == 0) return false;
-      if (this.promoReferGroup == null || this.promoReferGroup == undefined || this.promoReferGroup.length == 0) return false;
     } else {
       this.promoReferrer = '';
-      this.promoReferGroup = '';
     }
     return true;
   }

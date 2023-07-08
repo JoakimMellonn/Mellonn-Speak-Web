@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Amplify, DataStore, Storage } from 'aws-amplify';
+import { DataStore, Storage } from 'aws-amplify';
 import { Recording, Version } from 'src/models';
 import { Transcription, Segment, Item } from '../transcription';
 
@@ -155,17 +155,17 @@ export class TranscriptionService {
 
   combineWordsWithSpeaker (spInterval: SpeakerSegment[], wList: PronouncedWord[]): SpeakerWithWords[] {
     let swCombined: SpeakerWithWords[] = [];
-    
+
     for (const speakerSegment of spInterval) {
       let _words: string[] = [];
       let _joinableWords: string[] = [];
-      
+
       for (const pronouncedWord of wList) {
         if (pronouncedWord.startTime >= speakerSegment.startTime && pronouncedWord.endTime <= speakerSegment.endTime) {
           _words.push(pronouncedWord.word);
         }
       }
-      
+
       for (const word of _words) {
         if (word == ',' || word == '.' || word == '?' || word == '!') {
           _joinableWords.push(word);
@@ -179,7 +179,7 @@ export class TranscriptionService {
       while (joinedWords.charAt(0) == ' ') {
         joinedWords = joinedWords.replace(' ', '');
       }
-      
+
       if (joinedWords.length > 0) {
         swCombined.push(
           new SpeakerWithWords(
@@ -198,7 +198,7 @@ export class TranscriptionService {
     //first we remove all versions
     try {
       const versions: Version[] = await DataStore.query(Version, version => version.recordingID.eq(this.recording.id));
-  
+
       for (let version of versions) {
         try {
           const versionKey = 'versions/' + recording.id + '/' + version.id + '.json';
@@ -213,7 +213,7 @@ export class TranscriptionService {
     } catch (e) {
       console.error('Error while deleting original version: ' + e);
     }
-  
+
     //now we remove the audio and the transcription
     try {
       const transcriptKey = 'finishedJobs/' + recording.id + '.json';

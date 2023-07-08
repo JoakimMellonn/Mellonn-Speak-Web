@@ -94,7 +94,7 @@ export class PromotionService {
         "email": email
       }
     };
-  
+
     const response = await API.put('getPromo', '/addRemBenefit', params);
     if (response.statusCode == 200) {
       return true;
@@ -136,7 +136,7 @@ export class PromotionService {
         "code": code
       }
     };
-  
+
     const response = await API.put('getPromo', '/addPromo', params);
     if (response == `Successfully removed code: ${code}`) {
       return true;
@@ -174,7 +174,7 @@ export class PromotionService {
       let newReferrer = result;
       newReferrer.emails = emails;
       await Storage.put(key, newReferrer);
-      
+
       if (referGroup != undefined) return await this.addRemReferGroupAPI('add', email, referGroup, referrer);
 
       return true;
@@ -238,6 +238,18 @@ export class PromotionService {
     } catch (err) {
       console.error('Error while adding user to referGroup: ' + err);
       return false;
+    }
+  }
+
+  discountString(promotion: Promotion): string {
+    if (promotion.type == 'benefit' && promotion.freePeriods > 0) {
+      return 'Benefit user (-40% on all purchases) and ' + promotion.freePeriods + ' free credit(s)';
+    } else if (promotion.type == 'benefit' && promotion.freePeriods == 0) {
+      return 'Benefit user (-40% on all purchases)';
+    } else if (promotion.type == 'dev') {
+      return 'Developer user (everything is free)';
+    } else {
+      return promotion.freePeriods + ' free credits';
     }
   }
 }

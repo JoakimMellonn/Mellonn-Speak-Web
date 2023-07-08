@@ -4,7 +4,6 @@ import { Recording } from 'src/models';
 import { AuthService } from 'src/app/shared/auth-service/auth.service';
 import { Router } from '@angular/router';
 import { UploadService } from 'src/app/shared/upload-service/upload.service';
-import { PromotionService } from 'src/app/shared/promotion-service/promotion.service';
 
 @Component({
   selector: 'app-recordings-page',
@@ -29,7 +28,7 @@ export class RecordingsPageComponent implements OnInit, OnDestroy {
     public authService: AuthService,
     public uploadService: UploadService,
     private router: Router,
-    private promotionService: PromotionService
+    // private promotionService: PromotionDbService,
   ) { }
 
   async ngOnInit() {
@@ -43,9 +42,9 @@ export class RecordingsPageComponent implements OnInit, OnDestroy {
     this.uploadService.uploadDoneCalled.subscribe((res) => {
       if (res == true) this.currentMode = 'default';
     });
-    this.promotionService.switchCurrentModeCalled.subscribe((res) => {
-      this.currentMode = res;
-    });
+    // this.promotionService.switchCurrentModeCalled.subscribe((res) => {
+    //   this.currentMode = res;
+    // });
 
     if (!this.authService.isOnboarded) {
       this.currentMode = 'onboarding';
@@ -82,8 +81,10 @@ export class RecordingsPageComponent implements OnInit, OnDestroy {
 
   openRecording(recording: Recording) {
     if (typeof recording.fileUrl === "string") {
+      console.log(recording)
       this.router.navigateByUrl('/home/transcription/' + recording.id);
     } else {
+      console.log(recording)
       alert('The selected recording is currently being transcribed, this can take some time depending on the length of the audio clip. If this takes longer than 2 hours, please contact Mellonn by using Report issue on the profile page.');
     }
   }
