@@ -94,7 +94,7 @@ export class RecordingsPageComponent implements OnInit, OnDestroy {
     const files = target.files as FileList;
 
     if (files.length == 1) {
-      if (files[0].name.toLowerCase().match(/\.(wav|flac|m4p|m4a|m4b|mmf|aac|mp3|mp4|MP4)$/i)) {
+      if (files[0].name.toLowerCase().match(/\.(wav|flac|m4p|m4a|m4b|mmf|aac|mp3|mp4)$/i)) {
         this.onFileDropped(files[0]);
       } else {
         alert('This file type is not supported, a list of supported file types can be found here: www.mellonn.com/speak-help');
