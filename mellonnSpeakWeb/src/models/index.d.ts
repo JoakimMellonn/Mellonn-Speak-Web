@@ -66,7 +66,7 @@ type EagerPromotion = {
   readonly id: string;
   readonly type: PromotionType | keyof typeof PromotionType;
   readonly code: string;
-  readonly date: string;
+  readonly date?: string | null;
   readonly freePeriods: number;
   readonly uses: number;
   readonly referrerID?: string | null;
@@ -78,7 +78,7 @@ type LazyPromotion = {
   readonly id: string;
   readonly type: PromotionType | keyof typeof PromotionType;
   readonly code: string;
-  readonly date: string;
+  readonly date?: string | null;
   readonly freePeriods: number;
   readonly uses: number;
   readonly referrerID?: string | null;

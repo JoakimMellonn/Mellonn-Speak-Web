@@ -102,6 +102,26 @@ export const schema = {
                                     "delete",
                                     "read"
                                 ]
+                            },
+                            {
+                                "allow": "public",
+                                "operations": [
+                                    "read"
+                                ]
+                            },
+                            {
+                                "allow": "private",
+                                "operations": [
+                                    "read"
+                                ],
+                                "provider": "iam"
+                            },
+                            {
+                                "allow": "public",
+                                "operations": [
+                                    "read"
+                                ],
+                                "provider": "iam"
                             }
                         ]
                     }
@@ -138,7 +158,7 @@ export const schema = {
                     "name": "date",
                     "isArray": false,
                     "type": "AWSDate",
-                    "isRequired": true,
+                    "isRequired": false,
                     "attributes": []
                 },
                 "freePeriods": {
@@ -207,6 +227,26 @@ export const schema = {
                                     "delete",
                                     "read"
                                 ]
+                            },
+                            {
+                                "allow": "public",
+                                "operations": [
+                                    "read"
+                                ]
+                            },
+                            {
+                                "allow": "private",
+                                "operations": [
+                                    "read"
+                                ],
+                                "provider": "iam"
+                            },
+                            {
+                                "allow": "public",
+                                "operations": [
+                                    "read"
+                                ],
+                                "provider": "iam"
                             }
                         ]
                     }
@@ -534,5 +574,5 @@ export const schema = {
     },
     "nonModels": {},
     "codegenVersion": "3.4.4",
-    "version": "f2d14edc2d821a0af76dcc2c07302812"
+    "version": "3834523e4e2930c6d6b6d79d8c7fc8cb"
 };

@@ -3,7 +3,6 @@ import { DataStore, Auth } from 'aws-amplify';
 import { Subject } from 'rxjs';
 import { Promotion, PromotionType, Referrer } from 'src/models';
 import { AuthService } from '../auth-service/auth.service';
-import { Periods } from '../upload-service/upload.service';
 
 @Injectable({
   providedIn: 'root'
@@ -136,18 +135,17 @@ export class PromotionDbService {
 
   async addUserToReferrer(referrer: Referrer): Promise<boolean> {
     try {
-      await DataStore.save(
-        Referrer.copyOf(referrer, updated => {
-          updated.members = referrer.members + 1
-        })
-      );
-
       const user = await Auth.currentAuthenticatedUser();
       await Auth.updateUserAttributes(user, {
         'custom:referrer': referrer.name,
         'custom:referGroup': referrer.isGroup ? referrer.name : ''
       });
-
+      
+      await DataStore.save(
+        Referrer.copyOf(referrer, updated => {
+          updated.members = referrer.members + 1
+        })
+      );
       return true;
     } catch (err) {
       console.error(`An error happened while adding user to referrer: ${err}`)
@@ -178,6 +176,25 @@ export class PromotionDbService {
     }
   }
 
+  async registerPurchase(duration: number) {
+    try {
+      const { attributes } = await Auth.currentAuthenticatedUser();
+      const referrerCode = attributes['custom:referrer'];
+      if (referrerCode == null || referrerCode == undefined) return;
+      const dbReferrer = await DataStore.query(Referrer, (r) => r.name.eq(referrerCode));
+      if (dbReferrer.length == 0) return;
+      const referrer = dbReferrer[0];
+
+      const updatedReferrer = Referrer.copyOf(referrer, updated => {
+        updated.purchases = referrer.purchases + 1,
+        updated.seconds = referrer.seconds + duration
+      });
+      await DataStore.save(updatedReferrer);
+    } catch (err) {
+      console.log(`Error when registering purchase: ${err}`);
+    }
+  }
+
   discountString(promotion: Promotion): string {
     if (promotion.type == PromotionType.BENEFIT && promotion.freePeriods > 0) {
       return 'Benefit user (-40% on all purchases) and ' + promotion.freePeriods + ' free credit(s)';
@@ -198,25 +215,6 @@ export class PromotionDbService {
       case 'referGroup': return PromotionType.REFERGROUP
       case 'dev': return PromotionType.DEV
       default: return PromotionType.PERIODS
-    }
-  }
-
-  async registerPurchase(duration: number) {
-    try {
-      const { attributes } = await Auth.currentAuthenticatedUser();
-      const referrerCode = attributes['custom:referrer'];
-      if (referrerCode == null || referrerCode == undefined) return;
-      const dbReferrer = await DataStore.query(Referrer, (r) => r.name.eq(referrerCode));
-      if (dbReferrer.length == 0) return;
-      const referrer = dbReferrer[0];
-
-      const updatedReferrer = Referrer.copyOf(referrer, updated => {
-        updated.purchases = referrer.purchases + 1,
-        updated.seconds = referrer.seconds + duration
-      });
-      await DataStore.save(updatedReferrer);
-    } catch (err) {
-      console.log(`Error when registering purchase: ${err}`);
     }
   }
 }

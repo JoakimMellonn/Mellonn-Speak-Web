@@ -134,6 +134,7 @@ export class UploadService {
   }
 
   async uploadRecording(file: File, title: string, desc: string, speakerCount: number, languageCode: string, periods: Periods) {
+    console.log(`Title: ${title}, desc: ${desc}, fileName: ${file.name}, sc: ${speakerCount}, lc: ${languageCode}, date: ${new Date().toISOString()}`);
     const recording = new Recording({
       name: title,
       description: desc,
