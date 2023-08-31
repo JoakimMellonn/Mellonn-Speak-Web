@@ -151,7 +151,8 @@
         },
         "transcriptionDoneFunction": {
           "deploymentBucketName": "amplify-mellonnspeakeu-staging-102306-deployment",
-          "s3Key": "amplify-builds/transcriptionDoneFunction-6b616c44676a32623376-build.zip"
+          "s3Key": "amplify-builds/transcriptionDoneFunction-6b616c44676a32623376-build.zip",
+          "pinpointAppId": "06eb415f512343e0aaa8392679609f2a"
         },
         "getPromo": {
           "deploymentBucketName": "amplify-mellonnspeakeu-staging-102306-deployment",
@@ -240,7 +241,12 @@
         "mellonnSpeakS3EU": {}
       },
       "analytics": {
-        "SpeakAnalytics": {}
+        "SpeakAnalytics": {},
+        "Pinpoint": {
+          "Name": "SpeakAnalytics-staging",
+          "Id": "06eb415f512343e0aaa8392679609f2a",
+          "Region": "eu-central-1"
+        }
       },
       "api": {
         "export": {},
@@ -250,6 +256,13 @@
         "mellonnspeakeu": {},
         "stripe": {},
         "convert": {}
+      },
+      "notifications": {
+        "Pinpoint": {
+          "Name": "SpeakAnalytics-staging",
+          "Id": "06eb415f512343e0aaa8392679609f2a",
+          "Region": "eu-central-1"
+        }
       }
     }
   }
