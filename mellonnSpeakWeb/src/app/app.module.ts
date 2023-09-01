@@ -30,6 +30,7 @@ import { SearchPromoPipe } from './home-page/recordings-page/admin-page/searchPr
 import { BackgroundComponent } from './background/background.component';
 import { GuideComponent } from './home-page/recordings-page/transcription-page/guide/guide.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { AmbassadorPageComponent } from './home-page/ambassador-page/ambassador-page.component';
 
 Amplify.configure(awsconfig);
 
@@ -54,6 +55,7 @@ Amplify.configure(awsconfig);
     SearchPromoPipe,
     BackgroundComponent,
     GuideComponent,
+    AmbassadorPageComponent,
   ],
   imports: [
     BrowserModule,

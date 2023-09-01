@@ -6,6 +6,7 @@ import { RecordingsPageComponent } from './home-page/recordings-page/recordings-
 import { TranscriptionPageComponent } from './home-page/recordings-page/transcription-page/transcription-page.component';
 import { UploadPageComponent } from './home-page/recordings-page/upload-page/upload-page.component';
 import { LoginPageComponent } from './login/login-page/login-page.component';
+import { AmbassadorPageComponent } from './home-page/ambassador-page/ambassador-page.component';
 
 const routes: Routes = [
   { path: '', component: HomePageComponent },
@@ -13,7 +14,8 @@ const routes: Routes = [
   { path: 'home', component: RecordingsPageComponent },
   { path: 'home/transcription/:id', component: TranscriptionPageComponent },
   { path: 'profile', component: ProfilePageComponent },
-  { path: 'home/upload', component: UploadPageComponent }
+  { path: 'home/upload', component: UploadPageComponent },
+  { path: 'home/ambassador', component: AmbassadorPageComponent }
 ];
 
 @NgModule({
