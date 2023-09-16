@@ -1,5 +1,87 @@
 export const schema = {
     "models": {
+        "Purchase": {
+            "name": "Purchase",
+            "fields": {
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "date": {
+                    "name": "date",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "seconds": {
+                    "name": "seconds",
+                    "isArray": false,
+                    "type": "Float",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "referrerID": {
+                    "name": "referrerID",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                }
+            },
+            "syncable": true,
+            "pluralName": "Purchases",
+            "attributes": [
+                {
+                    "type": "model",
+                    "properties": {}
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "byReferrer",
+                        "fields": [
+                            "referrerID"
+                        ]
+                    }
+                },
+                {
+                    "type": "auth",
+                    "properties": {
+                        "rules": [
+                            {
+                                "allow": "private",
+                                "operations": [
+                                    "create",
+                                    "update",
+                                    "delete",
+                                    "read"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
         "Referrer": {
             "name": "Referrer",
             "fields": {
@@ -65,6 +147,20 @@ export const schema = {
                     "type": "Boolean",
                     "isRequired": true,
                     "attributes": []
+                },
+                "Purchases": {
+                    "name": "Purchases",
+                    "isArray": true,
+                    "type": {
+                        "model": "Purchase"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true,
+                    "association": {
+                        "connectionType": "HAS_MANY",
+                        "associatedWith": "referrerID"
+                    }
                 },
                 "createdAt": {
                     "name": "createdAt",
@@ -574,5 +670,5 @@ export const schema = {
     },
     "nonModels": {},
     "codegenVersion": "3.4.4",
-    "version": "3834523e4e2930c6d6b6d79d8c7fc8cb"
+    "version": "4fb69ae197bb396c34a1b3626265b4ca"
 };
