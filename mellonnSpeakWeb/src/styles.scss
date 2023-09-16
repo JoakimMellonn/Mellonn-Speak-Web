@@ -39,6 +39,15 @@ input, button {
     }
 }
 
+.standardContainer {
+  background-color: v.$white;
+  border-radius: v.$radius;
+  box-shadow: 0px 2px 20px v.$shadow;
+  box-sizing: border-box;
+  height: 100%;
+  margin-bottom: 50px;
+}
+
 .titleBox {
     width: 100%;
     background-color: v.$white;

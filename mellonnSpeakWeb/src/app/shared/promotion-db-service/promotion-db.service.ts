@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DataStore, Auth } from 'aws-amplify';
 import { Subject } from 'rxjs';
-import { Promotion, PromotionType, Referrer } from 'src/models';
+import { Promotion, PromotionType, Purchase, Referrer } from 'src/models';
 import { AuthService } from '../auth-service/auth.service';
 
 @Injectable({
@@ -176,20 +176,45 @@ export class PromotionDbService {
     }
   }
 
+  async getReferrer(referrer: string): Promise<Referrer | null> {
+    try {
+      const dbReferrer = await DataStore.query(Referrer, (r) => r.name.eq(referrer));
+      if (dbReferrer.length > 0) {
+        return dbReferrer[0];
+      }
+      return null;
+    } catch(err) {
+      console.error(err);
+      return null;
+    }
+  }
+
   async registerPurchase(duration: number) {
     try {
+      let purchase = new Purchase({
+        date: new Date().toISOString(),
+        seconds: duration
+      });
       const { attributes } = await Auth.currentAuthenticatedUser();
       const referrerCode = attributes['custom:referrer'];
-      if (referrerCode == null || referrerCode == undefined) return;
-      const dbReferrer = await DataStore.query(Referrer, (r) => r.name.eq(referrerCode));
-      if (dbReferrer.length == 0) return;
-      const referrer = dbReferrer[0];
+      if (referrerCode != null && referrerCode != undefined) {
+        const dbReferrer = await DataStore.query(Referrer, (r) => r.name.eq(referrerCode));
+        if (dbReferrer.length != 0) {
+          const referrer = dbReferrer[0];
 
-      const updatedReferrer = Referrer.copyOf(referrer, updated => {
-        updated.purchases = referrer.purchases + 1,
-        updated.seconds = referrer.seconds + duration
-      });
-      await DataStore.save(updatedReferrer);
+          const updatedReferrer = Referrer.copyOf(referrer, updated => {
+            updated.purchases = referrer.purchases + 1,
+            updated.seconds = referrer.seconds + duration
+          });
+          await DataStore.save(updatedReferrer);
+          purchase = new Purchase({
+            date: new Date().toISOString(),
+            seconds: duration,
+            referrerID: referrer == null ? null : referrer.id
+          });
+        }
+      }
+      await DataStore.save(purchase);
     } catch (err) {
       console.log(`Error when registering purchase: ${err}`);
     }

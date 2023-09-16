@@ -1,1 +1,31 @@
-<p>ambassador-page works!</p>
+<div class="pageContainer">
+  <div class="center">
+    <div *ngIf="!isLoading">
+      <div class="standardContainer">
+        <div class="titleBox">
+          <h1>{{referrer.name}}</h1>
+        </div>
+        <div class="highlights">
+          <div class="highlight">
+            <h2>Total Members</h2>
+            <p>{{referrer.members}}</p>
+          </div>
+          <div class="highlight">
+            <h2>Total Purchases</h2>
+            <p>{{referrer.purchases}}</p>
+          </div>
+          <div class="highlight">
+            <h2>Minutes of Transcription</h2>
+            <p>{{minutesString}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="standardContainer chart">
+      <canvas id="minutes"></canvas>
+    </div>
+    <div class="standardContainer chart">
+      <canvas id="purchases"></canvas>
+    </div>
+  </div>
+</div>

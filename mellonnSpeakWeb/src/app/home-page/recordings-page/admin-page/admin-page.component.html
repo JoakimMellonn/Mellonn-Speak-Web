@@ -27,15 +27,16 @@
 
     <!--Group admin-->
     <div *ngIf="authService.groupAdmin && currentMode == 'groupAdmin'">
-        <p>Add/remove user to {{authService.referGroup}}</p>
+        <button class="standardButton" (click)="openAmbassadorScreen()">Open Ambassador screen</button>
+        <!-- <p>Add/remove user to {{authService.referGroup}}</p>
         <input type="text" class="inputField" placeholder="Email" [(ngModel)]="groupEmail">
         <p class="successMessage" *ngIf="groupSuccess != ''">{{groupSuccess}}</p>
         <p class="errorMessage" *ngIf="groupError != ''">{{groupError}}</p>
         <div class="addRemove" *ngIf="!isLoading">
-            <!-- <button class="standardButton" id="remove" (click)="removeUserFromGroup(groupEmail)">Remove</button> -->
-            <!-- <button class="standardButton" (click)="addUserToGroup()">Add</button> -->
+            <button class="standardButton" id="remove" (click)="removeUserFromGroup(groupEmail)">Remove</button>
+            <button class="standardButton" (click)="addUserToGroup()">Add</button>
         </div>
-        <button class="standardButton" (click)="changeMode('groupList')">View all users in group</button>
+        <button class="standardButton" (click)="changeMode('groupList')">View all users in group</button> -->
     </div>
 
     <!--Group list page-->

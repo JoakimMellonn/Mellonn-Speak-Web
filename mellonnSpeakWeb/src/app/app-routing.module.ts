@@ -15,7 +15,7 @@ const routes: Routes = [
   { path: 'home/transcription/:id', component: TranscriptionPageComponent },
   { path: 'profile', component: ProfilePageComponent },
   { path: 'home/upload', component: UploadPageComponent },
-  { path: 'home/ambassador', component: AmbassadorPageComponent }
+  { path: 'home/ambassador/:referrer', component: AmbassadorPageComponent },
 ];
 
 @NgModule({

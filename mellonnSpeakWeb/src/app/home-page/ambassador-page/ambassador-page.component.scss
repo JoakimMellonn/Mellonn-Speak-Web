@@ -1,0 +1,34 @@
+@use "../../variables" as v;
+
+.center {
+  min-width: 700px;
+  max-width: 1000px;
+}
+
+.highlights {
+  display: flex;
+
+  .highlight {
+    flex: 1;
+    border-right: v.$shadow 1px solid;
+    padding: v.$radius;
+
+    h2 {
+      margin: 0;
+      margin-bottom: 20px;
+    }
+
+    p {
+      text-align: center;
+      font-size: 2em;
+    }
+  }
+
+  .highlight:last-child {
+    border-right: none;
+  }
+}
+
+.chart {
+  padding: v.$radius;
+}
