@@ -163,7 +163,6 @@ export class UploadService {
     try {
       console.log(newRecording);
       await DataStore.save(newRecording);
-      console.log("Saved recording")
       await Storage.put(key, uploadFile,
         {
           level: 'private',
@@ -172,11 +171,8 @@ export class UploadService {
           },
         }
       );
-      console.log("Uploaded recording")
       await this.authService.updateFreePeriods(periods.freeLeft);
-      console.log("Updated free periods")
       await this.promotionService.registerPurchase(periods.duration);
-      console.log("Registered purchase")
     } catch (err) {
       console.error('Error while uploading recording: ' + err);
     }

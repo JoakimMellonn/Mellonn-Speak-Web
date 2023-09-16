@@ -10,9 +10,10 @@ const PromotionType = {
   "PERIODS": "PERIODS"
 };
 
-const { Referrer, Promotion, Settings, Version, Recording } = initSchema(schema);
+const { Purchase, Referrer, Promotion, Settings, Version, Recording } = initSchema(schema);
 
 export {
+  Purchase,
   Referrer,
   Promotion,
   Settings,

@@ -10,6 +10,10 @@ export enum PromotionType {
   PERIODS = "PERIODS"
 }
 
+type PurchaseMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+}
+
 type ReferrerMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 }
@@ -30,6 +34,30 @@ type RecordingMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 }
 
+type EagerPurchase = {
+  readonly id: string;
+  readonly date: string;
+  readonly seconds: number;
+  readonly referrerID?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyPurchase = {
+  readonly id: string;
+  readonly date: string;
+  readonly seconds: number;
+  readonly referrerID?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type Purchase = LazyLoading extends LazyLoadingDisabled ? EagerPurchase : LazyPurchase
+
+export declare const Purchase: (new (init: ModelInit<Purchase, PurchaseMetaData>) => Purchase) & {
+  copyOf(source: Purchase, mutator: (draft: MutableModel<Purchase, PurchaseMetaData>) => MutableModel<Purchase, PurchaseMetaData> | void): Purchase;
+}
+
 type EagerReferrer = {
   readonly id: string;
   readonly name: string;
@@ -39,6 +67,7 @@ type EagerReferrer = {
   readonly promotions?: Promotion[] | null;
   readonly discount: number;
   readonly isGroup: boolean;
+  readonly Purchases?: (Purchase | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -52,6 +81,7 @@ type LazyReferrer = {
   readonly promotions: AsyncCollection<Promotion>;
   readonly discount: number;
   readonly isGroup: boolean;
+  readonly Purchases: AsyncCollection<Purchase>;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

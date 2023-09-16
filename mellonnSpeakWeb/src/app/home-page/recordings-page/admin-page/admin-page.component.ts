@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService } from 'src/app/shared/auth-service/auth.service';
 import { PromotionDbService } from 'src/app/shared/promotion-db-service/promotion-db.service';
 import { Promotion, PromotionService } from 'src/app/shared/promotion-service/promotion.service';
@@ -36,7 +37,8 @@ export class AdminPageComponent implements OnInit {
   constructor(
     private promotionService: PromotionDbService,
     public authService: AuthService,
-    public storageService: StorageService
+    public storageService: StorageService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -55,6 +57,10 @@ export class AdminPageComponent implements OnInit {
     } else {
       this.promotionService.changeCurrentMode('default');
     }
+  }
+
+  openAmbassadorScreen() {
+    this.router.navigateByUrl('/home/ambassador/' + this.authService.referrer);
   }
 
   async getGroupList() {
