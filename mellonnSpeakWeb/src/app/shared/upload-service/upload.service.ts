@@ -145,6 +145,13 @@ export class UploadService {
       languageCode: languageCode
     });
 
+    let uploadedRecording: Recording;
+    try {
+      uploadedRecording = await DataStore.save(recording);
+    } catch (err) {
+      console.error(`Error while saving recording first time: ${err}`);
+    }
+
     let uploadFile = file;
     let fileType = file.name.split('.')[file.name.split('.').length - 1];
 
@@ -156,7 +163,7 @@ export class UploadService {
     this.uploadText.next('Uploading recording...');
     const key = 'recordings/' + recording.id + '.' + fileType;
 
-    const newRecording = Recording.copyOf(recording, copy => {
+    const newRecording = Recording.copyOf(uploadedRecording, copy => {
       copy.fileKey = key
     });
 
