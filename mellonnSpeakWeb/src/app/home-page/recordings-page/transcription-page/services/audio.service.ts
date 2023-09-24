@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Storage } from 'aws-amplify';
+import { DataStore, Storage } from 'aws-amplify';
 import { Subject } from 'rxjs';
+import { Recording } from 'src/models';
 
 @Injectable({
   providedIn: 'root'
@@ -66,7 +67,7 @@ export class AudioService {
     this.player.onerror = (err) => {
       console.error('Audio error: ' + err.toString());
       alert("An error happened while getting the audio, the page will reload...");
-      window.location.reload();
+      //window.location.reload();
     }
   }
 
@@ -84,8 +85,18 @@ export class AudioService {
     this.audioControlResetChosen.next(1);
   }
 
-  async getAudioUrl(key: string): Promise<string> {
+  async getAudioUrl(recording: Recording): Promise<string> {
     try {
+      let key: string;
+      if (recording.fileKey.length == 0 || recording.fileKey == null || recording.fileKey == undefined) {
+        const files = await Storage.list(`recordings/${recording.id}`, { level: 'private', pageSize: 10 });
+        key = files.results[0].key;
+        await DataStore.save(Recording.copyOf(recording, (copy) => {
+          copy.fileKey = key
+        }));
+      } else {
+        key = recording.fileKey;
+      }
       const url = await Storage.get(key, {level: 'private', expires: 10800});
       return url;
     } catch (err) {

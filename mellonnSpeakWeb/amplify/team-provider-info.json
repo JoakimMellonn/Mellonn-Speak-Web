@@ -18,7 +18,8 @@
           "Name": "SpeakAnalytics-staging",
           "Id": "06eb415f512343e0aaa8392679609f2a",
           "Region": "eu-central-1"
-        }
+        },
+        "SpeakAnalytics": {}
       },
       "function": {
         "MellonnSpeakEUFunction": {
@@ -122,6 +123,15 @@
       },
       "storage": {
         "mellonnSpeakS3EU": {}
+      },
+      "api": {
+        "mellonnspeakeu": {},
+        "convert": {},
+        "export": {},
+        "feedback": {},
+        "getPromo": {},
+        "location": {},
+        "stripe": {}
       }
     }
   },

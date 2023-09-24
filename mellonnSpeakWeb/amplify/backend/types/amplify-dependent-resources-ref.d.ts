@@ -34,7 +34,8 @@ export type AmplifyDependentResourcesAttributes = {
     },
     "mellonnspeakeu": {
       "GraphQLAPIEndpointOutput": "string",
-      "GraphQLAPIIdOutput": "string"
+      "GraphQLAPIIdOutput": "string",
+      "GraphQLAPIKeyOutput": "string"
     },
     "stripe": {
       "ApiId": "string",

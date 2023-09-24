@@ -635,6 +635,14 @@ export const schema = {
                     "properties": {}
                 },
                 {
+                    "type": "key",
+                    "properties": {
+                        "fields": [
+                            "id"
+                        ]
+                    }
+                },
+                {
                     "type": "auth",
                     "properties": {
                         "rules": [
@@ -670,5 +678,5 @@ export const schema = {
     },
     "nonModels": {},
     "codegenVersion": "3.4.4",
-    "version": "4fb69ae197bb396c34a1b3626265b4ca"
+    "version": "adff6ab74ae1c028ab8ba4f5696828f9"
 };

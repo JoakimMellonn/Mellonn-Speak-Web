@@ -1,8 +1,8 @@
-type Purchase @model @auth(rules: [{allow: private}]) {
+type Purchase @model @auth(rules: [{allow: private}]) @key(name: "byReferrer", fields: ["referrerID"]) {
   id: ID!
   date: AWSDateTime!
   seconds: Float!
-  referrerID: ID @index(name: "byReferrer")
+  referrerID: ID
 }
 
 type Referrer @model @auth(rules: [{allow: private}, {allow: public, operations: [read]}, {allow: private, operations: [read], provider: iam}, {allow: public, operations: [read], provider: iam}]) {
@@ -11,10 +11,10 @@ type Referrer @model @auth(rules: [{allow: private}, {allow: public, operations:
   members: Int!
   purchases: Int!
   seconds: Float!
-  promotions: [Promotion!] @hasMany(indexName: "byReferrer", fields: ["id"])
+  promotions: [Promotion!] @connection(keyName: "byReferrer", fields: ["id"])
   discount: Float!
   isGroup: Boolean!
-  Purchases: [Purchase] @hasMany(indexName: "byReferrer", fields: ["id"])
+  Purchases: [Purchase] @connection(keyName: "byReferrer", fields: ["id"])
 }
 
 enum PromotionType {
@@ -25,14 +25,14 @@ enum PromotionType {
   PERIODS
 }
 
-type Promotion @model @auth(rules: [{allow: private}, {allow: public, operations: [read]}, {allow: private, operations: [read], provider: iam}, {allow: public, operations: [read], provider: iam}]) {
+type Promotion @model @key(name: "byReferrer", fields: ["referrerID"]) @auth(rules: [{allow: private}, {allow: public, operations: [read]}, {allow: private, operations: [read], provider: iam}, {allow: public, operations: [read], provider: iam}]) {
   id: ID!
   type: PromotionType!
   code: String!
   date: AWSDate
   freePeriods: Int!
   uses: Int!
-  referrerID: ID @index(name: "byReferrer")
+  referrerID: ID
 }
 
 type Settings @model @auth(rules: [{allow: owner}]) {
@@ -43,10 +43,10 @@ type Settings @model @auth(rules: [{allow: owner}]) {
   primaryCard: String
 }
 
-type Version @model @auth(rules: [{allow: private}]) {
+type Version @model @auth(rules: [{allow: private}]) @key(name: "byRecording", fields: ["recordingID"]) {
   id: ID!
   date: AWSDateTime!
-  recordingID: ID! @index(name: "byRecording")
+  recordingID: ID!
   editType: String!
 }
 
@@ -60,7 +60,8 @@ type Recording @model @auth(rules: [{allow: owner}]) {
   fileUrl: String
   speakerCount: Int!
   languageCode: String
-  versions: [Version] @hasMany(indexName: "byRecording", fields: ["id"])
+  versions: [Version] @connection(keyName: "byRecording", fields: ["id"])
   interviewers: [String]
   labels: [String]
 }
+ 
