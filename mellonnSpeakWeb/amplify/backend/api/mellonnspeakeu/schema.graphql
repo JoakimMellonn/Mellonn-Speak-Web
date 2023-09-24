@@ -5,7 +5,7 @@ type Purchase @model @auth(rules: [{allow: private}]) {
   referrerID: ID @index(name: "byReferrer")
 }
 
-type Referrer @model @auth(rules: [{allow: private}, {allow: public, operations: [read]}, {allow: private, operations: [read], provider: iam}, {allow: public, operations: [read], provider: iam}]) {
+type Referrer @model @auth(rules: [{allow: public}]) {
   id: ID!
   name: String!
   members: Int!
@@ -25,7 +25,7 @@ enum PromotionType {
   PERIODS
 }
 
-type Promotion @model @auth(rules: [{allow: private}, {allow: public, operations: [read]}, {allow: private, operations: [read], provider: iam}, {allow: public, operations: [read], provider: iam}]) {
+type Promotion @model @auth(rules: [{allow: public}]) {
   id: ID!
   type: PromotionType!
   code: String!
