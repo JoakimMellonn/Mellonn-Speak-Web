@@ -6,8 +6,8 @@
         <div class="termsBlock">
             <input formControlName="termsAccept" type="checkbox"><a href="https://mellonn.notion.site/Terms-and-Conditions-92e458a5b84849678115777b473259ec" target="_blank">I accept the terms and conditions</a>
         </div>
-        
-        <form class="promo" [formGroup]="promoForm" (ngSubmit)="redeemPromotion()" *ngIf="!promoRedeemed">
+        <!-- TODO: Fix the promo on signup thing -->
+        <!-- <form class="promo" [formGroup]="promoForm" (ngSubmit)="redeemPromotion()" *ngIf="!promoRedeemed">
             <p class="title">Do you have a promo code?</p>
             <input formControlName="promoCode" class="inputField" placeholder="Promo code">
             <p class="errorMessage" *ngIf="promoError != ''">{{promoError}}</p>
@@ -16,7 +16,7 @@
         <div class="discount" *ngIf="promoRedeemed">
             <p>Your discount: </p>
             <p>{{discountMessage}}</p>
-        </div>
+        </div> -->
 
         <div class="buttonRow">
             <button id="left" class="standardButton" type="button" (click)="setCreate(false)">
