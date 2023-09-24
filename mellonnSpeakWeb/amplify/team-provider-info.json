@@ -154,7 +154,8 @@
           "Name": "SpeakAnalytics-prod",
           "Id": "61149bd12e334b319781a5b8df8be583",
           "Region": "eu-central-1"
-        }
+        },
+        "SpeakAnalytics": {}
       },
       "function": {
         "MellonnSpeakEUFunction": {
@@ -258,6 +259,15 @@
       },
       "storage": {
         "mellonnSpeakS3EU": {}
+      },
+      "api": {
+        "convert": {},
+        "export": {},
+        "feedback": {},
+        "getPromo": {},
+        "location": {},
+        "mellonnspeakeu": {},
+        "stripe": {}
       }
     }
   }
