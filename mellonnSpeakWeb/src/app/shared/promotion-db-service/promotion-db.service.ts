@@ -46,13 +46,16 @@ export class PromotionDbService {
   async applyPromotion(promotion: Promotion, userFreePeriods: number) {
     const freePeriods = promotion.freePeriods ?? 0;
 
-    const user = await Auth.currentAuthenticatedUser();
-    let userPromos = user['custom:promos'];
-    let newPromoList: string[] = userPromos == undefined ? [] : userPromos.split(';');
-    newPromoList.push(promotion.code);
-    await Auth.updateUserAttributes(user, {
-      'custom:promos': newPromoList.join(';')
-    });
+    if (promotion.type != PromotionType.DEV) {
+      const user = await Auth.currentAuthenticatedUser();
+      const { attributes } = await Auth.currentAuthenticatedUser()
+      let userPromos = attributes['custom:promos'];
+      let newPromoList: string[] = userPromos == undefined ? [] : userPromos.split(';');
+      newPromoList.push(promotion.code);
+      await Auth.updateUserAttributes(user, {
+        'custom:promos': newPromoList.join(';')
+      });
+    }
 
     if (promotion.type === PromotionType.BENEFIT) {
       await this.updateUserGroup('benefit');
@@ -68,6 +71,17 @@ export class PromotionDbService {
       await this.addUserToReferrer(referrer);
       if (freePeriods > 0) {
         await this.authService.updateFreePeriods(userFreePeriods + freePeriods);
+      }
+    }
+
+    if (promotion.uses != 0) {
+      if (promotion.uses == 1) {
+        await DataStore.delete(promotion);
+      } else {
+        const newPromotion = Promotion.copyOf(promotion, copy => {
+          copy.uses -= 1
+        });
+        await DataStore.save(newPromotion);
       }
     }
   }
