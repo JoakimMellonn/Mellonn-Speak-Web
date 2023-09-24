@@ -168,7 +168,6 @@ export class UploadService {
     });
 
     try {
-      console.log(newRecording);
       await DataStore.save(newRecording);
       await Storage.put(key, uploadFile,
         {

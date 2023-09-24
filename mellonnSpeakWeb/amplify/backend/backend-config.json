@@ -604,22 +604,6 @@
         }
       ]
     },
-    "AMPLIFY_function_getPromo_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "getPromo"
-        }
-      ]
-    },
-    "AMPLIFY_function_getPromo_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "getPromo"
-        }
-      ]
-    },
     "AMPLIFY_function_getPromotion_deploymentBucketName": {
       "usedBy": [
         {
