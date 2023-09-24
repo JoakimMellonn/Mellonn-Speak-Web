@@ -69,6 +69,7 @@ export class UploadPageComponent implements OnInit {
 
   async ngOnInit() {
     await this.languageService.getLanguages();
+    await this.uploadService.getProduct();
     this.languageSelect = this.settingsService.currentSettings.languageCode;
     const fileUrl = URL.createObjectURL(this.file);
     this.player.src = fileUrl;

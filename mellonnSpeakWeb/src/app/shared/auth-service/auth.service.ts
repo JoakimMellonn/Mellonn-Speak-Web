@@ -69,13 +69,29 @@ export class AuthService {
       await DataStore.clear();
       await Auth.signOut();
       this.signInState.next(0);
+      this.resetState();
       this.router.navigate(['/login']);
     } catch (err) {
       console.error('error signing out', err);
     }
   }
 
+  resetState() {
+    this.email = null;
+    this.firstName = null;
+    this.lastName = null;
+    this.group = null;
+    this.superDev = false;
+    this.referrer = null;
+    this.referGroup = null;
+    this.groupAdmin = false;
+    this.isOnboarded = false;
+    this.userAvatar = null;
+    this.freePeriods = 0;
+  }
+
   async getUserInfo() {
+    this.resetState();
     const { attributes } = await Auth.currentAuthenticatedUser();
 
     this.email = attributes.email;
@@ -84,12 +100,6 @@ export class AuthService {
     this.group = attributes['custom:group'];
     this.referrer = attributes['custom:referrer'];
     this.referGroup = attributes['custom:referGroup'];
-    if (this.group != 'dev') {
-      const isBenefit = await this.checkBenefit(this.email);
-      if (this.group == 'benefit' && !isBenefit || this.group == 'user' && isBenefit) {
-        await this.changeBenefit(isBenefit);
-      }
-    }
     if (attributes['custom:groupAdmin'] == 'true') this.groupAdmin = true;
     if (attributes['custom:superdev'] == 'true') this.superDev = true;
     if (attributes['custom:onboardedWeb'] == 'true') this.isOnboarded = true;
@@ -100,34 +110,6 @@ export class AuthService {
     }
 
     this.freePeriods = await this.getFreePeriods();
-  }
-
-  async checkBenefit(email: string): Promise<boolean> {
-    const key = 'data/benefitUsers.json';
-    let returnElement: boolean = false;
-
-    try {
-      const url = await Storage.get(key);
-
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          Accept: 'application/json',
-        },
-      });
-      const result = await response.json();
-
-      for (let benefitEmail of result.emails) {
-        if (benefitEmail == email) {
-          returnElement = true;
-          break;
-        }
-      }
-    } catch (err) {
-      console.error('Error while checking benefit: ' + err);
-      return false;
-    }
-    return returnElement;
   }
 
   async changeBenefit(isBenefit: boolean) {
