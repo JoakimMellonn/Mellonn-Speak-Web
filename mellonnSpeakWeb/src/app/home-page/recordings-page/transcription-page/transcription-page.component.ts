@@ -62,7 +62,7 @@ export class TranscriptionPageComponent implements OnInit, OnDestroy {
     if (this.service.recording.labels == null || this.service.recording.labels == undefined || this.service.recording.labels.length != this.service.recording.speakerCount) {
       this.labelEditOpen = true;
     }
-    this.url = await this.audio.getAudioUrl(this.service.recording.fileKey ?? '');
+    this.url = await this.audio.getAudioUrl(this.service.recording);
     this.audio.setAudioUrl(this.url);
 
     /**

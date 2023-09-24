@@ -145,9 +145,8 @@ export class UploadService {
       languageCode: languageCode
     });
 
-    let uploadedRecording: Recording;
     try {
-      uploadedRecording = await DataStore.save(recording);
+      await DataStore.save(recording);
     } catch (err) {
       console.error(`Error while saving recording first time: ${err}`);
     }
@@ -161,14 +160,15 @@ export class UploadService {
     }
 
     this.uploadText.next('Uploading recording...');
-    const key = 'recordings/' + recording.id + '.' + fileType;
-
-    const newRecording = Recording.copyOf(uploadedRecording, copy => {
-      copy.fileKey = key
-    });
-
+    
     try {
-      await DataStore.save(newRecording);
+      const key = 'recordings/' + recording.id + '.' + fileType;
+      const uploadedRecording = (await DataStore.query(Recording, (r) => r.id.eq(recording.id)))[0];
+      const updatedRecording = Recording.copyOf(uploadedRecording, copy => {
+        copy.fileKey = key
+      });
+      console.log(updatedRecording);
+      await DataStore.save(updatedRecording);
       await Storage.put(key, uploadFile,
         {
           level: 'private',
